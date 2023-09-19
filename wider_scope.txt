@@ -1,4 +1,29 @@
-Add a messaging system
-Add notifications
+Add a messaging system between users (within projects of as direct messages)
+    L-> Add notifications
+        L-> Completion notification for tasks and steps
+    L-> Block people
+
 Add comments on project (and a flagging system)
-Add a pledge page to contribute to a project
+    L-> Add comments on other user's pages if a project is or was shared
+
+Make step status automatic (with optional or alternative tasks)
+
+Link resources to market price and link it to a possible shop
+    L-> Check delivery prices and options
+
+Have online/in person status for tasks/steps/project
+    L-> Link to a calendar for meeting dates?
+
+Attribute dates to tasks and/or steps
+    L-> Link to personal notification and calendar events
+
+Create and develop the "Learn skills" page
+    L-> Link to formations and studies
+        L-> Automatically update skills
+    L-> Link to Youtube pages
+
+Develop skills valuation and reduce likelihood of fraud
+    L-> Link skills to diplomas
+        L-> Link fields and diplomas
+    L-> Handle self-learning
+        L-> Link skill proofs through pictures or files
