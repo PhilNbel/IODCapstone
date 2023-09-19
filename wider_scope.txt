@@ -1,0 +1,4 @@
+Add a messaging system
+Add notifications
+Add comments on project (and a flagging system)
+Add a pledge page to contribute to a project

@@ -1,0 +1,9 @@
+
+    As many of you may know, the pandemic has changed how the people interact, from the popularisation of online courses and remote work to simply less going to bars and other outdoors activities.
+The process was of course, already ongoing, but COVID-19 brutally reshuffled the deck, leaving most of us in a position where it is harder to make friends.
+
+    To me, friendship is sharing a passion, sharing a hobby. There are already plenty of applications and services to let people meet over a lot of intellectual hobbies, such as club books or online gaming platforms;
+but I did not see any service to let people meet over more hands-on hobbys, like woodworking or creating plane models. I also come from a very intellectual background and never had any occasion to really get into a
+group that would share their knowledge or the passions they had for it
+
+    As such, to fill this void I seem to see, I am building a Software to let people participate and create their own projects
