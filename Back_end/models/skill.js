@@ -1,6 +1,6 @@
 let connection = require("../db_run");
 
-class Item {
+class Skill {
 
     constructor({name, price, category}) {
         this.name = name;
@@ -16,33 +16,33 @@ class Item {
         return `name = "${req_body.name}", price = "${req_body.price}"`
     }
 
-    static create(newItem) {
-        let mergedItem = new Item(newItem)
-        return connection.promise().query("INSERT INTO items(name,price) VALUES"+mergedItem.toInsert());
+    static create(newSkill) {
+        let mergedSkill = new Skill(newSkill)
+        return connection.promise().query("INSERT INTO skills(name,price) VALUES"+mergedSkill.toInsert());
     };
 
-    static update(updatedItem) {
-        let set = Item.getSet(updatedItem)
-        return connection.promise().query("UPDATE items SET "+set+" WHERE itemID = "+updatedItem.id)
+    static update(updatedSkill) {
+        let set = Skill.getSet(updatedSkill)
+        return connection.promise().query("UPDATE skills SET "+set+" WHERE SkillID = "+updatedSkill.id)
             .catch((err)=>{
                 console.log(err)
-                throw new Error("No item corresponding to this ID")
+                throw new Error("No Skill corresponding to this ID")
             });
     };  
     
-    static destroy(deletedItemId) {
-        return connection.promise().query("DELETE FROM items WHERE itemID = "+deletedItemId);
+    static destroy(deletedSkillId) {
+        return connection.promise().query("DELETE FROM skills WHERE SkillID = "+deletedSkillId);
     };     
 
     static findOne(toFindId) {
-        return connection.promise().query("SELECT * FROM items WHERE itemID = "+toFindId);
+        return connection.promise().query("SELECT * FROM skills WHERE SkillID = "+toFindId);
     }; 
 
     static findAll() {
-        return connection.promise().query("SELECT * FROM items");
+        return connection.promise().query("SELECT * FROM skills");
     };     
 
     static sync(){}
 }
 
-module.exports = Item
+module.exports = Skill

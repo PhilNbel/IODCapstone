@@ -1,9 +1,11 @@
 'use strict'
 
-const Items = require('./skill') //require the model
-const Categories = require('./field') //require the model
-const Proficiencies = require('./user') //require the model
+const Skills = require('./skill') //require the model
+const Fields = require('./field') //require the model
+const Users = require('./user') //require the model
+const Projects = require('./project') //require the model
+const Steps = require('./step') //require the model
 
 module.exports = {
-    Items,Categories,Proficiencies //export the model
+    Skills,Fields,Users,Projects,Steps //export the model
 };

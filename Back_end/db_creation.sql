@@ -55,7 +55,7 @@ CREATE TABLE Projects (
 CREATE TABLE Steps (
     stepID int unsigned NOT NULL AUTO_INCREMENT,
     name varchar(128) NOT NULL,
-    description varchar(4096) NOT NULL,
+    description varchar(4096),
     status ENUM('toDo','inProgress','isDone') NOT NULL,
     hasResources boolean,
     projectID int unsigned,

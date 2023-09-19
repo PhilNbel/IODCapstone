@@ -1,6 +1,6 @@
 let connection = require("../db_run");
 
-class Category {
+class Step {
 
     constructor({name}) {
         this.name = name;
@@ -14,45 +14,45 @@ class Category {
         return `name = "${req_body.name}"`
     }
 
-    static create(newCategory) {
-        let mergedCategory = new Category(newCategory)
-        return connection.promise().query("INSERT INTO categories(name) VALUES"+mergedCategory.toInsert());
+    static create(newStep) {
+        let mergedStep = new Step(newStep)
+        return connection.promise().query("INSERT INTO steps(name) VALUES"+mergedStep.toInsert());
     };
 
-    static update(updatedCategory) {
-        let set = Category.getSet(updatedCategory)
-        return connection.promise().query("UPDATE categories SET "+set+" WHERE categoryID = "+updatedCategory.id)
+    static update(updatedStep) {
+        let set = Step.getSet(updatedStep)
+        return connection.promise().query("UPDATE steps SET "+set+" WHERE stepID = "+updatedStep.id)
             .catch((err)=>{
-                throw new Error("No category corresponding to this ID")
+                throw new Error("No Step corresponding to this ID")
             });
     };  
     
-    static destroy(deletedCategoryId) {
-        return connection.promise().query("DELETE FROM categories WHERE categoryID = "+deletedCategoryId);
+    static destroy(deletedstepId) {
+        return connection.promise().query("DELETE FROM steps WHERE stepID = "+deletedstepId);
     };     
 
     static findOne(toFindId) {
-        return connection.promise().query("SELECT * FROM categories WHERE categoryID = "+toFindId);
+        return connection.promise().query("SELECT * FROM steps WHERE stepID = "+toFindId);
     };
 
     static async findElements(toFindId){
-        let itemList = await connection.promise().query("SELECT items.name FROM belongs INNER JOIN items ON items.itemID=belongs.itemID INNER JOIN categories ON categories.categoryID = belongs.categoryID WHERE belongs.categoryID = "+toFindId);
+        let itemList = await connection.promise().query("SELECT items.name FROM belongs INNER JOIN items ON items.itemID=belongs.itemID INNER JOIN steps ON steps.stepID = belongs.stepID WHERE belongs.stepID = "+toFindId);
         return (itemList[0].length!=0)?itemList[0]:[]
     }
 
     static async findAll() {
-        return connection.promise().query("SELECT categoryID FROM categories")
+        return connection.promise().query("SELECT stepID FROM steps")
             .then(allIdArray=>
                 Promise.all(allIdArray[0].map(async(currLine)=>{
-                    let category = await Category.findOne(currLine.categoryID)
-                    return category[0][0];
+                    let Step = await Step.findOne(currLine.stepID)
+                    return Step[0][0];
                 }))
-            .then(allCategories=>{
-                return Promise.all(allCategories.map(async(category)=>{
-                    let content = await Category.findElements(category.categoryID);
+            .then(allSteps=>{
+                return Promise.all(allSteps.map(async(Step)=>{
+                    let content = await Step.findElements(Step.stepID);
                     if(content.length == 0)
-                        return category;
-                    return ({...category,contains:content});
+                        return Step;
+                    return ({...Step,contains:content});
                 }))
             }));
     };     
@@ -60,4 +60,4 @@ class Category {
     static sync(){}
 }
 
-module.exports = Category
+module.exports = Step
