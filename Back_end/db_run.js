@@ -1,5 +1,6 @@
 const mysql = require("mysql2");
 const fs = require("fs");
+const tests = require("./tests");
 // Create a connection to the database
 const connection = mysql.createConnection({
     host: process.env.DB_HOST,
@@ -13,10 +14,7 @@ const connection = mysql.createConnection({
 connection.connect(error => {
     if (error) throw error;
     console.log("Successfully connected to the database."); 
-    init().then(async(res)=>{
-        res = await connection.promise().query("SELECT Users.firstName,Skills.name FROM Masters JOIN Users ON Users.userID = Masters.userID JOIN Skills ON Skills.skillID=Masters.skillID");
-        console.log(res[0]);
-    })
+    init().then((res)=>res = tests.testLinks(connection,"null"))
 });
 
 async function init(){
