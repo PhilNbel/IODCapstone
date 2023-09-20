@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
+const sqlSanitizer = require('sql-sanitizer');
 
 require("dotenv").config();
 require("./db_run"); // example using mysql2 package - first run 'npm install mysql2'
@@ -10,6 +12,8 @@ let proficiencyRoutes = require('./routes/proficiencyRoutes')*/
 
 // parse requests of content-type - application / json;
 app.use(express.json());
+app.use(cors());
+app.use(sqlSanitizer);
 
 app.get("/", (req, res) => {
   res.json({ message: "You should not be here, go to localhost:5000" });
