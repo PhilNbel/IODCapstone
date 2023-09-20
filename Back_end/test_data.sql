@@ -34,6 +34,7 @@ INSERT INTO Skills(name, description,fieldID) VALUES
     ('Data flow schematisation','Drawing and thinking through where and how information is contained and is shared',1),
     ('Data structure understanding','',2),
     ('Complexity evaluation','',2),
+    ('Conceptualization','',2),
     ('Program optimization','',2),
     ('Geometry','',3),
     ('Arithmetics','',3),

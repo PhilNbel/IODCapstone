@@ -1,0 +1,8 @@
+-Forms format
+-accessing private data without being connected (ProtectedRoutes)
+-Fetch calls
+-testing 
+-Pledging 0 or less when implemented
+
+FOR IMPORTANT FEATURES:
+    Describe what should happen when clicking the button/performing the action
