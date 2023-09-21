@@ -27,7 +27,7 @@ function NavBar() {
   };
 
   return (
-    <AppBar position="sticky">
+    <AppBar position="sticky" sx={{backgroundColor:"#64732C"}}>
       <Box marginLeft={"2rem"}>
         <Toolbar disableGutters>
 
