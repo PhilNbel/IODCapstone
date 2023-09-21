@@ -1,7 +1,10 @@
 import { useState,useEffect } from "react";
 
 // hooks are usually named exports rather than default
-export function useData(url, initialValue = []) {
+export default function readThat(table){ 
+  if(table = "Projects")
+    return [{name:"Proj1",type:"Hobby"},{name:"Proj2",type:"Serious"}];
+  return []/*}url, initialValue = []) {
 
   // state variable for holding fetched json data
   const [data, setData] = useState(initialValue);
@@ -25,6 +28,6 @@ export function useData(url, initialValue = []) {
   }, [url]); // re-run effect if url changes
 
   // return the data fetched from the given url
-  return data;
+  return data;*/
 }
 

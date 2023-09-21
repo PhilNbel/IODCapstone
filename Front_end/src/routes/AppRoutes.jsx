@@ -1,7 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 import HomePage from "../pages/HomePage";
 import AboutPage from "../pages/AboutPage";
+import BrowsePage from "../pages/BrowsePage";
 import PageNotFound from "../pages/PageNotFound";
+import SignPage from "../pages/SignPage";
 
 // special component containing all the possible routes for this app
 // any props passed into AppRoutes will also be passed onto
@@ -12,6 +14,10 @@ function AppRoutes(props) {
     <Routes>
       <Route index element={<HomePage {...props} />} />
       <Route path="about" element={<AboutPage {...props} />} />
+      <Route path="browse" element={<BrowsePage {...props} />} />
+      <Route path="sign-in" element={<SignPage {...props} />} />
+      <Route path="sign-up" element={<SignPage {...props} />} />
+      <Route path="log-in" element={<SignPage {...props} />} />
 
       {/* nested routes, matches on /dash/tasks etc
       <Route path="dash" element={<ProtectedRoute><DashboardPage {...props} /></ProtectedRoute>}>

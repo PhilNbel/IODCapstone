@@ -10,10 +10,9 @@ import Container from '@mui/material/Container';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { NavLink } from 'react-router-dom';
-import { logoStyle } from '../MUIStyles';
+import { navButton } from '../MUIStyles';
 
-const pages = [{link: '/', label: 'Home'}, {link: '/about/', label: 'About'}, 
-    {link: '/learn/', label: 'Learn skills'}];
+const pages = [{link: '/', label: 'Home'}, {link: '/about/', label: 'About'}, {link: '/browse/', label: 'Projects'}, {link: '/learn/', label: 'Learn skills'},{link: '/sign-in/', label: 'Self'}];
 
 // see https://mui.com/material-ui/react-app-bar/
 function NavBar() {
@@ -29,7 +28,7 @@ function NavBar() {
 
   return (
     <AppBar position="sticky">
-      <Box maxWidth="xl" marginLeft={"2rem"}>
+      <Box marginLeft={"2rem"}>
         <Toolbar disableGutters>
 
           {/* desktop menu logo and icon */}
@@ -39,7 +38,7 @@ function NavBar() {
             noWrap
             component="a"
             href="/"
-            sx={logoStyle}
+            sx={navButton}
           >
             Eovia
           </Typography>
@@ -83,7 +82,7 @@ function NavBar() {
             noWrap
             component="a"
             href="/"
-            sx={logoStyle}
+            sx={navButton}
           >
             IOD : REACT
           </Typography>

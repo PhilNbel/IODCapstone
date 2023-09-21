@@ -5,6 +5,10 @@ main {
   display: flex;
 }
 
+div, h2{
+  display: inherit;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
