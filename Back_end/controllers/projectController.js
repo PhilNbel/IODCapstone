@@ -92,9 +92,10 @@ const getProjects = (res) => {
 
 const createProject = (data, res) => {
     Models.Projects.create(data).then(function (data) {
-        res.send({ result: 200, message: "Project successfully created with ID "+data[0].insertId })
+        console.log("Project successfully created with ID "+data.insertId)
+        res.send({ result: 200, message: "Project "+data.insertName+" successfully created"})
     }).catch(err => {
-        res.send({ result: 500, error:"Invalid Project format: Project needs a name and a boolean telling if it is a category (or an item otherwise)"} )
+        res.send({ result: 500, error:err.message} )
     })
 }
 const updateProject = (req, res) => {
@@ -106,12 +107,12 @@ const updateProject = (req, res) => {
 }
 
 const deleteProject = (req, res) => {
-    let ProjectID = req.params.id;
+    let projectName = req.params.name;
+    let projectCreator = req.body.creator;
 
-    Models.Projects.destroy(ProjectID).then(function (data) {
-        let ProjectsDeleted = data[0].affectedRows;
-        if(ProjectsDeleted == 0) throw new Error("No Project with ID "+ProjectID+" to delete");
-        res.send({ result: 200, message:`Successfully deleted ${ProjectsDeleted} proficienc${(ProjectsDeleted>1)?"ies":"y"}` })
+    Models.Projects.destroy(projectName,projectCreator).then(function (data) {
+        if(data.deleted == 0) throw new Error("No project \""+projectName+"\" to delete");
+        res.send({ result: 200, message:`Successfully deleted project ${data.name}` })
     }).catch(err => {
         res.send({ result: 500, error: err.message })
     })

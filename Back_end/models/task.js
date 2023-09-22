@@ -1,63 +1,78 @@
 let connection = require("../db_run");
 
-class Task {
+class User {
 
-    constructor({name}) {
-        this.name = name;
+    constructor({firstName, lastName, nickName=null, password=null, email=null, theme=null}) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.nickName = (nickName)?nickName:(firstName+"-"+lastName);
+        if(password)
+            this.password = password;
+        if(email)
+            this.email = email;
+        if(theme)
+            this.theme = theme;
     }
+
+    //Formatting methods
 
     toInsert(){
-        return `("${this.name}")`;
+        let keys = Object.keys(this);
+        let values = Object.values(this);
+
+        return `(${keys.reduce((fieldStr,currKey,index)=>`${fieldStr} ${(index>0)?',':''} ${currKey} `,"")}) VALUES (${values.reduce((fieldStr,currValue,index)=>fieldStr+`${(index>0)?',':''}"${currValue}"`,"")})`;
     }
+
     static getSet(req_body){
-        if(!req_body.name) throw new Error("Invalid format");
-        return `name = "${req_body.name}"`
+        let keys = Object.keys(req_body)
+        let values = Object.values(req_body);
+        let result = keys[0]+" = \""+values[0]+'\"'
+        for(let i=1;i<keys.length;i++){
+            result+= `, ${keys[i]} = "${values[i]}"`
+        }
+        return result;
     }
 
-    static create(newTask) {
-        let mergedTask = new Task(newTask)
-        return connection.promise().query("INSERT INTO tasks(name) VALUES"+mergedTask.toInsert());
-    };
-
-    static update(updatedTask) {
-        let set = Task.getSet(updatedTask)
-        return connection.promise().query("UPDATE tasks SET "+set+" WHERE taskID = "+updatedTask.id)
-            .catch((err)=>{
-                throw new Error("No Task corresponding to this ID")
-            });
-    };  
+    //CRUD operations
     
-    static destroy(deletedtaskId) {
-        return connection.promise().query("DELETE FROM tasks WHERE taskID = "+deletedtaskId);
-    };     
-
-    static findOne(toFindId) {
-        return connection.promise().query("SELECT * FROM tasks WHERE taskID = "+toFindId);
+    static async create(newUser) {
+        let userToInsert = new User(newUser)
+        return connection.promise().query("INSERT INTO Users"+ userToInsert.toInsert()).then((result)=>({result :result, name:userToInsert.nickName}));
     };
 
-    static async findElements(toFindId){
-        let itemList = await connection.promise().query("SELECT items.name FROM belongs INNER JOIN items ON items.itemID=belongs.itemID INNER JOIN tasks ON tasks.taskID = belongs.taskID WHERE belongs.taskID = "+toFindId);
-        return (itemList[0].length!=0)?itemList[0]:[]
-    }
+    static readOne(toReadName) {
+        return connection.promise().query(`SELECT (firstName,lastName,nickName,password,email) FROM Users WHERE nickName = "${toReadName}"`);
+    };
 
-    static async findAll() {
-        return connection.promise().query("SELECT taskID FROM tasks")
-            .then(allIdArray=>
-                Promise.all(allIdArray[0].map(async(currLine)=>{
-                    let Task = await Task.findOne(currLine.taskID)
-                    return Task[0][0];
-                }))
-            .then(allTasks=>{
-                return Promise.all(allTasks.map(async(Task)=>{
-                    let content = await Task.findElements(Task.taskID);
-                    if(content.length == 0)
-                        return Task;
-                    return ({...Task,contains:content});
-                }))
-            }));
+    static async readAll(constraint = null) {
+        let query = "SELECT nickName FROM Users";
+        if(constraint)
+            query+= " WHERE "+constraint;
+        return connection.promise().query(query)
     };     
 
-    static sync(){}
+    static async update(toUpdate) {
+        let set = User.getSet(toUpdate[0])
+        return connection.promise().query("UPDATE Users SET "+set+" WHERE nickName = \""+toUpdate[1]+"\"")
+            .catch((err)=>{
+                console.log(err);
+                throw new Error("No User corresponding to this ID")
+            });
+    };
+    
+    
+    static async destroy(bountyName) {
+        return connection.promise().query("DELETE FROM Users WHERE nickName = \""+bountyName+"\"").then((result)=>({deletedRows:result.affectedRows, deletedName:bountyName}));;
+    };     
+
+    //Relationship modifications
+    static addInterest(userName, fieldName){
+
+    }
+
+    static addMastery(userName, skillName){
+
+    }
 }
 
-module.exports = Task
+module.exports = User

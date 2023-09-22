@@ -1,63 +1,78 @@
 let connection = require("../db_run");
 
-class Project {
+class User {
 
-    constructor({name}) {
-        this.name = name;
+    constructor({firstName, lastName, nickName=null, password=null, email=null, theme=null}) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.nickName = (nickName)?nickName:(firstName+"-"+lastName);
+        if(password)
+            this.password = password;
+        if(email)
+            this.email = email;
+        if(theme)
+            this.theme = theme;
     }
+
+    //Formatting methods
 
     toInsert(){
-        return `("${this.name}")`;
+        let keys = Object.keys(this);
+        let values = Object.values(this);
+
+        return `(${keys.reduce((fieldStr,currKey,index)=>`${fieldStr} ${(index>0)?',':''} ${currKey} `,"")}) VALUES (${values.reduce((fieldStr,currValue,index)=>fieldStr+`${(index>0)?',':''}"${currValue}"`,"")})`;
     }
+
     static getSet(req_body){
-        if(!req_body.name) throw new Error("Invalid format");
-        return `name = "${req_body.name}"`
+        let keys = Object.keys(req_body)
+        let values = Object.values(req_body);
+        let result = keys[0]+" = \""+values[0]+'\"'
+        for(let i=1;i<keys.length;i++){
+            result+= `, ${keys[i]} = "${values[i]}"`
+        }
+        return result;
     }
 
-    static create(newProject) {
-        let mergedProject = new Project(newProject)
-        return connection.promise().query("INSERT INTO categories(name) VALUES"+mergedProject.toInsert());
-    };
-
-    static update(updatedProject) {
-        let set = Project.getSet(updatedProject)
-        return connection.promise().query("UPDATE categories SET "+set+" WHERE projectID = "+updatedProject.id)
-            .catch((err)=>{
-                throw new Error("No Project corresponding to this ID")
-            });
-    };  
+    //CRUD operations
     
-    static destroy(deletedProjectId) {
-        return connection.promise().query("DELETE FROM categories WHERE projectID = "+deletedProjectId);
-    };     
-
-    static findOne(toFindId) {
-        return connection.promise().query("SELECT * FROM categories WHERE projectID = "+toFindId);
+    static async create(newUser) {
+        let userToInsert = new User(newUser)
+        return connection.promise().query("INSERT INTO Users"+ userToInsert.toInsert()).then((result)=>({result :result, name:userToInsert.nickName}));
     };
 
-    static async findElements(toFindId){
-        let itemList = await connection.promise().query("SELECT items.name FROM belongs INNER JOIN items ON items.itemID=belongs.itemID INNER JOIN categories ON categories.projectID = belongs.projectID WHERE belongs.projectID = "+toFindId);
-        return (itemList[0].length!=0)?itemList[0]:[]
-    }
+    static readOne(toReadName) {
+        return connection.promise().query(`SELECT (firstName,lastName,nickName,password,email) FROM Users WHERE nickName = "${toReadName}"`);
+    };
 
-    static async findAll() {
-        return connection.promise().query("SELECT projectID FROM categories")
-            .then(allIdArray=>
-                Promise.all(allIdArray[0].map(async(currLine)=>{
-                    let Project = await Project.findOne(currLine.projectID)
-                    return Project[0][0];
-                }))
-            .then(allCategories=>{
-                return Promise.all(allCategories.map(async(Project)=>{
-                    let content = await Project.findElements(Project.projectID);
-                    if(content.length == 0)
-                        return Project;
-                    return ({...Project,contains:content});
-                }))
-            }));
+    static async readAll(constraint = null) {
+        let query = "SELECT nickName FROM Users";
+        if(constraint)
+            query+= " WHERE "+constraint;
+        return connection.promise().query(query)
     };     
 
-    static sync(){}
+    static async update(toUpdate) {
+        let set = User.getSet(toUpdate[0])
+        return connection.promise().query("UPDATE Users SET "+set+" WHERE nickName = \""+toUpdate[1]+"\"")
+            .catch((err)=>{
+                console.log(err);
+                throw new Error("No User corresponding to this ID")
+            });
+    };
+    
+    
+    static async destroy(bountyName) {
+        return connection.promise().query("DELETE FROM Users WHERE nickName = \""+bountyName+"\"").then((result)=>({deletedRows:result.affectedRows, deletedName:bountyName}));;
+    };     
+
+    //Relationship modifications
+    static addInterest(userName, fieldName){
+
+    }
+
+    static addMastery(userName, skillName){
+
+    }
 }
 
-module.exports = Project
+module.exports = User

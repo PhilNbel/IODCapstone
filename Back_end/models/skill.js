@@ -1,48 +1,78 @@
 let connection = require("../db_run");
 
-class Skill {
+class User {
 
-    constructor({name, price, category}) {
-        this.name = name;
-        this.price = price;
-        this.category = category;
+    constructor({firstName, lastName, nickName=null, password=null, email=null, theme=null}) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.nickName = (nickName)?nickName:(firstName+"-"+lastName);
+        if(password)
+            this.password = password;
+        if(email)
+            this.email = email;
+        if(theme)
+            this.theme = theme;
     }
+
+    //Formatting methods
 
     toInsert(){
-        return `("${this.name}","${this.price}")`;
-    }
-    static getSet(req_body){
-        if(!req_body.name || !req_body.price) throw new Error("Invalid format");
-        return `name = "${req_body.name}", price = "${req_body.price}"`
+        let keys = Object.keys(this);
+        let values = Object.values(this);
+
+        return `(${keys.reduce((fieldStr,currKey,index)=>`${fieldStr} ${(index>0)?',':''} ${currKey} `,"")}) VALUES (${values.reduce((fieldStr,currValue,index)=>fieldStr+`${(index>0)?',':''}"${currValue}"`,"")})`;
     }
 
-    static create(newSkill) {
-        let mergedSkill = new Skill(newSkill)
-        return connection.promise().query("INSERT INTO skills(name,price) VALUES"+mergedSkill.toInsert());
+    static getSet(req_body){
+        let keys = Object.keys(req_body)
+        let values = Object.values(req_body);
+        let result = keys[0]+" = \""+values[0]+'\"'
+        for(let i=1;i<keys.length;i++){
+            result+= `, ${keys[i]} = "${values[i]}"`
+        }
+        return result;
+    }
+
+    //CRUD operations
+    
+    static async create(newUser) {
+        let userToInsert = new User(newUser)
+        return connection.promise().query("INSERT INTO Users"+ userToInsert.toInsert()).then((result)=>({result :result, name:userToInsert.nickName}));
     };
 
-    static update(updatedSkill) {
-        let set = Skill.getSet(updatedSkill)
-        return connection.promise().query("UPDATE skills SET "+set+" WHERE SkillID = "+updatedSkill.id)
+    static readOne(toReadName) {
+        return connection.promise().query(`SELECT (firstName,lastName,nickName,password,email) FROM Users WHERE nickName = "${toReadName}"`);
+    };
+
+    static async readAll(constraint = null) {
+        let query = "SELECT nickName FROM Users";
+        if(constraint)
+            query+= " WHERE "+constraint;
+        return connection.promise().query(query)
+    };     
+
+    static async update(toUpdate) {
+        let set = User.getSet(toUpdate[0])
+        return connection.promise().query("UPDATE Users SET "+set+" WHERE nickName = \""+toUpdate[1]+"\"")
             .catch((err)=>{
-                console.log(err)
-                throw new Error("No Skill corresponding to this ID")
+                console.log(err);
+                throw new Error("No User corresponding to this ID")
             });
-    };  
+    };
     
-    static destroy(deletedSkillId) {
-        return connection.promise().query("DELETE FROM skills WHERE SkillID = "+deletedSkillId);
+    
+    static async destroy(bountyName) {
+        return connection.promise().query("DELETE FROM Users WHERE nickName = \""+bountyName+"\"").then((result)=>({deletedRows:result.affectedRows, deletedName:bountyName}));;
     };     
 
-    static findOne(toFindId) {
-        return connection.promise().query("SELECT * FROM skills WHERE SkillID = "+toFindId);
-    }; 
+    //Relationship modifications
+    static addInterest(userName, fieldName){
 
-    static findAll() {
-        return connection.promise().query("SELECT * FROM skills");
-    };     
+    }
 
-    static sync(){}
+    static addMastery(userName, skillName){
+
+    }
 }
 
-module.exports = Skill
+module.exports = User
