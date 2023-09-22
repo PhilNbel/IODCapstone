@@ -41,7 +41,7 @@ class User {
     };
 
     static readOne(toReadName) {
-        return connection.promise().query(`SELECT (firstName,lastName,nickName,password,email) FROM Users WHERE nickName = "${toReadName}"`);
+        return connection.promise().query(`SELECT firstName,lastName,nickName,password,email FROM Users WHERE nickName = "${toReadName}"`);
     };
 
     static async readAll(constraint = null) {

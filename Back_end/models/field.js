@@ -1,17 +1,10 @@
 let connection = require("../db_run");
 
-class User {
+class Field {
 
-    constructor({firstName, lastName, nickName=null, password=null, email=null, theme=null}) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.nickName = (nickName)?nickName:(firstName+"-"+lastName);
-        if(password)
-            this.password = password;
-        if(email)
-            this.email = email;
-        if(theme)
-            this.theme = theme;
+    constructor({name, description}) {
+        this.name = name;
+        this.description = description;
     }
 
     //Formatting methods
@@ -33,46 +26,51 @@ class User {
         return result;
     }
 
+
+    static getFieldInfoName(info,name){
+        return connection.promise().query(`SELECT ${info} FROM Fields WHERE name = "${name}"`)[0][0][info]
+    }
+
+    static getFieldInfoID(info,id){
+        return connection.promise().query(`SELECT ${info} FROM Fields WHERE fieldID = "${id}"`)[0][0][info]
+    }
+
+
     //CRUD operations
     
-    static async create(newUser) {
-        let userToInsert = new User(newUser)
-        return connection.promise().query("INSERT INTO Users"+ userToInsert.toInsert()).then((result)=>({result :result, name:userToInsert.nickName}));
+    static async create(newField) {
+        let fieldToInsert = new Field(newField)
+        return connection.promise().query("INSERT INTO Fields"+ fieldToInsert.toInsert()).then((result)=>({result :result, name:fieldToInsert.nickName}));
     };
 
-    static readOne(toReadName) {
-        return connection.promise().query(`SELECT (firstName,lastName,nickName,password,email) FROM Users WHERE nickName = "${toReadName}"`);
+    static async readOne(toReadName) {
+        let part1 = await connection.promise().query(`SELECT name,description FROM Fields WHERE name = "${toReadName}"`);
+        let part2 = await connection.promise().query(`SELECT Skills.name,Skills.description FROM Skills JOIN Fields ON Skills.fieldID=Fields.fieldID WHERE Fields.name = "${toReadName}"`)
+
+        return {...part1[0][0], skills:part2[0]}
     };
 
     static async readAll(constraint = null) {
-        let query = "SELECT nickName FROM Users";
+        let query = "SELECT name,description FROM Fields";
         if(constraint)
             query+= " WHERE "+constraint;
         return connection.promise().query(query)
     };     
 
     static async update(toUpdate) {
-        let set = User.getSet(toUpdate[0])
-        return connection.promise().query("UPDATE Users SET "+set+" WHERE nickName = \""+toUpdate[1]+"\"")
+        let set = Field.getSet(toUpdate[0])
+        return connection.promise().query("UPDATE Fields SET "+set+" WHERE name = \""+toUpdate[1]+"\"")
             .catch((err)=>{
                 console.log(err);
-                throw new Error("No User corresponding to this ID")
+                throw new Error("No Field corresponding to this ID")
             });
     };
     
     
     static async destroy(bountyName) {
-        return connection.promise().query("DELETE FROM Users WHERE nickName = \""+bountyName+"\"").then((result)=>({deletedRows:result.affectedRows, deletedName:bountyName}));;
+        return connection.promise().query("DELETE FROM Fields WHERE name = \""+bountyName+"\"").then((result)=>({deletedRows:result.affectedRows, deletedName:bountyName}));;
     };     
 
-    //Relationship modifications
-    static addInterest(userName, fieldName){
-
-    }
-
-    static addMastery(userName, skillName){
-
-    }
 }
 
-module.exports = User
+module.exports = Field

@@ -9,8 +9,7 @@ dotenv.config({ path: `./.env.${process.env.NODE_ENV || "dev"}` }); // support m
 require("./db_run"); // example using mysql2 package - first run 'npm install mysql2'
 
 let userRoutes = require('./routes/userRoutes')
-//let categoryRoutes = require('./routes/categoryRoutes')
-//let proficiencyRoutes = require('./routes/proficiencyRoutes')
+let fieldRoutes = require('./routes/fieldRoutes')
 
 // parse requests of content-type - application / json;
 app.use(express.json());
@@ -23,8 +22,7 @@ app.get("/", (req, res) => {
 });
 
 app.use('/api/users', userRoutes);
-//app.use('/api/categories', categoryRoutes);
-//app.use('/api/proficiencies', proficiencyRoutes);
+app.use('/api/fields', fieldRoutes);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;
