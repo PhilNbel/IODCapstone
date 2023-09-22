@@ -98,9 +98,12 @@ const createProject = (data, res) => {
         res.send({ result: 500, error:err.message} )
     })
 }
+
 const updateProject = (req, res) => {
-    Models.Projects.update({...req.body,id:req.params.id}).then(function (data) {
-        res.send({ result: 200, message: "Successfully updated Project #"+req.params.id })
+    Models.Projects.update([req.body,req.params.name]).then(function (data) {
+        if(data[0].affectedRows ==0)
+            throw new Error("No project "+req.params.name+" to update");
+        res.send({ result: 200, message: "Project "+req.params.name+" updated succesfully" })
     }).catch(err => {
         res.send({ result: 500, error: err.message })
     })

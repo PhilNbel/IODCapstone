@@ -4,7 +4,7 @@ class Field {
 
     constructor({name, description}) {
         this.name = name;
-        this.description = description;
+        this.fieldID = null;
     }
 
     //Formatting methods
@@ -27,12 +27,16 @@ class Field {
     }
 
 
-    static getFieldInfoName(info,name){
-        return connection.promise().query(`SELECT ${info} FROM Fields WHERE name = "${name}"`)[0][0][info]
+    static async getFieldInfoName(info,name){
+        let queryRes = await connection.promise().query(`SELECT ${info} FROM Fields WHERE name = "${name}"`)
+        if(queryRes[0].length!=0)
+            return queryRes[0][0][info]
+        return null
     }
 
-    static getFieldInfoID(info,id){
-        return connection.promise().query(`SELECT ${info} FROM Fields WHERE fieldID = "${id}"`)[0][0][info]
+    static async getFieldInfoID(info,id){
+        await connection.promise().query(`SELECT ${info} FROM Fields WHERE fieldID = "${id}"`)[0][0][info]
+        return
     }
 
 
@@ -40,7 +44,7 @@ class Field {
     
     static async create(newField) {
         let fieldToInsert = new Field(newField)
-        return connection.promise().query("INSERT INTO Fields"+ fieldToInsert.toInsert()).then((result)=>({result :result, name:fieldToInsert.nickName}));
+        return connection.promise().query("INSERT INTO Fields"+ fieldToInsert.toInsert()).then((result)=>({result :result, insertName:fieldToInsert.name}));
     };
 
     static async readOne(toReadName) {
@@ -61,14 +65,13 @@ class Field {
         let set = Field.getSet(toUpdate[0])
         return connection.promise().query("UPDATE Fields SET "+set+" WHERE name = \""+toUpdate[1]+"\"")
             .catch((err)=>{
-                console.log(err);
                 throw new Error("No Field corresponding to this ID")
             });
     };
     
     
     static async destroy(bountyName) {
-        return connection.promise().query("DELETE FROM Fields WHERE name = \""+bountyName+"\"").then((result)=>({deletedRows:result.affectedRows, deletedName:bountyName}));;
+        return connection.promise().query("DELETE FROM Fields WHERE name = \""+bountyName+"\"").then((result)=>({deletedRows:result[0].affectedRows, deletedName:bountyName}));
     };     
 
 }

@@ -10,6 +10,7 @@ require("./db_run"); // example using mysql2 package - first run 'npm install my
 
 let userRoutes = require('./routes/userRoutes')
 let fieldRoutes = require('./routes/fieldRoutes')
+let skillRoutes = require('./routes/skillRoutes')
 
 // parse requests of content-type - application / json;
 app.use(express.json());
@@ -23,6 +24,7 @@ app.get("/", (req, res) => {
 
 app.use('/api/users', userRoutes);
 app.use('/api/fields', fieldRoutes);
+app.use('/api/skills', skillRoutes);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8080;

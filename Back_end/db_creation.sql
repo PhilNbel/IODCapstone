@@ -46,7 +46,7 @@ CREATE TABLE Skills (
     skillID int unsigned NOT NULL AUTO_INCREMENT,
     name varchar(128) NOT NULL,
     description varchar(2048) NOT NULL,
-    fieldID int unsigned,
+    fieldID int unsigned NOT NULL,
     CONSTRAINT fk FOREIGN KEY (fieldID) REFERENCES Fields(fieldID),
     PRIMARY KEY(skillID),
     CONSTRAINT skillsUQ UNIQUE (name,fieldID)

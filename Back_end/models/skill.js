@@ -6,15 +6,15 @@ class Skill {
     constructor(name, description, fieldID) {
         this.name = name;
         this.description = description;
-        this.field = fieldID
+        this.fieldID = fieldID
     }
 
-    async init({name, description, fieldName}){
-        let id = Fields.getFieldInfoName("fieldID",fieldName);
+    static async init({name, description, field}){
+        let id = await Fields.getFieldInfoName("fieldID",field);
         if(id)
             return new Skill(name, description, id);
         else
-            throw new Error("No such field");
+            throw new Error("No field with name "+field+" found");
     }
 
     //Formatting methods
@@ -39,18 +39,18 @@ class Skill {
     //CRUD operations
     
     static async create(newSkill) {
-        let skillToInsert = init(newSkill)
+        let skillToInsert = await Skill.init(newSkill)
         return connection.promise().query("INSERT INTO Skills"+ skillToInsert.toInsert());
     };
 
     static async readOne(toReadName) {
         let details = await connection.promise().query(`SELECT name,description,fieldID FROM Skills WHERE name = "${toReadName}"`)[0][0];
-        let fieldInfo
-        return
+        let fieldInfo = await connection.promise().query(`SELECT name,description FROM Fields WHERE fieldID = "${details.fieldID}"`)[0][0];
+        return  {name:details.name,description:details.description,field:{name:fieldInfo.name,description:fieldInfo.description}}
     };
 
     static async readAll(constraint = null) {
-        let query = "SELECT nickName FROM Skills";
+        let query = "SELECT Skills.name, Skills.description, Fields.name AS field FROM Skills JOIN Fields ON Skills.fieldID=Fields.fieldID";
         if(constraint)
             query+= " WHERE "+constraint;
         return connection.promise().query(query)
@@ -58,7 +58,7 @@ class Skill {
 
     static async update(toUpdate) {
         let set = Skill.getSet(toUpdate[0])
-        return connection.promise().query("UPDATE Skills SET "+set+" WHERE nickName = \""+toUpdate[1]+"\"")
+        return connection.promise().query("UPDATE Skills SET "+set+" WHERE name = \""+toUpdate[1]+"\"")
             .catch((err)=>{
                 console.log(err);
                 throw new Error("No Skill corresponding to this ID")
@@ -67,7 +67,7 @@ class Skill {
     
     
     static async destroy(bountyName) {
-        return connection.promise().query("DELETE FROM Skills WHERE nickName = \""+bountyName+"\"").then((result)=>({deletedRows:result.affectedRows, deletedName:bountyName}));;
+        return connection.promise().query("DELETE FROM Skills WHERE name = \""+bountyName+"\"").then((result)=>({deletedRows:result[0].affectedRows, deletedName:bountyName}));;
     };     
 
     //Relationship modifications
