@@ -1,13 +1,16 @@
 'use strict'
 let path = "http://localhost:8080/api/"
-async function test(url, method, body=null){
-    console.log(body)
+async function test(url, method,body=null){ //function to test the API routes
+    console.log(JSON.stringify(body))
     let promise = (method == "GET")?
         fetch(path+url)
         :
         fetch(path+url,{
+            headers: {
+                "Content-Type": "application/json"
+              },
             method: method,
-            body:body
+            body:JSON.stringify(body)
         });
     return promise
     .then((response) => response.json())
@@ -26,26 +29,26 @@ async function testReadOne(){
     return test('users/fidjic7','GET')
     .then((res)=>res = test('fields/testfield','GET'))
     .then((res)=>res = test('skills/testing','GET'))
-    .then((res)=>"Finished testing CREATE")
+    .then((res)=>"Finished testing individual READ")
 }
 async function testReadAll(){
     return test('users','GET')
     .then((res)=>res = test('fields','GET'))
     .then((res)=>res = test('skills','GET'))
-    .then((res)=>"Finished testing CREATE")
+    .then((res)=>"Finished testing general READ")
 }
 
 async function testUpdate(){
     return test('users/fidjic7','PUT', {"firstName":"Thomas", "lastName":"Chevalier", "nickName":"FidjiC7", "password":"m0d3p4s"})
     .then((res)=>res = test('fields/testField','PUT', {"name":"testField", "description":"used Testing Area"}))   
     .then((res)=>res = test('skills/testing','PUT', {"name":"testing", "description":"tested", "field":"testField"}))
-    .then((res)=>"Finished testing CREATE")
+    .then((res)=>"Finished testing UPDATE")
 }
 async function testDelete(){
     return test('users/fidjic7','DELETE',{})
     .then((res)=>res = test('fields/testField','DELETE',{}))   
     .then((res)=>res = test('skills/testing','DELETE',{}))
-    .then((res)=>"Finished testing CREATE")
+    .then((res)=>"Finished testing DELETE")
 }
 
 async function testBattery(){
@@ -53,9 +56,9 @@ async function testBattery(){
     .then((result)=>{ console.log(result); return testCreate()})
     .then((result)=>{ console.log(result); return testReadOne()})
     .then((result)=>{ console.log(result); return testUpdate()})
-    .then((result)=>{ result = testReadOne(); console.log("Testing individual READ calls")})
-    .then((result)=>{ result = testDelete(); console.log("Testing DELETE calls")})
-    .then((result)=>{ result = testReadAll(); console.log("Testing general READ calls")})
+    .then((result)=>{ console.log(result); return testReadOne();})
+    .then((result)=>{ console.log(result); return testDelete();})
+    .then((result)=>{ console.log(result); return testReadAll();})
 }
 
 module.exports={

@@ -12,7 +12,6 @@ router.get('/:name', (req, res) => {
 })
 
 router.post('/create', (req, res) => {
-    console.log(req)
     Controllers.userController.createUser(req.body, res)
 })
 router.put('/:name', (req, res) => {
