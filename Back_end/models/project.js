@@ -44,6 +44,8 @@ class Project {
     static getSet(req_body){
         let keys = Object.keys(req_body)
         let values = Object.values(req_body);
+        if(keys.length==0)
+            throw new Error("Error: Empty body")
         let result = keys[0]+" = \""+values[0]+'\"'
         for(let i=1;i<keys.length;i++){
             result+= `, ${keys[i]} = "${values[i]}"`
