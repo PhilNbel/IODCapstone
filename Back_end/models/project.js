@@ -1,17 +1,35 @@
 let connection = require("../db_run");
+let Projects = require("./project")
 
-class User {
+class Project {
 
-    constructor({firstName, lastName, nickName=null, password=null, email=null, theme=null}) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.nickName = (nickName)?nickName:(firstName+"-"+lastName);
-        if(password)
-            this.password = password;
-        if(email)
-            this.email = email;
-        if(theme)
-            this.theme = theme;
+    constructor({type, name, description, isPrivate = false, altDescription = null, budget = null, showBudget = null, isOpen = false, creatorID}) {
+        this.type = type;
+        this.name = name;
+        this.description = description;
+        this.isPrivate = isPrivate;
+        this.isOpen = isOpen;
+        this.creatorID = creatorID;
+        if(altDescription)
+            this.altDescription = altDescription;
+        if(budget)
+            this.budget = budget;
+        if(showBudget)
+            this.showBudget = showBudget;
+    }
+
+    static async init(newProject){
+        let keys = Object.keys(newProject)
+        let createdProject = {};
+        keys.forEach(async (key)=>{
+            if(!key)//In case the key is null or false, the constructor will pick it up. It also let us get rid of undefined values (that would be inputted through the request)
+                return 
+            if(key=="creator")
+                createdProject[creatorID] = await Users.getUserInfoName("id",newProject[key]);
+            else
+                createdProject[key] = newProject[key] 
+        });
+        return new Project(createdProject)
     }
 
     //Formatting methods
@@ -35,44 +53,57 @@ class User {
 
     //CRUD operations
     
-    static async create(newUser) {
-        let userToInsert = new User(newUser)
-        return connection.promise().query("INSERT INTO Users"+ userToInsert.toInsert()).then((result)=>({result :result, name:userToInsert.nickName}));
+    static async create(newProject) {
+        let ProjectToInsert = new Project(newProject)
+        return connection.promise().query("INSERT INTO Projects"+ ProjectToInsert.toInsert()).then((result)=>({result :result, name:ProjectToInsert.nickName}));
     };
 
-    static readOne(toReadName) {
-        return connection.promise().query(`SELECT firstName,lastName,nickName,password,email FROM Users WHERE nickName = "${toReadName}"`);
+    static async readOne(toReadName, creatorName) {
+        let creatorID  = await Users.getUserInfoName("id",creatorName)
+        let req1 = await connection.promise().query(`SELECT type, name, description, isPrivate, showBudget FROM Projects WHERE name = "${toReadName}" AND creatorID = ${creatorID}`);
+        let part1 = req1[0][0];
+        if(part1)
+            throw new Error("")
+        let req2 = await connection.promise().query(`SELECT ${(part1.isPrivate)?"altDescription,":""}${(part1.showBudget)?"budget,":""},isOpen FROM Projects WHERE name = "${toReadName}" AND creatorID = ${creatorID}`);
+        let part2 = req2[0][0];
+        return {...part1,...part2}
+    };
+    
+    static async readOneAdmin(toReadName) {
+        let creatorID  = await Users.getUserInfoName("id",creatorName)
+        let req = await connection.promise().query(`SELECT type, name, description, isPrivate, altDescription, budget, showBudget, isOpen, creatorID FROM Projects WHERE nickName = "${toReadName}" AND creatorID = ${creatorID}`);
+        return req[0][0]
     };
     
     static async readAll(constraint = null) {
-        let query = "SELECT nickName FROM Users";
+        let query = "SELECT Projects.name, Users.name FROM Projects JOIN Users ON Users.userID=Projects.creatorID";
         if(constraint)
             query+= " WHERE "+constraint;
         return connection.promise().query(query)
-    };     
+    };
 
     static async update(toUpdate) {
-        let set = User.getSet(toUpdate[0])
-        return connection.promise().query("UPDATE Users SET "+set+" WHERE nickName = \""+toUpdate[1]+"\"")
+        let set = Project.getSet(toUpdate[0])
+        return connection.promise().query("UPDATE Projects SET "+set+" WHERE nickName = \""+toUpdate[1]+"\"")
             .catch((err)=>{
                 console.log(err);
-                throw new Error("No User corresponding to this ID")
+                throw new Error("No Project corresponding to this ID")
             });
     };
     
     
     static async destroy(bountyName) {
-        return connection.promise().query("DELETE FROM Users WHERE nickName = \""+bountyName+"\"").then((result)=>({deletedRows:result.affectedRows, deletedName:bountyName}));;
+        return connection.promise().query("DELETE FROM Projects WHERE nickName = \""+bountyName+"\"").then((result)=>({deletedRows:result.affectedRows, deletedName:bountyName}));;
     };     
 
     //Relationship modifications
-    static addInterest(userName, fieldName){
+    static addInterest(ProjectName, fieldName){
 
     }
 
-    static addMastery(userName, skillName){
+    static addMastery(ProjectName, skillName){
 
     }
 }
 
-module.exports = User
+module.exports = Project

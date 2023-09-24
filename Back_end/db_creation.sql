@@ -60,7 +60,7 @@ CREATE TABLE Projects (
     isPrivate boolean,
     altdescription varchar(4096) DEFAULT NULL,
     budget int unsigned DEFAULT NULL,
-    budgetIsShared boolean,
+    budgetIsShared boolean DEFAULT NULL,
     isOpen boolean,
     creatorID int unsigned NOT NULL,
     CONSTRAINT fk0 FOREIGN KEY (creatorID) REFERENCES Users(userID) ON DELETE CASCADE,

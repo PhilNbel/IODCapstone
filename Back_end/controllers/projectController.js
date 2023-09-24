@@ -3,88 +3,16 @@ const Models = require("../models");
 
 const getProject = (req,res) => {
 
-    Models.Projects.findOne(req.params.id).then(function (data) {
-        res.send({
-                result: 200,
-                data: {
-                        name:"Placeholder project",
-                        steps:[
-                            {
-                                name:"step1",
-                                description:"a placeholder step",
-                                status:"toDo",
-                                tasks:[
-                                    { name:"doing this", status:"isDone" },
-                                    { name:"doing that", status:"toDo" }
-                                ]
-                            },
-                            {
-                                name:"step2",
-                                description:"a placeholder step too",
-                                status:"toDo",
-                                tasks:[
-                                    { name:"love this", status:"toDo" },
-                                    { name:"love that", status:"toDo" }
-                                ]
-                            }
-                        ]
-                    }
-                });
+    Models.Projects.findOne(req.params.name).then(function (data) {
+        res.send({ result: 200, data: data });
     }).catch(err => {
-        res.send({ result: 500, data: {error:"No Project corresponding to this id"} })
+        res.send({ result: 500, data: {error:err.message} })
     })
 }
 
 const getProjects = (res) => {
     Models.Projects.findAll().then(function (data) {
-        res.send({ result: 200, data:[
-            {
-                name:"Placeholder project",
-                steps:[
-                    {
-                        name:"step1",
-                        description:"a placeholder step",
-                        status:"toDo",
-                        tasks:[
-                            { name:"doing this", status:"isDone" },
-                            { name:"doing that", status:"toDo" }
-                        ]
-                    },
-                    {
-                        name:"step2",
-                        description:"a placeholder step too",
-                        status:"toDo",
-                        tasks:[
-                            { name:"love this", status:"toDo" },
-                            { name:"love that", status:"toDo" }
-                        ]
-                    }
-                ]
-            },
-            {
-                name:"Second placeholder project",
-                steps:[
-                    {
-                        name:"step s.1",
-                        description:"a placeholder step",
-                        status:"isDone",
-                        tasks:[
-                            { name:"s.doing this", status:"isDone" },
-                            { name:"s.doing that", status:"toDo" }
-                        ]
-                    },
-                    {
-                        name:"step s.2",
-                        description:"a placeholder step too",
-                        status:"isDone",
-                        tasks:[
-                            { name:"love s.this", status:"isDone" },
-                            { name:"love s.that", status:"isDone" }
-                        ]
-                    }
-                ]
-            }
-        ]})
+        res.send({ result: 200, data:data[0]})
     }).catch(err => {
         res.send({ result: 500, error: err.message })
     })

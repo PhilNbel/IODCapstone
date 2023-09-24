@@ -26,15 +26,16 @@ class Field {
         return result;
     }
 
-
-    static async getFieldInfoName(info,name){
+    //Remote getters
+    
+    static async getFieldInfoName(info,name){ //to get and info with the name
         let queryRes = await connection.promise().query(`SELECT ${info} FROM Fields WHERE name = "${name}"`)
         if(queryRes[0].length!=0)
             return queryRes[0][0][info]
         return null
     }
 
-    static async getFieldInfoID(info,id){
+    static async getFieldInfoID(info,id){ //to get an info with the id
         await connection.promise().query(`SELECT ${info} FROM Fields WHERE fieldID = "${id}"`)[0][0][info]
         return
     }

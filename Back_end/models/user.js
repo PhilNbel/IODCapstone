@@ -33,6 +33,15 @@ class User {
         return result;
     }
 
+    //Remote getters
+
+    static async getUserInfoName(info,name){ //to get and info with the name
+        let queryRes = await connection.promise().query(`SELECT ${info} FROM Users WHERE name = "${name}"`)
+        if(queryRes[0].length!=0)
+            return queryRes[0][0][info]
+        return null
+    }
+
     //CRUD operations
     
     static async create(newUser) {
@@ -46,6 +55,10 @@ class User {
     };
 
     static readOne(toReadName) {
+        return connection.promise().query(`SELECT nickName,email FROM Users WHERE nickName = "${toReadName}"`);
+    };
+    
+    static readOneAdmin(toReadName) {
         return connection.promise().query(`SELECT firstName,lastName,nickName,password,email FROM Users WHERE nickName = "${toReadName}"`);
     };
 
@@ -79,9 +92,6 @@ class User {
 
     }
 
-    static addProject(){
-
-    }
 }
 
 module.exports = User
