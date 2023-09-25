@@ -30,7 +30,6 @@ const getUsers = (res) => {
 }
 
 const createUser = (data, res) => {
-    console.log(data)
     Models.Users.create(data).then(function (data) {
         res.send({ result: 200, message: "Successfully created user "+data.name })
     }).catch(err => {

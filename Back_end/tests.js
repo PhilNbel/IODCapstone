@@ -1,7 +1,6 @@
 'use strict'
 let path = "http://localhost:8080/api/"
 async function test(url, method,body=null){ //function to test the API routes
-    console.log(JSON.stringify(body))
     let promise = (method == "GET")?
         fetch(path+url)
         :
@@ -20,7 +19,7 @@ async function test(url, method,body=null){ //function to test the API routes
 async function testCreate(){
     return test('users/create','POST', {"firstName":"Thomas", "lastName":"Knight", "nickName":"FidjiC7", "password":"motdepasse"})   
     .then((res)=>res = test('fields/create','POST', {"name":"testField", "description":"testingArea"}))   
-    .then((res)=>res = test('skills/create','POST', {"name":"testing", "description":"toTest", "field":"testField"}))
+    .then((res)=>res = test('skills/create','POST', {"name":"testing skill", "description":"toTest", "field":"testField"}))
     .then((res)=>"Finished testing CREATE")
      
 }
@@ -28,7 +27,7 @@ async function testCreate(){
 async function testReadOne(){
     return test('users/fidjic7','GET')
     .then((res)=>res = test('fields/testfield','GET'))
-    .then((res)=>res = test('skills/testing','GET'))
+    .then((res)=>res = test('skills/testing%20skill','GET'))
     .then((res)=>"Finished testing individual READ")
 }
 async function testReadAll(){
@@ -41,7 +40,7 @@ async function testReadAll(){
 async function testUpdate(){
     return test('users/fidjic7','PUT', {"firstName":"Thomas", "lastName":"Chevalier", "nickName":"FidjiC7", "password":"m0d3p4s"})
     .then((res)=>res = test('fields/testField','PUT', {"name":"testField", "description":"used Testing Area"}))   
-    .then((res)=>res = test('skills/testing','PUT', {"name":"testing", "description":"tested", "field":"testField"}))
+    .then((res)=>res = test('skills/testing%20skill','PUT', {"name":"testing", "description":"tested", "field":"testField"}))
     .then((res)=>"Finished testing UPDATE")
 }
 async function testDelete(){

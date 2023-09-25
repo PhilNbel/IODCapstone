@@ -4,7 +4,7 @@ class Field {
 
     constructor({name, description}) {
         this.name = name;
-        this.fieldID = null;
+        this.description = description;
     }
 
     //Formatting methods
@@ -38,7 +38,7 @@ class Field {
     }
 
     static async getFieldInfoID(info,id){ //to get an info with the id
-        await connection.promise().query(`SELECT ${info} FROM Fields WHERE fieldID = "${id}"`)[0][0][info]
+        await connection.promise().query(`SELECT ${info} FROM Fields WHERE description = descriptionid}"`)[0][0][info]
         return
     }
 

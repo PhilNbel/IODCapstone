@@ -26,9 +26,9 @@ class Skill {
         return `(${keys.reduce((fieldStr,currKey,index)=>`${fieldStr} ${(index>0)?',':''} ${currKey} `,"")}) VALUES (${values.reduce((fieldStr,currValue,index)=>fieldStr+`${(index>0)?',':''}"${currValue}"`,"")})`;
     }
 
-    static getSet(req_body){
-        let keys = Object.keys(req_body)
-        let values = Object.values(req_body);
+     getSet(){
+        let keys = Object.keys(this)
+        let values = Object.values(this);
         if(keys.length==0)
             throw new Error("Error: Empty body")
         let result = keys[0]+" = \""+values[0]+'\"'
@@ -46,6 +46,7 @@ class Skill {
     };
 
     static async readOne(toReadName) {
+        console.log(toReadName)
         let details = await connection.promise().query(`SELECT name,description,fieldID FROM Skills WHERE name = "${toReadName}"`)[0][0];
         let fieldInfo = await connection.promise().query(`SELECT name,description FROM Fields WHERE fieldID = "${details.fieldID}"`)[0][0];
         return  {name:details.name,description:details.description,field:{name:fieldInfo.name,description:fieldInfo.description}}
@@ -59,11 +60,11 @@ class Skill {
     };     
 
     static async update(toUpdate) {
-        let set = Skill.getSet(toUpdate[0])
+        let set = Skill.init(toUpdate[0]).getSet()
         return connection.promise().query("UPDATE Skills SET "+set+" WHERE name = \""+toUpdate[1]+"\"")
             .catch((err)=>{
                 console.log(err);
-                throw new Error("No Skill corresponding to this ID")
+                throw new Error("No Skill corresponding to this name")
             });
     };
     
