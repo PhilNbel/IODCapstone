@@ -11,7 +11,7 @@ export default function HomeLogo(){
                     noWrap
                     sx={homeLogo1}
                 >
-                Eovia
+                EOVIA
                 </Typography>
           </Container>
             <Box> 

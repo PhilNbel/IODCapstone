@@ -3,7 +3,7 @@ import React, { useState, useContext } from "react";
 const UserContext = React.createContext();
 
 export const UserProvider = (props) => {
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState(null);
 
   const handleUpdateUser = (user) => {
     setCurrentUser(user);

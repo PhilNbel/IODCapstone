@@ -3,7 +3,7 @@ const Models = require("../models");
 
 const getProject = (req,res) => {
 
-    Models.Projects.findOne(req.params.name).then(function (data) {
+    Models.Projects.readOne(req.params.name).then(function (data) {
         res.send({ result: 200, data: data });
     }).catch(err => {
         res.send({ result: 500, data: {error:err.message} })
@@ -11,7 +11,7 @@ const getProject = (req,res) => {
 }
 
 const getProjects = (res) => {
-    Models.Projects.findAll().then(function (data) {
+    Models.Projects.readAll().then(function (data) {
         res.send({ result: 200, data:data[0]})
     }).catch(err => {
         res.send({ result: 500, error: err.message })
