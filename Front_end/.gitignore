@@ -22,3 +22,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.~lock.retroplanning.ods#
+.~lock.Documentation Template.docx#

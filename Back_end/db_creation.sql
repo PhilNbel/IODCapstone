@@ -9,15 +9,28 @@ DROP TABLE IF EXISTS Projects;
 DROP TABLE IF EXISTS Skills;
 DROP TABLE IF EXISTS Users;
 DROP TABLE IF EXISTS Fields;
+DROP TABLE IF EXISTS Themes;
 
+
+CREATE TABLE Themes (
+    themeID int unsigned NOT NULL AUTO_INCREMENT,
+    primary_color char(7) NOT NULL,
+    secondary_color char(7) NOT NULL,
+    ternary_color char(7) NOT NULL,
+    quaternary_color char(7) NOT NULL,
+    quinary_color char(7) NOT NULL,
+    PRIMARY KEY(themeID)
+);
 CREATE TABLE Users (
     userID int unsigned NOT NULL AUTO_INCREMENT,
-    firstName varchar(128),
-    lastName varchar(512),
-    nickName varchar(128) NOT NULL,
+    firstName varchar(32) NOT NULL,
+    lastName varchar(128) NOT NULL,
+    nickName varchar(256) NOT NULL,
     password varchar(128) NOT NULL,
     email varchar(128),
+    themeID int unsigned,
     PRIMARY KEY(userID),
+    CONSTRAINT themeRef FOREIGN KEY (themeID) REFERENCES Themes(themeID),
     UNIQUE KEY(nickName)
 );
 
@@ -33,8 +46,8 @@ CREATE TABLE Skills (
     skillID int unsigned NOT NULL AUTO_INCREMENT,
     name varchar(128) NOT NULL,
     description varchar(2048) NOT NULL,
-    fieldID int unsigned,
-    CONSTRAINT fk0 FOREIGN KEY (fieldID) REFERENCES Fields(fieldID),
+    fieldID int unsigned NOT NULL,
+    CONSTRAINT fk FOREIGN KEY (fieldID) REFERENCES Fields(fieldID),
     PRIMARY KEY(skillID),
     CONSTRAINT skillsUQ UNIQUE (name,fieldID)
 );
@@ -47,21 +60,23 @@ CREATE TABLE Projects (
     isPrivate boolean,
     altdescription varchar(4096) DEFAULT NULL,
     budget int unsigned DEFAULT NULL,
-    budgetIsShared boolean,
+    budgetIsShared boolean DEFAULT NULL,
     isOpen boolean,
+    creatorID int unsigned NOT NULL,
+    CONSTRAINT fk0 FOREIGN KEY (creatorID) REFERENCES Users(userID) ON DELETE CASCADE,
     PRIMARY KEY(projectID)
 );
 
 CREATE TABLE Steps (
     stepID int unsigned NOT NULL AUTO_INCREMENT,
     name varchar(128) NOT NULL,
-    description varchar(4096) NOT NULL,
+    description varchar(4096),
     status ENUM('toDo','inProgress','isDone') NOT NULL,
     hasResources boolean,
     projectID int unsigned,
     parentID int unsigned DEFAULT NULL,
-    CONSTRAINT fk1 FOREIGN KEY (projectID) REFERENCES Projects(projectID),
-    CONSTRAINT fk2 FOREIGN KEY (parentID) REFERENCES Steps(stepID),
+    CONSTRAINT fk1 FOREIGN KEY (projectID) REFERENCES Projects(projectID) ON DELETE CASCADE,
+    CONSTRAINT fk2 FOREIGN KEY (parentID) REFERENCES Steps(stepID) ON DELETE CASCADE,
     PRIMARY KEY(stepID)
 );
 
@@ -73,9 +88,7 @@ CREATE TABLE Tasks (
     stepID int unsigned,
     userID int unsigned,
     skillID int unsigned,
-    CONSTRAINT fk3 FOREIGN KEY (stepID) REFERENCES Steps(stepID),
-    CONSTRAINT fk4 FOREIGN KEY (userID) REFERENCES Users(userID),
-    CONSTRAINT fk5 FOREIGN KEY (skillID) REFERENCES Skills(skillID),
+    CONSTRAINT fk3 FOREIGN KEY (stepID) REFERENCES Steps(stepID) ON DELETE CASCADE,
     PRIMARY KEY(taskID)
 );
 
@@ -99,23 +112,23 @@ CREATE TABLE IsMember (
 CREATE TABLE Interests (
     userID int unsigned,
     fieldID int unsigned,
-    CONSTRAINT fk9 FOREIGN KEY (userID) REFERENCES Users(userID),
-    CONSTRAINT fkA FOREIGN KEY (fieldID) REFERENCES Fields(fieldID),
+    CONSTRAINT fk9 FOREIGN KEY (userID) REFERENCES Users(userID) ON DELETE CASCADE,
+    CONSTRAINT fkA FOREIGN KEY (fieldID) REFERENCES Fields(fieldID) ON DELETE CASCADE,
     CONSTRAINT interestsPK PRIMARY KEY CLUSTERED (userID, fieldID)
 );
 
 CREATE TABLE Masters (
     userID int unsigned,
     skillID int unsigned,
-    CONSTRAINT fkB FOREIGN KEY (userID) REFERENCES Users(userID),
-    CONSTRAINT fkC FOREIGN KEY (skillID) REFERENCES Skills(skillID),
+    CONSTRAINT fkB FOREIGN KEY (userID) REFERENCES Users(userID) ON DELETE CASCADE,
+    CONSTRAINT fkC FOREIGN KEY (skillID) REFERENCES Skills(skillID) ON DELETE CASCADE,
     CONSTRAINT mastersPK PRIMARY KEY CLUSTERED (userID, skillID)
 );
 
 CREATE TABLE TouchesOn (
     projectID int unsigned,
     fieldID int unsigned    ,
-    CONSTRAINT fkD FOREIGN KEY (projectID) REFERENCES Projects(projectID),
-    CONSTRAINT fkE FOREIGN KEY (fieldID) REFERENCES Fields(fieldID),
+    CONSTRAINT fkD FOREIGN KEY (projectID) REFERENCES Projects(projectID) ON DELETE CASCADE,
+    CONSTRAINT fkE FOREIGN KEY (fieldID) REFERENCES Fields(fieldID) ON DELETE CASCADE,
     CONSTRAINT touchesonPK PRIMARY KEY CLUSTERED (projectID, fieldID)
 );

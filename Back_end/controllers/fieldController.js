@@ -1,50 +1,51 @@
 "use strict";
 const Models = require("../models");
 
-const getCategory = (req,res) => {
-
-    Models.Categories.findOne(req.params.id).then(function (data) {
-        res.send({ result: 200, data: data[0][0] })
+const getField = (req,res) => {
+    Models.Fields.readOne(req.params.name).then(function (data) {
+        res.send({ result: 200, data: data })
     }).catch(err => {
-        res.send({ result: 500, error:"No Category corresponding to this id"} )
+        res.send({ result: 500, error:"No field with name "+req.params.name} )
     })
 }
 
-const getCategories = (res) => {
-    Models.Categories.findAll().then(function (data) {
-        res.send({ result: 200, data: data })
+const getFields = (res) => {
+    Models.Fields.readAll().then(function (data) {
+        res.send({ result: 200, data: data[0] })
     })/*.catch(err => {
-        res.send({ result: 500, error:"An error occured while fetching categories"} )
+        res.send({ result: 500, error:"An error occured while fetching Fields"} )
     })*/
 }
 
-const createCategory = (data, res) => {
-    Models.Categories.create(data).then(function (data) {
-        res.send({ result: 200, message: "Category successfully created with ID "+data[0].insertId })
+const createField = (data, res) => {
+    Models.Fields.create(data).then(function (data) {
+        res.send({ result: 200, message: "Field "+data.insertName+" successfully created"})
     }).catch(err => {
-        res.send({ result: 500, error:"Invalid category format: category needs a names"} )
+        res.send({ result: 500, error:err.message} )
     })
 }
 
-const updateCategory = (req, res) => {
-    Models.Categories.update({...req.body,id:req.params.id}).then(function (data) {
-        res.send({ result: 200, message: "Category #"+req.params.id+" updated succesfully" })
+const updateField = (req, res) => {
+    Models.Fields.update([req.body,req.params.name]).then(function (data) {
+        if(data[0].affectedRows ==0)
+            throw new Error("No field "+req.params.name+" to update");
+        res.send({ result: 200, message: "Field "+req.params.name+" updated succesfully" })
     }).catch(err => {
         res.send({ result: 500, error: err.message })
     })
 }
 
-const deleteCategory = (req, res) => {
-    let categoryId = req.params.id;
-    Models.Categories.destroy(categoryId).then(function (data) {
-        let categoriesDeleted = data[0].affectedRows;
-        if(categoriesDeleted == 0) throw new Error("No Category with ID "+categoryId+" to delete");
-        res.send({ result: 200, message:`Successfully deleted ${categoriesDeleted} categor${(categoriesDeleted>1)?"ies":"y"}` })
+const deleteField = (req, res) => {
+    let fieldName = req.params.name;
+    Models.Fields.destroy(fieldName).then(function (data) {
+        let fieldsDeleted = data.deletedRows;
+        if(fieldsDeleted == 0) throw new Error("No field with name "+fieldName+" to delete");
+        res.send({ result: 200, message:`Successfully deleted field ${data.deletedName}` })
     }).catch(err => {
         res.send({ result: 500, error: err.message })
     })
 }
 
 module.exports = {
-    getCategory, getCategories, createCategory, updateCategory, deleteCategory
+    getField, getFields, createField, updateField, deleteField
 }

@@ -1,50 +1,54 @@
 "use strict";
 const Models = require("../models");
 
-const getProficiency = (req,res) => {
+const getProject = (req,res) => {
 
-    Models.Proficiencies.findOne(req.params.id).then(function (data) {
-        res.send({ result: 200, data: data })
+    Models.Projects.findOne(req.params.name).then(function (data) {
+        res.send({ result: 200, data: data });
     }).catch(err => {
-        res.send({ result: 500, data: {error:"No proficiency corresponding to this id"} })
+        res.send({ result: 500, data: {error:err.message} })
     })
 }
 
-const getProficiencies = (res) => {
-    Models.Proficiencies.findAll().then(function (data) {
-        res.send({ result: 200, data: data })
-    }).catch(err => {
-        res.send({ result: 500, error: err.message })
-    })
-}
-
-const createProficiency = (data, res) => {
-    Models.Proficiencies.create(data).then(function (data) {
-        res.send({ result: 200, message: "Proficiency successfully created with ID "+data[0].insertId })
-    }).catch(err => {
-        res.send({ result: 500, error:"Invalid Proficiency format: proficiency needs a name and a boolean telling if it is a category (or an item otherwise)"} )
-    })
-}
-const updateProficiency = (req, res) => {
-    Models.Proficiencies.update({...req.body,id:req.params.id}).then(function (data) {
-        res.send({ result: 200, message: "Successfully updated proficiency #"+req.params.id })
+const getProjects = (res) => {
+    Models.Projects.findAll().then(function (data) {
+        res.send({ result: 200, data:data[0]})
     }).catch(err => {
         res.send({ result: 500, error: err.message })
     })
 }
 
-const deleteProficiency = (req, res) => {
-    let proficiencyID = req.params.id;
+const createProject = (data, res) => {
+    Models.Projects.create(data).then(function (data) {
+        console.log("Project successfully created with ID "+data.insertId)
+        res.send({ result: 200, message: "Project "+data.insertName+" successfully created"})
+    }).catch(err => {
+        res.send({ result: 500, error:err.message} )
+    })
+}
 
-    Models.Proficiencies.destroy(proficiencyID).then(function (data) {
-        let proficienciesDeleted = data[0].affectedRows;
-        if(proficienciesDeleted == 0) throw new Error("No proficiency with ID "+proficiencyID+" to delete");
-        res.send({ result: 200, message:`Successfully deleted ${proficienciesDeleted} proficienc${(proficienciesDeleted>1)?"ies":"y"}` })
+const updateProject = (req, res) => {
+    Models.Projects.update([req.body,req.params.name]).then(function (data) {
+        if(data[0].affectedRows ==0)
+            throw new Error("No project "+req.params.name+" to update");
+        res.send({ result: 200, message: "Project "+req.params.name+" updated succesfully" })
+    }).catch(err => {
+        res.send({ result: 500, error: err.message })
+    })
+}
+
+const deleteProject = (req, res) => {
+    let projectName = req.params.name;
+    let projectCreator = req.body.creator;
+
+    Models.Projects.destroy(projectName,projectCreator).then(function (data) {
+        if(data.deleted == 0) throw new Error("No project \""+projectName+"\" to delete");
+        res.send({ result: 200, message:`Successfully deleted project ${data.name}` })
     }).catch(err => {
         res.send({ result: 500, error: err.message })
     })
 }
 
 module.exports = {
-    getProficiency, getProficiencies, createProficiency, updateProficiency, deleteProficiency
+    getProject, getProjects, createProject, updateProject, deleteProject
 }

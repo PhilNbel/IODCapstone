@@ -26,4 +26,6 @@ dist-ssr
 # node module files
 
 node_modules/*
+.~lock.Documentation Template.docx#
+.~lock.retroplanning.ods#
 Back_end/results

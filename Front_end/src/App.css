@@ -1,8 +1,12 @@
-#root {
-  max-width: 1280px;
+main {
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
+  padding: 2rem;
+  display: flex;
+}
+
+div, h2{
+  display: inherit;
 }
 
 .logo {

@@ -1,50 +1,97 @@
 "use strict";
 const Models = require("../models");
 
-const getProficiency = (req,res) => {
+const getStep = (req,res) => {
 
-    Models.Proficiencies.findOne(req.params.id).then(function (data) {
-        res.send({ result: 200, data: data })
+    Models.Steps.readOne(req.params.id).then(function (data) {
+        res.send({ result: 200, data:
+                {
+                    name:"step1",
+                    description:"a placeholder step",
+                    status:"toDo",
+                    tasks:[
+                        { name:"doing this", status:"isDone" },
+                        { name:"doing that", status:"toDo" }
+                    ]
+                }
+            })
     }).catch(err => {
-        res.send({ result: 500, data: {error:"No proficiency corresponding to this id"} })
+        res.send({ result: 500, data: {error:"No Step corresponding to this id"} })
     })
 }
 
-const getProficiencies = (res) => {
-    Models.Proficiencies.findAll().then(function (data) {
-        res.send({ result: 200, data: data })
+const getSteps = (res) => {
+    Models.Steps.readAll().then(function (data) {
+        res.send({ result: 200, data:[
+            {
+                name:"step1",
+                description:"a placeholder step",
+                status:"toDo",
+                tasks:[
+                    { name:"doing this", status:"isDone" },
+                    { name:"doing that", status:"toDo" }
+                ]
+            },
+            {
+                name:"step2",
+                description:"a placeholder step too",
+                status:"toDo",
+                tasks:[
+                    { name:"love this", status:"toDo" },
+                    { name:"love that", status:"toDo" }
+                ]
+            },
+            {
+                name:"step1",
+                description:"a placeholder step",
+                status:"toDo",
+                tasks:[
+                    { name:"doing this", status:"isDone" },
+                    { name:"doing that", status:"toDo" }
+                ]
+            },
+            {
+                name:"step2",
+                description:"a placeholder step too",
+                status:"toDo",
+                tasks:[
+                    { name:"love this", status:"toDo" },
+                    { name:"love that", status:"toDo" }
+                ]
+            }]
+        }).catch(err => {
+            res.send({ result: 500, error: err.message })
+        })
+    })
+}
+
+const createStep = (data, res) => {
+    Models.Steps.create(data).then(function (data) {
+        res.send({ result: 200, message: "Step successfully created with ID "+data[0].insertId })
+    }).catch(err => {
+        res.send({ result: 500, error:"Invalid Step format: Step needs a name and a boolean telling if it is a category (or an item otherwise)"} )
+    })
+}
+const updateStep = (req, res) => {
+    Models.Steps.update({...req.body,id:req.params.id}).then(function (data) {
+        res.send({ result: 200, message: "Successfully updated Step #"+req.params.id })
     }).catch(err => {
         res.send({ result: 500, error: err.message })
     })
 }
 
-const createProficiency = (data, res) => {
-    Models.Proficiencies.create(data).then(function (data) {
-        res.send({ result: 200, message: "Proficiency successfully created with ID "+data[0].insertId })
-    }).catch(err => {
-        res.send({ result: 500, error:"Invalid Proficiency format: proficiency needs a name and a boolean telling if it is a category (or an item otherwise)"} )
-    })
-}
-const updateProficiency = (req, res) => {
-    Models.Proficiencies.update({...req.body,id:req.params.id}).then(function (data) {
-        res.send({ result: 200, message: "Successfully updated proficiency #"+req.params.id })
-    }).catch(err => {
-        res.send({ result: 500, error: err.message })
-    })
-}
+const deleteStep = (req, res) => {
+    let StepID = req.params.id;
 
-const deleteProficiency = (req, res) => {
-    let proficiencyID = req.params.id;
-
-    Models.Proficiencies.destroy(proficiencyID).then(function (data) {
-        let proficienciesDeleted = data[0].affectedRows;
-        if(proficienciesDeleted == 0) throw new Error("No proficiency with ID "+proficiencyID+" to delete");
-        res.send({ result: 200, message:`Successfully deleted ${proficienciesDeleted} proficienc${(proficienciesDeleted>1)?"ies":"y"}` })
+    Models.Steps.destroy(StepID).then(function (data) {
+        let StepsDeleted = data[0].affectedRows;
+        if(StepsDeleted == 0) throw new Error("No Step with ID "+StepID+" to delete");
+        res.send({ result: 200, message:`Successfully deleted ${StepsDeleted} proficienc${(StepsDeleted>1)?"ies":"y"}` })
     }).catch(err => {
         res.send({ result: 500, error: err.message })
     })
 }
 
 module.exports = {
-    getProficiency, getProficiencies, createProficiency, updateProficiency, deleteProficiency
+    getStep, getSteps, createStep, updateStep, deleteStep
 }

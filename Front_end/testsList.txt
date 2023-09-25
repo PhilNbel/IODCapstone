@@ -1,0 +1,12 @@
+-Forms format
+-accessing private data without being connected (ProtectedRoutes)
+-Fetch calls
+-testing 
+-Pledging 0 or less when implemented
+
+FOR IMPORTANT FEATURES:
+    Describe what should happen when clicking the button/performing the action
+
+multiple tags that are true or false: Binary values
+Divide (rounded down) by the value you are looking for. If result is even, it has the tag
+in case of multiple tags, look for tags individually and apply and/or rules

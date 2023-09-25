@@ -1,5 +1,7 @@
 module.exports={
-    itemController: require('./userController'),
-    categoryController: require('./fieldController'),
-    proficiencyController: require('./projectController')
+    userController: require('./userController'),
+    fieldController: require('./fieldController'),
+    projectController: require('./projectController'),
+    stepController: require('./stepController'),
+    skillController: require('./skillController')
 }
