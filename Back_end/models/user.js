@@ -5,6 +5,7 @@ class User {
     constructor({firstName, lastName, nickName=null, password=null, email=null, theme=null}) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.userName = (nickName)?nickName:email;
         this.nickName = (nickName)?nickName:(firstName+"-"+lastName);
         if(password)
             this.password = password;
@@ -57,7 +58,7 @@ class User {
     };
 
     static readOne(toReadName) {
-        return connection.promise().query(`SELECT nickName,email FROM Users WHERE nickName = "${toReadName}"`);
+        return connection.promise().query(`SELECT nickName, userName, email, password FROM Users WHERE nickName = "${toReadName}"`);
     };
     
     static readOneAdmin(toReadName) {

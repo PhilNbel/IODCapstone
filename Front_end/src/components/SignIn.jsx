@@ -4,7 +4,7 @@ import { useMyThemeContext } from "../contexts/MyThemeContext";
 import readThat from "../hooks/readThat";
 import { useRef } from "react";
 import { useUserContext } from "../contexts/UserContext";
-const crypto = require('crypto');
+import crypto from 'crypto';
 
 export default function SignIn(){
 
@@ -41,8 +41,12 @@ export default function SignIn(){
                     O
             </Typography>
         </Box>
-        <TextField ref={username} label="Username (email if not specified)" variant="standard" type="text" />
-        <TextField ref={password} label="Password" variant="standard" type="password" />
+        <Box>
+            <TextField ref={username} label="Username (email if not specified)" variant="standard" type="text" />
+        </Box>
+        <Box>
+            <TextField ref={password} label="Password" variant="standard" type="password" />
+        </Box>
         <Button onClick={login}>Log In</Button>
     </Box>
 }
