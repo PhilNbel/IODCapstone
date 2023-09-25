@@ -1,30 +1,27 @@
 import { useState,useEffect } from "react";
+let path = "http://localhost:8080/api"
 
 // hooks are usually named exports rather than default
-export function useData(url, initialValue = []) {
+export default function updateData(table, entity, body, initialValue = []) {
 
   // state variable for holding fetched json data
   const [data, setData] = useState(initialValue);
 
   useEffect(() => {
-    if (url) {
-      let ignore = false;
-      fetch(url)
-        .then((response) => response.json())
-        .then((json) => {
-          if (!ignore) {
-            setData(json);
-          }
-        });
+    fetch(`${path}/${table}s/${entity}`,{
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: 'UPDATE',
+      body:JSON.stringify(body)
+    })
+    .then((response) => response.json())
+    .then((json) => {
+      setData(json);
+    });
 
-      // cleanup function, in case url changes before complete
-      return () => {
-        ignore = true;
-      };
-    }
-  }, [url]); // re-run effect if url changes
+  }, []); // re-run effect if url changes
 
   // return the data fetched from the given url
   return data;
 }
-

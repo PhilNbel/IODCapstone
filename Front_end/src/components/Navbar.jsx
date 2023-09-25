@@ -1,4 +1,5 @@
 import * as React from 'react';
+//import { Box, TextField, Button, Typography } from "@mui/material";
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -27,7 +28,7 @@ function NavBar() {
   };
 
   return (
-    <AppBar position="sticky">
+    <AppBar position="sticky" sx={{backgroundColor:"#64732C"}}>
       <Box marginLeft={"2rem"}>
         <Toolbar disableGutters>
 

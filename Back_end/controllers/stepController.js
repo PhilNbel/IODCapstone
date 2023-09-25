@@ -3,7 +3,7 @@ const Models = require("../models");
 
 const getStep = (req,res) => {
 
-    Models.Steps.findOne(req.params.id).then(function (data) {
+    Models.Steps.readOne(req.params.id).then(function (data) {
         res.send({ result: 200, data:
                 {
                     name:"step1",
@@ -21,7 +21,7 @@ const getStep = (req,res) => {
 }
 
 const getSteps = (res) => {
-    Models.Steps.findAll().then(function (data) {
+    Models.Steps.readAll().then(function (data) {
         res.send({ result: 200, data:[
             {
                 name:"step1",

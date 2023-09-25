@@ -3,7 +3,7 @@ import { Box, Button, FormControl, InputLabel, Radio, RadioGroup, Select, MenuIt
 import { useRef, useState } from "react";
 
 export default function Filter({list, handler}){//Returns a component where you can filter the list passed as argument by name, field, type or status
-    const [settings, setSettings] = useState((<>Init</>));
+    const [settings, setSettings] = useState((<></>));
     const [filterType, setFilterType] = useState("");
     const [radioVal, setRadioVal] = useState();
     const initList = [...list];
@@ -31,7 +31,7 @@ export default function Filter({list, handler}){//Returns a component where you 
                 </>)
                 break;
             default:
-                setSettings((<>DefaultSwitch</>))
+                setSettings((<></>))
                 break;
         }
 
@@ -40,10 +40,8 @@ export default function Filter({list, handler}){//Returns a component where you 
     function modifyList(){
         switch (filterType){
             case "type":
-                console.log(radioVal)
-                let newList = list.filter((project)=>project.type == radioVal); 
-                console.log(newList)
-                handler([])
+                let newList = list.filter((project)=>project.type == radioVal);
+                handler(newList)
                 break;
             default:
                 setSettings((<></>))
@@ -55,15 +53,16 @@ export default function Filter({list, handler}){//Returns a component where you 
         list = [...initList];
     }
 
-    return (<Box sx={{display:"flex", justifyContent:"space-between"}}>
-            <FormControl fullWidth sx={{display:"inline-block"}}>
+    return (<Box sx={{display:"flex", justifyContent:"space-between", padding:"1rem"}}>
+            <FormControl fullWidth >
                 <InputLabel id="filter-type">Type</InputLabel>
                 <Select
                     labelId="filter-type"
-                    id="demo-simple-select"
                     label="Type"
+                    defaultValue="name"
                     value={filterType}
                     onChange={changeSettings}
+                    sx={{width:"50%"}}
                 >
                     <MenuItem value={"name"}>
                         Name
@@ -79,7 +78,7 @@ export default function Filter({list, handler}){//Returns a component where you 
                     </MenuItem>
                 </Select>
             </FormControl>
-            <FormControl fullWidth sx={{display:"inline-block"}}>
+            <FormControl fullWidth>
                 {settings}
                 <Button type="submit" onClick={modifyList}>
                     Submit

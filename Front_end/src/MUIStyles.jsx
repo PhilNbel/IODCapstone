@@ -1,7 +1,3 @@
-import React from 'react'
-
-
-
 export const homeLogo1 = {
     mr: 2,
     flexGrow: 3,
@@ -9,6 +5,7 @@ export const homeLogo1 = {
     fontWeight: 700,
     letterSpacing: '.3rem',
     textDecoration: 'none',
+    color: "#088578"
 };
 
 export const homeLogo2 = {
@@ -18,7 +15,9 @@ export const homeLogo2 = {
     fontWeight: 300,
     letterSpacing: '.3rem',
     textDecoration: 'italics',
+    color:"#FFEBCD"
 };
+
 
 export const about = {
     mr: 2,
@@ -26,7 +25,7 @@ export const about = {
     fontFamily: 'monospace',
     fontWeight: 700,
     letterSpacing: '.3rem',
-    textDecoration: 'none',
+    textDecoration: 'none'
 };
 
 export const presentation = {
@@ -35,8 +34,9 @@ export const presentation = {
     fontFamily: 'none',
     fontWeight: 300,
     letterSpacing: '.3rem',
-    textDecoration: 'italics',
+    textDecoration: 'italics'
 };
+
 
 export const navButton = {
     mr: 2,
@@ -45,5 +45,14 @@ export const navButton = {
     fontFamily: 'monospace',
     fontWeight: 700,
     letterSpacing: '.3rem',
-    textDecoration: 'none',
+    textDecoration: 'none'
+};
+
+export const title = {
+    mr: 2,
+    flexGrow: 3,
+    fontFamily: 'monospace',
+    fontWeight: 700,
+    letterSpacing: '.3rem',
+    textDecoration: 'none'
 };

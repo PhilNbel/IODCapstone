@@ -1,63 +1,99 @@
 let connection = require("../db_run");
 
 class User {
-    constructor({name, isCategory}) {
-        this.name = name;
-        if(typeof(isCategory)!= "boolean") throw new Error("Invalid format");
-        this.isCategory = isCategory;
-    }
-    async toInsert(){
-        let result = await connection.promise().query(`SELECT ${(this.isCategory)?'categoryID':'itemID'} FROM ${(this.isCategory)?'categories':'items'} WHERE name="${this.name}"`);
-        return Object.values(result[0][0])[0];
+
+    constructor({firstName, lastName, nickName=null, password=null, email=null, theme=null}) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.nickName = (nickName)?nickName:(firstName+"-"+lastName);
+        if(password)
+            this.password = password;
+        if(email)
+            this.email = email;
+        if(theme)
+            this.theme = theme;
     }
 
-    static async getSet(req_body){
-        let result = await connection.promise().query(`SELECT ${(req_body.isCategory)?'categoryID':'itemID'} FROM ${(req_body.isCategory)?'categories':'items'} WHERE name="${req_body.name}"`);
-        return `${(req_body.isCategory)?'categoryID':'itemID'} = ${Object.values(result[0][0])[0]}`;
+    //Formatting methods
+
+    toInsert(){
+        let keys = Object.keys(this);
+        let values = Object.values(this);
+
+        return `(${keys.reduce((fieldStr,currKey,index)=>`${fieldStr} ${(index>0)?',':''} ${currKey} `,"")}) VALUES (${values.reduce((fieldStr,currValue,index)=>fieldStr+`${(index>0)?',':''}"${currValue}"`,"")})`;
     }
 
+    static getSet(req_body){
+        let keys = Object.keys(req_body)
+        let values = Object.values(req_body);
+        if(keys.length==0)
+            throw new Error("Error: Empty body")
+        let result = keys[0]+" = \""+values[0]+'\"'
+        for(let i=1;i<keys.length;i++){
+            result+= `, ${keys[i]} = "${values[i]}"`
+        }
+        return result;
+    }
+
+    //Remote getters
+
+    static async getUserInfoName(info,name){ //to get and info with the name
+        let queryRes = await connection.promise().query(`SELECT ${info} FROM Users WHERE name = "${name}"`)
+        if(queryRes[0].length!=0)
+            return queryRes[0][0][info]
+        return null
+    }
+
+    //CRUD operations
+    
     static async create(newUser) {
-        let mergedProf = new User(newUser)
-        return connection.promise().query(`INSERT INTO users(${(mergedProf.isCategory)?'categoryID':'itemID'}) VALUES (${await mergedProf.toInsert()})`);
+        let userToInsert = new User(newUser)
+        return connection.promise().query("INSERT INTO Users"+ userToInsert.toInsert()).then((result)=>({result :result, name:userToInsert.nickName}));
     };
 
+    static async readProject(creatorName,projectName) {
+        return connection.promise().query(`SELECT userID FROM Users WHERE nickName = "${creatorName}"`)//We retrieve the ID corresponding to the name of the creator
+            .then((result)=>connection.promise().query(`SELECT * FROM Projects WHERE name = "${projectName}" AND creatorID = ${result[0][0].userID}`));//We return the project with the same name and creator ID
+    };
 
-    static async update(updatedUser) {
-        console.log(updatedUser)
-        return connection.promise().query("UPDATE users SET "+await User.getSet(updatedUser)+" WHERE userID = "+updatedUser.id);
+    static readOne(toReadName) {
+        return connection.promise().query(`SELECT nickName,email FROM Users WHERE nickName = "${toReadName}"`);
     };
     
-    static destroy(deletedUserId) {
-        return connection.promise().query("DELETE FROM users WHERE userID = "+deletedUserId);
+    static readOneAdmin(toReadName) {
+        return connection.promise().query(`SELECT firstName,lastName,nickName,password,email FROM Users WHERE nickName = "${toReadName}"`);
+    };
+
+    static async readAll(constraint = null) {
+        let query = "SELECT nickName FROM Users";
+        if(constraint)
+            query+= " WHERE "+constraint;
+        return connection.promise().query(query)
     };     
 
-    static async findOne(toFindId){
-        return connection.promise().query("SELECT * FROM users WHERE userID = "+toFindId)
-            .then((response)=>{
-                let result = response[0][0];
-                return (result.itemID)?
-                    connection.promise().query("SELECT name FROM items WHERE itemID = "+result.itemID).then((nameResult)=>({userID:response[0][0].userID,name:nameResult[0][0].name,type:'item',itemID:result.itemID}))
-                :
-                    connection.promise().query("SELECT name FROM categories WHERE categoryID = "+result.categoryID).then((nameResult)=>({userID:response[0][0].userID,name:nameResult[0][0].name,type:'category',categoryID:result.categoryID}))
-                ;
-            })
+    static async update(toUpdate) {
+        let set = User.getSet(toUpdate[0])
+        return connection.promise().query("UPDATE Users SET "+set+" WHERE nickName = \""+toUpdate[1]+"\"")
+            .catch((err)=>{
+                console.log(err);
+                throw new Error("No User corresponding to this ID")
+            });
+    };
+    
+    
+    static async destroy(bountyName) {
+        return connection.promise().query("DELETE FROM Users WHERE nickName = \""+bountyName+"\"").then((result)=>({deletedRows:result[0].affectedRows, deletedName:bountyName}));;
+    };     
+
+    //Relationship modifications
+    static addInterest(userName, fieldName){
+
     }
 
-    static async findAll() {
-        return connection.promise().query("SELECT * FROM users")
-            .then((responseArray)=>{
-                    return Promise.all(responseArray[0].map((response)=>{
-                        let result = response;
-                        return (result.itemID)?
-                            connection.promise().query("SELECT name FROM items WHERE itemID = "+result.itemID).then((nameResult)=>({userID:response.userID,name:nameResult[0][0].name, type:'item'}))
-                        :
-                            connection.promise().query("SELECT name FROM categories WHERE categoryID = "+result.categoryID).then((nameResult)=>({userID:response.userID,name:nameResult[0][0].name,type:'category'}))
-                        ;
-                    }))
-            })
-    };     
+    static addMastery(userName, skillName){
 
-    static sync(){}
+    }
+
 }
 
 module.exports = User

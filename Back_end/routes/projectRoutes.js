@@ -2,19 +2,19 @@ let express = require("express");
 let router = express.Router();
 let Controllers = require("../controllers"); //index.js
 router.get('/', (req, res) => {
-    Controllers.categoryController.getCategories(res);
+    Controllers.projectController.getProjects(res);
 })
-router.get('/:id', (req, res) => {
-    Controllers.categoryController.getCategory(req,res);
+router.get('/:name', (req, res) => {
+    Controllers.projectController.getProject(req,res);
 })
 router.post('/create', (req, res) => {
-    Controllers.categoryController.createCategory(req.body, res)
+    Controllers.projectController.createProject(req.body, res)
 })
-router.put('/:id', (req, res) => {
-    Controllers.categoryController.updateCategory(req, res)
+router.put('/:name', (req, res) => {
+    Controllers.projectController.updateProject(req, res)
 })
-router.delete('/:id', (req, res) => {
-    Controllers.categoryController.deleteCategory(req, res)
+router.delete('/:name', (req, res) => {
+    Controllers.projectController.deleteProject(req, res)
 })
    
 module.exports = router;
