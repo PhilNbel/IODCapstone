@@ -26,3 +26,4 @@ dist-ssr
 # node module files
 
 node_modules/*
+Back_end/results
