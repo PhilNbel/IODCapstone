@@ -25,9 +25,8 @@ CREATE TABLE Users (
     userID int unsigned NOT NULL AUTO_INCREMENT,
     firstName varchar(32) NOT NULL,
     lastName varchar(128) NOT NULL,
-    userName varchar(256) NOT NULL,
     nickName varchar(256) NOT NULL,
-    password char(512) NOT NULL,
+    password varchar(512) NOT NULL,
     email varchar(128),
     themeID int unsigned,
     PRIMARY KEY(userID),
@@ -39,6 +38,7 @@ CREATE TABLE Fields (
     fieldID int unsigned NOT NULL AUTO_INCREMENT,
     name varchar(128) NOT NULL,
     description varchar(2048) NOT NULL,
+    color char(7),
     PRIMARY KEY(fieldID),
     UNIQUE KEY(name)
 );
@@ -48,6 +48,7 @@ CREATE TABLE Skills (
     name varchar(128) NOT NULL,
     description varchar(2048) NOT NULL,
     fieldID int unsigned NOT NULL,
+    color char(7),
     CONSTRAINT fk FOREIGN KEY (fieldID) REFERENCES Fields(fieldID),
     PRIMARY KEY(skillID),
     CONSTRAINT skillsUQ UNIQUE (name,fieldID)

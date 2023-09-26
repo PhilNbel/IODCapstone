@@ -5,7 +5,6 @@ class User {
     constructor({firstName, lastName, nickName=null, password=null, email=null, theme=null}) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.userName = (nickName)?nickName:email;
         this.nickName = (nickName)?nickName:(firstName+"-"+lastName);
         if(password)
             this.password = password;
