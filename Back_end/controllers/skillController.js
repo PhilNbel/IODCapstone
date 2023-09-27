@@ -2,25 +2,26 @@
 const Models = require("../models");
 
 const getSkill = (req,res) => {
-    console.log(req.params.name)
     Models.Skills.readOne(req.params.name).then(function (data) {
         res.send({ result: 200, data: data })
-    }).catch(err => {
-        res.send({ result: 500, error:"No skill corresponding to this id"} )
+    }).catch( err => {
+        res.send({ result: 500, error:err.message} )
     })
 }
 
 const getSkills = (res) => {
     Models.Skills.readAll().then(function (data) {
         res.send({ result: 200, data: data[0] })
-    })/*.catch(err => {
+    }).catch(err => {
         res.send({ result: 500, error:"An error occured while fetching skills"} )
-    })*/
+    })
 }
 
-const createSkill = (data, res) => {
-    Models.Skills.create(data).then(function (data) {
-        res.send({ result: 200, message: "Skill successfully created with ID "+data[0].insertId })
+const createSkill = (req_body, res) => {
+    Models.Skills.create(req_body).then(function (data) {
+        if(data[0].affectedRows==0)
+            throw new Error("Error while creating the skill "+req_body.name)
+        res.send({ result: 200, message: "Successfully created skill "+req_body.name })
     }).catch(err => {
         res.send({ result: 500, error:err} )
     })

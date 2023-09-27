@@ -1,97 +1,87 @@
 "use strict";
 const Models = require("../models");
 
+//Step methods
+
 const getStep = (req,res) => {
 
-    Models.Steps.readOne(req.params.id).then(function (data) {
-        res.send({ result: 200, data:
-                {
-                    name:"step1",
-                    description:"a placeholder step",
-                    status:"toDo",
-                    tasks:[
-                        { name:"doing this", status:"isDone" },
-                        { name:"doing that", status:"toDo" }
-                    ]
-                }
-            })
+    Models.Steps.readOne(req.params.step, req.params.project,req.params.name).then(function (data) {
+        res.send(data)
     }).catch(err => {
-        res.send({ result: 500, data: {error:"No Step corresponding to this id"} })
+        res.send({ result: 500, data: {error:"No Step corresponding to this name"} })
     })
 }
 
 const getSteps = (res) => {
     Models.Steps.readAll().then(function (data) {
-        res.send({ result: 200, data:[
-            {
-                name:"step1",
-                description:"a placeholder step",
-                status:"toDo",
-                tasks:[
-                    { name:"doing this", status:"isDone" },
-                    { name:"doing that", status:"toDo" }
-                ]
-            },
-            {
-                name:"step2",
-                description:"a placeholder step too",
-                status:"toDo",
-                tasks:[
-                    { name:"love this", status:"toDo" },
-                    { name:"love that", status:"toDo" }
-                ]
-            },
-            {
-                name:"step1",
-                description:"a placeholder step",
-                status:"toDo",
-                tasks:[
-                    { name:"doing this", status:"isDone" },
-                    { name:"doing that", status:"toDo" }
-                ]
-            },
-            {
-                name:"step2",
-                description:"a placeholder step too",
-                status:"toDo",
-                tasks:[
-                    { name:"love this", status:"toDo" },
-                    { name:"love that", status:"toDo" }
-                ]
-            }]
-        }).catch(err => {
+        res.send(data).catch(err => {
             res.send({ result: 500, error: err.message })
         })
     })
 }
 
-const createStep = (data, res) => {
-    Models.Steps.create(data).then(function (data) {
-        res.send({ result: 200, message: "Step successfully created with ID "+data[0].insertId })
+const createStep = (req, res) => {
+    Models.Steps.create(req.body, req.params.step,req.params.project).then(function (data) {
+        res.send({ result: 200, message: "Step successfully created with ID "+data[0].name })
     }).catch(err => {
-        res.send({ result: 500, error:"Invalid Step format: Step needs a name and a boolean telling if it is a category (or an item otherwise)"} )
+        res.send({ result: 500, error:"Invalid step format: Step needs a name, a description and a project"} )
     })
 }
 const updateStep = (req, res) => {
-    Models.Steps.update({...req.body,id:req.params.id}).then(function (data) {
-        res.send({ result: 200, message: "Successfully updated Step #"+req.params.id })
+    Models.Steps.update(req.body,req.params.step, req.params.project,req.params.name).then(function (data) {
+        res.send({ result: 200, message: "Successfully updated Step #"+req.params.name })
     }).catch(err => {
         res.send({ result: 500, error: err.message })
     })
 }
 
 const deleteStep = (req, res) => {
-    let StepID = req.params.id;
-
-    Models.Steps.destroy(StepID).then(function (data) {
+    Models.Steps.destroy(req.params.step, req.params.project,req.params.name).then(function (data) {
         let StepsDeleted = data[0].affectedRows;
-        if(StepsDeleted == 0) throw new Error("No Step with ID "+StepID+" to delete");
-        res.send({ result: 200, message:`Successfully deleted ${StepsDeleted} proficienc${(StepsDeleted>1)?"ies":"y"}` })
+        if(StepsDeleted == 0) throw new Error("No step with name "+stepName+" to delete");
+        res.send({ result: 200, message:`Successfully deleted Step ${req.params.name}` })
+    }).catch(err => {
+        res.send({ result: 500, error: err.message })
+    })
+}
+
+//Task methods
+const getTasks = (req,res)=>{
+    Models.Tasks.read(req.params.step,req.params.project,req.params.name).then(function (data) {
+        res.send(data)
+        .catch(err => {
+            res.send({ result: 500, error: err.message })
+        })
+    })
+}
+const createTask = (req,res)=>{
+    Models.Tasks.create(req.body, req.params.step,req.params.project,req.params.name).then(function (data) {
+        res.send({ result: 200, message: "Task successfully created with ID "+data[0].name })
+    }).catch(err => {
+        res.send({ result: 500, error:"Invalid Task format: Task needs a name and a description"} )
+    })
+
+}
+const updateTask = (req,res)=>{
+    Models.Tasks.update(req.body,req.params.step,req.params.project,req.params.name).then(function (data) {
+        res.send({ result: 200, message: "Successfully updated Task #"+req.params.name })
+    }).catch(err => {
+        res.send({ result: 500, error: err.message })
+    })
+}
+const deleteTask = (req,res)=>{
+
+    let taskName = req.params.name;
+
+    Models.Tasks.destroy(taskName).then(function (data) {
+        let TasksDeleted = data[0].affectedRows;
+        if(TasksDeleted == 0) throw new Error("No Task with name "+taskName+" to delete");
+        res.send({ result: 200, message:`Successfully deleted Task ${taskName}` })
     }).catch(err => {
         res.send({ result: 500, error: err.message })
     })
 }
 
 module.exports = {
-    getStep, getSteps, createStep, updateStep, deleteStep
+    getStep, getSteps, createStep, updateStep, deleteStep, getTasks, createTask, updateTask, deleteTask
 }
