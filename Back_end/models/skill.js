@@ -22,13 +22,14 @@ class Skill {
     toInsert(){
         let keys = Object.keys(this);
         let values = Object.values(this);
-
         return `(${keys.reduce((fieldStr,currKey,index)=>`${fieldStr} ${(index>0)?',':''} ${currKey} `,"")}) VALUES (${values.reduce((fieldStr,currValue,index)=>fieldStr+`${(index>0)?',':''}"${currValue}"`,"")})`;
     }
 
-     getSet(){
+    getSet(){
         let keys = Object.keys(this)
         let values = Object.values(this);
+        keys = keys.filter((key)=>key!="fieldID")
+        values = values.filter((value)=>value!=this.fieldID)
         if(keys.length==0)
             throw new Error("Error: Empty body")
         let result = keys[0]+" = \""+values[0]+'\"'
@@ -46,10 +47,11 @@ class Skill {
     };
 
     static async readOne(toReadName) {
-        console.log(toReadName)
-        let details = await connection.promise().query(`SELECT name,description,fieldID FROM Skills WHERE name = "${toReadName}"`)[0][0];
-        let fieldInfo = await connection.promise().query(`SELECT name,description FROM Fields WHERE fieldID = "${details.fieldID}"`)[0][0];
-        return  {name:details.name,description:details.description,field:{name:fieldInfo.name,description:fieldInfo.description}}
+        let details = await connection.promise().query(`SELECT name,description,fieldID FROM Skills WHERE name = "${toReadName}"`);
+        if(details[0].length == 0)
+            throw new Error("No field with name "+toReadName)
+        let fieldInfo = await connection.promise().query(`SELECT name,description FROM Fields WHERE fieldID = "${details[0][0].fieldID}"`);
+        return  {name:details[0][0].name,description:details[0][0].description,field:{name:fieldInfo[0][0].name,description:fieldInfo[0][0].description}}
     };
 
     static async readAll(constraint = null) {
@@ -60,10 +62,10 @@ class Skill {
     };     
 
     static async update(toUpdate) {
-        let set = Skill.init(toUpdate[0]).getSet()
+        let skill = await Skill.init(toUpdate[0])
+        let set = skill.getSet()
         return connection.promise().query("UPDATE Skills SET "+set+" WHERE name = \""+toUpdate[1]+"\"")
             .catch((err)=>{
-                console.log(err);
                 throw new Error("No Skill corresponding to this name")
             });
     };

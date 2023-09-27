@@ -3,6 +3,12 @@ Add a messaging system between users (within projects of as direct messages)
         L-> Completion notification for tasks and steps
     L-> Block people
 
+Expand on the projects content
+    L-> Allow multiple users to be assigned on one taks
+    L-> Allow muliple skills to be required on one task
+    L-> Allow a step to be linked to another step instead of a project
+    L-> Automate status change for steps when its tasks change status
+
 Add comments on project (and a flagging system)
     L-> Add comments on other user's pages if a project is or was shared
 

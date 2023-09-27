@@ -5,7 +5,6 @@ class User {
     constructor({firstName, lastName, nickName=null, password=null, email=null, theme=null}) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.userName = (nickName)?nickName:email;
         this.nickName = (nickName)?nickName:(firstName+"-"+lastName);
         if(password)
             this.password = password;
@@ -38,8 +37,8 @@ class User {
 
     //Remote getters
 
-    static async getUserInfoName(info,name){ //to get and info with the name
-        let queryRes = await connection.promise().query(`SELECT ${info} FROM Users WHERE name = "${name}"`)
+    static async getUserInfoName(info,name){ //to get info with the name
+        let queryRes = await connection.promise().query(`SELECT ${info} FROM Users WHERE nickName = "${name}"`)
         if(queryRes[0].length!=0)
             return queryRes[0][0][info]
         return null
@@ -58,7 +57,7 @@ class User {
     };
 
     static readOne(toReadName) {
-        return connection.promise().query(`SELECT nickName, userName, email, password FROM Users WHERE nickName = "${toReadName}"`);
+        return connection.promise().query(`SELECT nickName, email, password FROM Users WHERE nickName = "${toReadName}"`);
     };
     
     static readOneAdmin(toReadName) {

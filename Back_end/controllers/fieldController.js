@@ -5,16 +5,16 @@ const getField = (req,res) => {
     Models.Fields.readOne(req.params.name).then(function (data) {
         res.send({ result: 200, data: data })
     }).catch(err => {
-        res.send({ result: 500, error:"No field with name "+req.params.name} )
+        res.send({ result: 500, error:err.message} )
     })
 }
 
 const getFields = (res) => {
     Models.Fields.readAll().then(function (data) {
         res.send({ result: 200, data: data[0] })
-    })/*.catch(err => {
+    }).catch(err => {
         res.send({ result: 500, error:"An error occured while fetching Fields"} )
-    })*/
+    })
 }
 
 const createField = (data, res) => {
