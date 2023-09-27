@@ -1,17 +1,16 @@
 let connection = require("../db_run");
 
-class User {
+class Task {
 
-    constructor({firstName, lastName, nickName=null, password=null, email=null, theme=null}) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.nickName = (nickName)?nickName:(firstName+"-"+lastName);
-        if(password)
-            this.password = password;
-        if(email)
-            this.email = email;
-        if(theme)
-            this.theme = theme;
+    constructor({name, description, status, stepID, userID=null, skillID=null}) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.stepID = stepID;
+        if(userID)
+            this.userID = userID;
+        if(skillID)
+            this.skillID = skillID;
     }
 
     //Formatting methods
@@ -37,44 +36,31 @@ class User {
 
     //CRUD operations
     
-    static async create(newUser) {
-        let userToInsert = new User(newUser)
-        return connection.promise().query("INSERT INTO Users"+ userToInsert.toInsert()).then((result)=>({result :result, name:userToInsert.nickName}));
+    static async create(newTask) {
+        let TaskToInsert = new Task(newTask)
+        return connection.promise().query("INSERT INTO Tasks"+ TaskToInsert.toInsert()).then((result)=>({result :result, name:TaskToInsert.nickName}));
     };
 
-    static readOne(toReadName) {
-        return connection.promise().query(`SELECT firstName,lastName,nickName,password,email FROM Users WHERE nickName = "${toReadName}"`);
-    };
-
-    static async readAll(constraint = null) {
-        let query = "SELECT nickName FROM Users";
-        if(constraint)
-            query+= " WHERE "+constraint;
+    static async read(stepName,projectName,creator) {
+        let prep = await connection.promise().query(`SELECT Steps.stepID FROM Projects JOIN Steps ON Steps.projectID=Projects.projectID JOIN Users ON Projects.creator=Users.userID WHERE Users.nickName = "${creator}" AND Projects.name = "${projectName} AND Steps.name = "${stepName}"`)
+        let query = "SELECT Tasks.name, Tasks.description FROM Tasks JOIN Steps ON Tasks.stepID=Steps.stepID WHERE Steps.stepID = "+prep[0][0].stepID;
         return connection.promise().query(query)
     };     
 
     static async update(toUpdate) {
-        let set = User.getSet(toUpdate[0])
-        return connection.promise().query("UPDATE Users SET "+set+" WHERE nickName = \""+toUpdate[1]+"\"")
+        let set = Task.getSet(toUpdate[0])
+        return connection.promise().query("UPDATE Tasks SET "+set+" WHERE name = \""+toUpdate[1]+"\"")
             .catch((err)=>{
                 console.log(err);
-                throw new Error("No User corresponding to this ID")
+                throw new Error("No Task corresponding to this ID")
             });
-    };
+    };    
     
-    
-    static async destroy(bountyName) {
-        return connection.promise().query("DELETE FROM Users WHERE nickName = \""+bountyName+"\"").then((result)=>({deletedRows:result.affectedRows, deletedName:bountyName}));;
+    static async destroy(toDestroy) {
+//        return connection.promise().query("DELETE FROM Tasks WHERE name = \""+bountyName+"\"").then((result)=>({deletedRows:result.affectedRows, deletedName:bountyName}));;
+        return "destroy Task"
     };     
 
-    //Relationship modifications
-    static addInterest(userName, fieldName){
-
-    }
-
-    static addMastery(userName, skillName){
-
-    }
 }
 
-module.exports = User
+module.exports = Task

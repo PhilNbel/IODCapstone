@@ -56,3 +56,18 @@ export const title = {
     letterSpacing: '.3rem',
     textDecoration: 'none'
 };
+
+export const logInField = {
+    backgroundColor:"transparent",
+    padding:"2rem 0"
+};
+
+export const signUpField = {
+    backgroundColor:"transparent",
+    padding:"1rem 0"
+};
+
+export const fieldStyle = {
+    borderRadius:"50%",
+    padding:"0.5rem 1rem"
+};

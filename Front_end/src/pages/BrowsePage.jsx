@@ -26,11 +26,7 @@ export default function BrowsePage(){
                     marginLeft: 'auto',
                     boxSizing: 'border-box',
                     marginRight: 'auto',
-                    display: 'block',
-                    paddingLeft: '16px',
-                    paddingRight: '16px',
-                    minHeight: '90vh',
-                    borderRadius: '25px'
+                    display: 'block'
                 }}
             >
                 <Filter list={projectList} handler={setProjectList}/>
