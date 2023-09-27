@@ -1,9 +1,10 @@
 let connection = require("../db_run");
-let Projects = require("./project")
+let Users = require("./user")
+let Steps = require("./step")
 
 class Project {
 
-    constructor({type, name, description, isPrivate = false, altDescription = null, budget = null, showBudget = null, isOpen = false, creatorID}) {
+    constructor({type, name, description, isPrivate = false, altDescription = null, budget = null, budgetIsShared = null, isOpen = false, creatorID}) {
         this.type = type;
         this.name = name;
         this.description = description;
@@ -12,24 +13,33 @@ class Project {
         this.creatorID = creatorID;
         if(altDescription)
             this.altDescription = altDescription;
-        if(budget)
-            this.budget = budget;
-        if(showBudget)
-            this.showBudget = showBudget;
+        if(budget!=null && budget!=undefined)
+            this.budget = budget
+        if(budgetIsShared!=null && budgetIsShared!=undefined)
+            this.budgetIsShared = budgetIsShared
     }
 
     static async init(newProject){
         let keys = Object.keys(newProject)
         let createdProject = {};
-        keys.forEach(async (key)=>{
+        await Promise.all(keys.map(async (key)=>{
             if(!key)//In case the key is null or false, the constructor will pick it up. It also let us get rid of undefined values (that would be inputted through the request)
-                return 
+                return
             if(key=="creator")
-                createdProject[creatorID] = await Users.getUserInfoName("id",newProject[key]);
+                createdProject["creatorID"] = await Users.getUserInfoName("userID",newProject[key]);
             else
                 createdProject[key] = newProject[key] 
-        });
+        }));
         return new Project(createdProject)
+    }
+    
+    //Remote getters
+
+    static async getProjectInfoName(info,name){ //to get info with the name
+        let queryRes = await connection.promise().query(`SELECT ${info} FROM Projects WHERE name = "${name}"`)
+        if(queryRes[0].length!=0)
+            return queryRes[0][0][info]
+        return null
     }
 
     //Formatting methods
@@ -56,29 +66,35 @@ class Project {
     //CRUD operations
     
     static async create(newProject) {
-        let ProjectToInsert = new Project(newProject)
-        return connection.promise().query("INSERT INTO Projects"+ ProjectToInsert.toInsert()).then((result)=>({result :result, name:ProjectToInsert.nickName}));
+        let projectToInsert = await Project.init(newProject)
+        return connection.promise().query("INSERT INTO Projects"+ projectToInsert.toInsert()).then((result)=>({result :result, name:projectToInsert.name}));
     };
 
     static async readOne(toReadName, creatorName) {
-        let creatorID  = await Users.getUserInfoName("id",creatorName)
-        let req1 = await connection.promise().query(`SELECT type, name, description, isPrivate, showBudget FROM Projects WHERE name = "${toReadName}" AND creatorID = ${creatorID}`);
+        let creatorID  = await Users.getUserInfoName("userID",creatorName)
+        let req1 = await connection.promise().query(`SELECT type, name, description, isPrivate, budgetIsShared FROM Projects WHERE name = "${toReadName}" AND creatorID = ${creatorID}`);
         let part1 = req1[0][0];
-        if(part1)
-            throw new Error("")
-        let req2 = await connection.promise().query(`SELECT ${(part1.isPrivate)?"altDescription,":""}${(part1.showBudget)?"budget,":""},isOpen FROM Projects WHERE name = "${toReadName}" AND creatorID = ${creatorID}`);
+        if(!part1)
+            throw new Error("Cannot find project "+toReadName+" created by "+creatorName)
+        let req2 = await connection.promise().query(`SELECT ${(part1.isPrivate)?"altDescription,":""}${(part1.budgetIsShared)?"budget,":""}isOpen FROM Projects WHERE name = "${toReadName}" AND creatorID = ${creatorID}`);
         let part2 = req2[0][0];
-        return {...part1,...part2}
+        let req4 = await Steps.readAll(toReadName, creatorName)
+        
+        return {...part1,...part2,steps:req4[0]}
     };
     
-    static async readOneAdmin(toReadName) {
-        let creatorID  = await Users.getUserInfoName("id",creatorName)
-        let req = await connection.promise().query(`SELECT type, name, description, isPrivate, altDescription, budget, showBudget, isOpen, creatorID FROM Projects WHERE nickName = "${toReadName}" AND creatorID = ${creatorID}`);
-        return req[0][0]
+    static async readOneAdmin(toReadName, creatorName) {
+        let creatorID  = await Users.getUserInfoName("userID",creatorName)
+        let req = await connection.promise().query(`SELECT type, name, description, isPrivate, altDescription, budget, budgetIsShared, isOpen, creatorID FROM Projects WHERE name = "${toReadName}" AND creatorID = ${creatorID}`);
+        let part1 = req[0][0]
+        
+        let req2 = await Steps.readAll(toReadName, creatorName)
+        
+        return {...part1,steps:req2[0]}
     };
     
     static async readAll(constraint = null) {
-        let query = "SELECT Projects.name, Users.name FROM Projects JOIN Users ON Users.userID=Projects.creatorID";
+        let query = "SELECT Projects.name, Users.nickName FROM Projects JOIN Users ON Users.userID=Projects.creatorID";
         if(constraint)
             query+= " WHERE "+constraint;
         return connection.promise().query(query)
@@ -86,7 +102,7 @@ class Project {
 
     static async update(toUpdate) {
         let set = Project.getSet(toUpdate[0])
-        return connection.promise().query("UPDATE Projects SET "+set+" WHERE nickName = \""+toUpdate[1]+"\"")
+        return connection.promise().query("UPDATE Projects SET "+set+" WHERE name = \""+toUpdate[1]+"\" AND name = \""+await Users.getUserInfoName("id",toUpdate[2])+"\"")
             .catch((err)=>{
                 console.log(err);
                 throw new Error("No Project corresponding to this ID")
@@ -94,18 +110,9 @@ class Project {
     };
     
     
-    static async destroy(bountyName) {
-        return connection.promise().query("DELETE FROM Projects WHERE nickName = \""+bountyName+"\"").then((result)=>({deletedRows:result.affectedRows, deletedName:bountyName}));;
+    static async destroy(bountyName,creator) {
+        return connection.promise().query("DELETE FROM Projects WHERE name = \""+bountyName+"\" AND name = \""+await Users.getUserInfoName("id",toUpdate[2])+"\"").then((result)=>({deletedRows:result.affectedRows, deletedName:bountyName}));;
     };     
-
-    //Relationship modifications
-    static addInterest(ProjectName, fieldName){
-
-    }
-
-    static addMastery(ProjectName, skillName){
-
-    }
 }
 
 module.exports = Project

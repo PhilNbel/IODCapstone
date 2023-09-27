@@ -30,7 +30,7 @@ class Field {
 
     //Remote getters
     
-    static async getFieldInfoName(info,name){ //to get and info with the name
+    static async getFieldInfoName(info, name){ //to get and info with the name
         let queryRes = await connection.promise().query(`SELECT ${info} FROM Fields WHERE name = "${name}"`)
         if(queryRes[0].length!=0)
             return queryRes[0][0][info]
@@ -52,8 +52,7 @@ class Field {
 
     static async readOne(toReadName) {
         let part1 = await connection.promise().query(`SELECT name,description FROM Fields WHERE name = "${toReadName}"`);
-        let part2 = await connection.promise().query(`SELECT Skills.name,Skills.description FROM Skills JOIN Fields ON Skills.fieldID=Fields.fieldID WHERE Fields.name = "${toReadName}"`)
-
+        let part2 = await connection.promise().query(`SELECT Skills.name,Skills.description FROM Fields JOIN Skills ON Fields.fieldID=Skills.fieldID WHERE Fields.name = "${toReadName}"`)
         return {...part1[0][0], skills:part2[0]}
     };
 

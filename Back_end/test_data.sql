@@ -1,12 +1,13 @@
--- INSERT INTO users(firstName,lastName,nickName, password) VALUES
---     ('Philippe','Hennebelle', 'Eovius', '$2a$10$4iF2CbFZ41047vsw1zMPW.bJ72ajAXJ8drvziqgHwtk/3azCJzc6e'), -- 1234
---     ('Jo', 'Batkin', 'The great teacher in IOD', '$2a$10$hoM8XevovTn/ktXNEKy8veLgWmH63l0IJoaxuTj/3fdFLclSOZknu'), -- hig#leve!pa5sw0rd
---     ('Jordan', 'Klianis','Custodes Tech-priest', '$2a$10$wypS/rep72Lla7tqIL4UzOMLDLCaXWIpIWVXbJeo48ercsotIg9b.'), -- wa4a4a4ag#4mm3r
---     ('Thomas', 'Knight','Fidji','$2a$10$4mG42I38aooTSxSPi4AGf.3fh8I9TuZx4AoDz0p6m0Wmwup4DHYvu'), -- mod3pas
---     ('Justine', 'Villegas', "Adam's badminton partner",'$2a$10$P6sza6z1qbclwC.6Nm41dujNM6qpIG/r8YiI4hGa1ka4E5N9ATSZK'), -- badm!nt0n
---     ('Adam', 'DeGas', "Justine's badminton partner",'$2a$10$P6sza6z1qbclwC.6Nm41dujNM6qpIG/r8YiI4hGa1ka4E5N9ATSZK'), -- badm!nt0n
---     ('Chris', 'Marsh', 'The greatest Australian assistant in IOD','!0D'), -- !0D
---     ('Gareth', 'Wootton', 'The greatest Kiwi assistant in IOD','!0D'); -- !0D
+INSERT INTO users(firstName,lastName,nickName, password) VALUES
+    ('Philippe','Hennebelle', 'Eovius', '$2a$10$4iF2CbFZ41047vsw1zMPW.bJ72ajAXJ8drvziqgHwtk/3azCJzc6e'), -- 1234
+    ('Jo', 'Batkin', 'The great teacher in IOD', '$2a$10$hoM8XevovTn/ktXNEKy8veLgWmH63l0IJoaxuTj/3fdFLclSOZknu'), -- hig#leve!pa5sw0rd
+    ('Jordan', 'Klianis','Custodes Tech-priest', '$2a$10$wypS/rep72Lla7tqIL4UzOMLDLCaXWIpIWVXbJeo48ercsotIg9b.'), -- wa4a4a4ag#4mm3r
+    ('Thomas', 'Knight','Fidji','$2a$10$4mG42I38aooTSxSPi4AGf.3fh8I9TuZx4AoDz0p6m0Wmwup4DHYvu'), -- mod3pas
+    ('Justine', 'Villegas', "Adam's badminton partner",'$2a$10$P6sza6z1qbclwC.6Nm41dujNM6qpIG/r8YiI4hGa1ka4E5N9ATSZK'), -- badm!nt0n
+    ('Adam', 'DeGas', "Justine's badminton partner",'$2a$10$P6sza6z1qbclwC.6Nm41dujNM6qpIG/r8YiI4hGa1ka4E5N9ATSZK'), -- badm!nt0n
+    ('Chris', 'Marsh', 'The greatest Australian assistant in IOD','!0D'), -- !0D
+    ('Gareth', 'Wootton', 'The greatest Kiwi assistant in IOD','!0D'); -- !0D
+    ('Dahlia', 'Aly', 'Software and buildings architect','3¶yp7');
 
 INSERT INTO Fields(name, description) VALUES
     ('Software engineering','The art of solving real life problems with computer programs'),
@@ -53,42 +54,71 @@ INSERT INTO Skills(name, description,fieldID) VALUES
     ('Forming','',6),
     ('Bezels','',6);
 
--- INSERT INTO Masters (userID,skillID) VALUES
---     (1,3),
---     (1,1),
---     (1,2),
---     (1,5),
---     (1,9),
---     (1,10),
---     (1,4),
---     (2,1),
---     (2,2),
---     (2,3),
---     (2,4),
---     (2,8),
---     (2,11),
---     (3,3),
---     (3,4),
---     (3,1),
---     (3,2),
---     (3,7),
---     (4,4),
---     (4,1),
---     (4,2),
---     (5,3),
---     (5,4),
---     (6,1),
---     (6,2),
---     (6,3),
---     (6,4);
+INSERT INTO Masters (userID,skillID) VALUES
+    (1,3),
+    (1,1),
+    (1,2),
+    (1,5),
+    (1,9),
+    (1,10),
+    (1,4),
+    (2,1),
+    (2,2),
+    (2,3),
+    (2,4),
+    (2,8),
+    (2,11),
+    (3,3),
+    (3,4),
+    (3,1),
+    (3,2),
+    (3,7),
+    (4,4),
+    (4,1),
+    (4,2),
+    (5,3),
+    (5,4),
+    (6,1),
+    (6,2),
+    (6,3),
+    (6,4);
 
--- INSERT INTO Interests (userID,fieldID) VALUES
---     (1,1),
---     (1,2),
---     (1,3),
---     (1,4),
---     (2,4),
---     (2,2),
---     (2,3),
---     (3,2),
---     (3,3);
+INSERT INTO Interests (userID,fieldID) VALUES
+    (1,1),
+    (1,2),
+    (1,3),
+    (1,4),
+    (2,4),
+    (2,2),
+    (2,3),
+    (3,2),
+    (3,3);
+
+INSERT INTO Projects (type, name, description, isPrivate, altdescription, budget, budgetIsShared, isOpen,creatorID) VALUES
+    ('Hobby', 'Homemade soap', 'Using ashes to make lye and said lie to make a homemade soap', FALSE, NULL, NULL, NULL, TRUE , 1),
+    ('Serious', 'Waaaaaghammer', 'A Warhammer game aid to simplify and reduce the required time to play', FALSE, NULL, 500, FALSE, TRUE , 3),
+    ('Professional', 'Freelance career', 'Using prior and new knowledge to create new programs', TRUE, 'The furthering of my personal career', NULL, NULL, TRUE , 9),
+    ('Serious', 'Badminton tournament', 'Bringing in players to have a tournament', FALSE, NULL, 12500, TRUE, TRUE , 5);
+
+INSERT INTO Steps (name, description, status, hasResources, projectID) VALUES
+    ('Preparing the materials', 'Preparing the different resources to ', 'toDo', FALSE, 1),
+    ('Cooking the lye', '', 'toDo', TRUE, 1),
+    ('Cooking the soap', 'Creating the', 'toDo', TRUE, 1),
+    ('Learning how to develop', 'Taking classes or learning by myself', 'isDone', FALSE, 2),
+    ('Develop the program', 'Actually create the website', 'inProgress', FALSE, 2),
+    ('Learning architecture', '', 'isDone', FALSE, 3),
+    ('Learning development', '', 'inProgress', FALSE, 3),
+    ('Creating a few programs', '', 'toDo', FALSE, 3),
+    ('Advertising the programs', '', 'toDo', FALSE, 3),
+    ('Looking for players', '', 'toDo', FALSE, 4);
+
+INSERT INTO Tasks (name, description, status, stepID, userID, skillID) VALUES
+    ('Materials for the lye', 'Getting dry grass, stones and charcoal', 'toDo', 1, NULL, NULL),
+    ('Materials for the soap', 'Getting lye, a wooden structure for drying and ', 'toDo', 1, 1, NULL),
+    ('Calulating the doses', 'Calculate the doses required ', 'toDo', 2, 1, 9),
+    ('Getting enrolled in the IOD course', '', 'isDone', 4, NULL, NULL),
+    ('Finishing the learning part of the course', '', 'isDone', 4, NULL, NULL),
+    ('Finishing the capstone', '', 'inProgress', 5, NULL, 1),
+    ('Doing the course', '', 'inProgress', 7, NULL, NULL),
+    ('Learning more languages', '', 'toDo', 7, NULL, NULL),
+    ('Creating a permit submission review website', '', 'toDo', 8, NULL, 6);

@@ -1,17 +1,27 @@
 let connection = require("../db_run");
+let Users = require("./user")
 
-class User {
+class Step {
 
-    constructor({firstName, lastName, nickName=null, password=null, email=null, theme=null}) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.nickName = (nickName)?nickName:(firstName+"-"+lastName);
-        if(password)
-            this.password = password;
-        if(email)
-            this.email = email;
-        if(theme)
-            this.theme = theme;
+    constructor({name, description, status, projectID}) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.projectID = projectID;
+    }
+    
+    static async init(newProject){
+        let keys = Object.keys(newProject)
+        let createdProject = {};
+        keys.forEach(async (key)=>{
+            if(!key)//In case the key is null or false, the constructor will pick it up. It also let us get rid of undefined values (that would be inputted through the request)
+                return 
+            if(key=="creator")
+                createdProject[creatorID] = await Users.getUserInfoName("id",newProject[key]);
+            else
+                createdProject[key] = newProject[key] 
+        });
+        return new Step(createdProject)
     }
 
     //Formatting methods
@@ -37,44 +47,57 @@ class User {
 
     //CRUD operations
     
-    static async create(newUser) {
-        let userToInsert = new User(newUser)
-        return connection.promise().query("INSERT INTO Users"+ userToInsert.toInsert()).then((result)=>({result :result, name:userToInsert.nickName}));
+    static async create(newStep) {
+        let StepToInsert = new Step(newStep)
+        return connection.promise().query("INSERT INTO Steps"+ StepToInsert.toInsert()).then((result)=>({result :result, name:StepToInsert.nickName}));
     };
 
-    static readOne(toReadName) {
-        return connection.promise().query(`SELECT firstName,lastName,nickName,password,email FROM Users WHERE nickName = "${toReadName}"`);
+    static async readOne(toReadName,project,creator) {
+        console.log(toReadName)
+        let queryRes = await connection.promise().query(`SELECT projectID FROM Projects JOIN Users ON Projects.creatorID=Users.userID WHERE Projects.name = "${project}" AND Users.nickName="${creator}"`)
+        if(queryRes[0].length==0)
+            throw new Error("Project does not exist")
+        let projectId = queryRes[0][0].projectID
+        let part1 = await connection.promise().query(`SELECT name,description FROM Steps WHERE name = "${toReadName}" AND projectID=${projectId}`);
+        if(part1[0].length==0)
+            throw new Error("No Such step")
+        let part2 = await connection.promise().query(`SELECT Tasks.name,Tasks.description FROM Tasks JOIN Steps ON Tasks.stepID=Steps.stepID WHERE Steps.name = "${toReadName}" AND Steps.projectID=${projectId}`)
+        return {...part1[0][0], tasks:part2[0]}
     };
 
-    static async readAll(constraint = null) {
-        let query = "SELECT nickName FROM Users";
+    static async readAll(project, creator, constraint = null) {
+        let queryRes = await connection.promise().query(`SELECT projectID FROM Projects JOIN Users ON Projects.creatorID=Users.userID WHERE Projects.name = "${project}" AND Users.nickName="${creator}"`)
+        if(queryRes[0].length==0)
+            throw new Error("Project does not exist")
+        let projectId = queryRes[0][0].projectID
+        let query = "SELECT name FROM Steps WHERE projectID ="+projectId;
         if(constraint)
-            query+= " WHERE "+constraint;
-        return connection.promise().query(query)
+            query+= " AND "+constraint;
+        return connection.promise().query(query).then( (nameList)=>Promise.all( nameList[0].map((stepName)=>Step.readOne(stepName.name,project,creator)) ) )
     };     
 
     static async update(toUpdate) {
-        let set = User.getSet(toUpdate[0])
-        return connection.promise().query("UPDATE Users SET "+set+" WHERE nickName = \""+toUpdate[1]+"\"")
+        let set = Step.getSet(toUpdate[0])
+        return connection.promise().query("UPDATE Steps SET "+set+" WHERE nickName = \""+toUpdate[1]+"\"")
             .catch((err)=>{
                 console.log(err);
-                throw new Error("No User corresponding to this ID")
+                throw new Error("No Step corresponding to this ID")
             });
     };
     
     
     static async destroy(bountyName) {
-        return connection.promise().query("DELETE FROM Users WHERE nickName = \""+bountyName+"\"").then((result)=>({deletedRows:result.affectedRows, deletedName:bountyName}));;
+        return connection.promise().query("DELETE FROM Steps WHERE nickName = \""+bountyName+"\"").then((result)=>({deletedRows:result.affectedRows, deletedName:bountyName}));;
     };     
 
     //Relationship modifications
-    static addInterest(userName, fieldName){
+    static addInterest(StepName, fieldName){
 
     }
 
-    static addMastery(userName, skillName){
+    static addMastery(StepName, skillName){
 
     }
 }
 
-module.exports = User
+module.exports = Step

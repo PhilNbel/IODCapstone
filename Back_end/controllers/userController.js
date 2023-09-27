@@ -11,15 +11,6 @@ const getUser = (req,res) => {
     })
 }
 
-const getProject = (req,res) => {
-    Models.Users.readProject(req.params.name,req.params.project).then(function (data) {
-        res.send({ result: 200, data: data[0][0] })
-    }).catch(err => {
-        console.log(err.message)
-        res.send({ result: 500, error:"No project corresponding to this name"} )
-    })
-}
-
 const getUsers = (res) => {
     Models.Users.readAll().then(function (data) {
         res.send({ result: 200, data: data[0] })
@@ -59,5 +50,5 @@ const deleteUser = (req, res) => {
 }
 
 module.exports = {
-    getUser, getUsers, createUser, updateUser, deleteUser, getProject
+    getUser, getUsers, createUser, updateUser, deleteUser
 }
