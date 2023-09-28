@@ -6,7 +6,7 @@ INSERT INTO users(firstName,lastName,nickName, password) VALUES
     ('Justine', 'Villegas', "Adam's badminton partner",'$2a$10$P6sza6z1qbclwC.6Nm41dujNM6qpIG/r8YiI4hGa1ka4E5N9ATSZK'), -- badm!nt0n
     ('Adam', 'DeGas', "Justine's badminton partner",'$2a$10$P6sza6z1qbclwC.6Nm41dujNM6qpIG/r8YiI4hGa1ka4E5N9ATSZK'), -- badm!nt0n
     ('Chris', 'Marsh', 'The greatest Australian assistant in IOD','!0D'), -- !0D
-    ('Gareth', 'Wootton', 'The greatest Kiwi assistant in IOD','!0D'); -- !0D
+    ('Gareth', 'Wootton', 'The greatest Kiwi assistant in IOD','!0D'), -- !0D
     ('Dahlia', 'Aly', 'Software and buildings architect','3¶yp7');
 
 INSERT INTO Fields(name, description) VALUES

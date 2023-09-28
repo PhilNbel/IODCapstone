@@ -56,12 +56,18 @@ class User {
             .then((result)=>connection.promise().query(`SELECT * FROM Projects WHERE name = "${projectName}" AND creatorID = ${result[0][0].userID}`));//We return the project with the same name and creator ID
     };
 
-    static readOne(toReadName) {
-        return connection.promise().query(`SELECT nickName, email, password FROM Users WHERE nickName = "${toReadName}"`);
+    static async readOne(toReadName) {
+        let req1 = await connection.promise().query(`SELECT nickName, email, password FROM Users WHERE nickName = "${toReadName}"`);
+        let req2 = await connection.promise().query(`SELECT Fields.name,Fields.description FROM Interests JOIN Users ON Interests.userID=Users.userID JOIN Fields ON Interests.fieldID=Fields.fieldID WHERE Users.nickName ="${toReadName}"`)
+        let req3 = await connection.promise().query(`SELECT Skills.name,Skills.description FROM Masters JOIN Users ON Masters.userID=Users.userID JOIN Skills ON Masters.skillID=Skills.skillID WHERE Users.nickName ="${toReadName}"`)
+        return {...req1[0][0],interests:req2[0],masters:req3[0]}
     };
     
-    static readOneAdmin(toReadName) {
-        return connection.promise().query(`SELECT firstName,lastName,nickName,password,email FROM Users WHERE nickName = "${toReadName}"`);
+    static async readOneAdmin(toReadName) {
+        let req1 = await connection.promise().query(`SELECT firstName,lastName,nickName,password,email FROM Users WHERE nickName = "${toReadName}"`);
+        let req2 = await connection.promise().query(`SELECT Fields.name,Fields.description FROM Interests JOIN Users ON Interests.userID=Users.userID JOIN Fields ON Interests.fieldID=Fields.fieldID WHERE Users.nickName ="${toReadName}"`)
+        let req3 = await connection.promise().query(`SELECT Skills.name,Skills.description FROM Masters JOIN Users ON Masters.userID=Users.userID JOIN Skills ON Masters.skillID=Skills.skillID WHERE Users.nickName ="${toReadName}"`)
+        return {...req1[0][0],interests:req2[0],masters:req3[0]}
     };
 
     static async readAll(constraint = null) {
@@ -87,11 +93,11 @@ class User {
 
     //Relationship modifications
     static addInterest(userName, fieldName){
-
+        let userID = User.getUserInfoName("userID", userName)
     }
 
     static addMastery(userName, skillName){
-
+        let userID = User.getUserInfoName("userID", userName)
     }
 
 }
