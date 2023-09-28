@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
-import { fieldStyle } from "../MUIStyles"
 import { Box } from "@mui/material";
 
 export default function Field({fieldInfo}){
+    console.log(fieldInfo)
     function randomColor(){
         let red = Math.floor(Math.random()*256).toString(16)
         let green = Math.floor(Math.random()*256).toString(16)
@@ -31,24 +31,19 @@ export default function Field({fieldInfo}){
 
     let bg = (fieldInfo.color)?{backgroundColor:fieldInfo.color}:{backgroundColor:randomColor()};
 
-    const FieldText = <>
-            <Box sx={{...fieldStyle, ...bg, right:"5px"}}/>
-            <Box sx={{...bg, whiteSpace:"nowrap", margin:"0 1rem", zIndex:3}}>
+    const fieldText = (<Box sx={{...bg, whiteSpace:"nowrap", padding:"0 0.5rem", margin:"0 0.1rem", lineHeight:"1.8", borderRadius:"1rem/50%"}}>
                 {fieldInfo.name}
-            </Box>
-            <Box sx={{...fieldStyle, ...bg, left:"5px"}}/>
-        </>
+            </Box>)
 
-    return <Box>
+    return (<Box>
             <Detail
                 title={
                     <React.Fragment>
-                        {fieldInfo.detail}
+                        {fieldInfo.description}
                     </React.Fragment>
                 }
-                sx={{position:"relative"}}
             >
-                <FieldText/>
+                {fieldText}
             </Detail>
-        </Box>           
+        </Box>)           
 }

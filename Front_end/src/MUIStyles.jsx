@@ -61,9 +61,24 @@ export const signUpField = {
     padding:"1rem 0"
 };
 
-export const fieldStyle = {
-    height:"100%",
-    aspectRatio :"1 / 1",
-    borderRadius:"100%",
+// export const roundEdge = {
+//     height:"100%",
+//     aspectRatio :"1 / 1",
+//     borderRadius:"100%",
+//     position:"absolute"
+// };
+
+export const browse = {
+    backgroundColor:"transparent",
+    color: 'rgba(0, 0, 0, 0.87)',
+
+};
+export const browseBox = {
+    backgroundColor: '#f5f5f9',
     position:"absolute"
 };
+
+export const addButton={
+    color: '#1B1B1B',
+    height:"15%"
+}
