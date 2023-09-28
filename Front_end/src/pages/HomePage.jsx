@@ -5,9 +5,9 @@ import HomeLogo from '../components/HomeLogo';
 import { presentation } from '../MUIStyles';
 
 export default function HomePage(){
-    return <Container sx={{maxWidth:"1600px"}}>
+    return <Container maxWidth="xl">
         <HomeLogo/>
-        <Container>
+        <Container maxWidth={false}>
             <Typography
                 variant="p"
                 sx={{...presentation, color:"inherit"}}

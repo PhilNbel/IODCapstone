@@ -1,6 +1,5 @@
 export const homeLogo1 = {
     mr: 2,
-    flexGrow: 3,
     fontFamily: 'monospace',
     fontWeight: 700,
     letterSpacing: '.3rem',
@@ -10,7 +9,6 @@ export const homeLogo1 = {
 
 export const homeLogo2 = {
     mr: 2,
-    flexGrow: 2,
     fontFamily: 'none',
     fontWeight: 300,
     letterSpacing: '.3rem',
@@ -21,7 +19,6 @@ export const homeLogo2 = {
 
 export const about = {
     mr: 2,
-    flexGrow: 3,
     fontFamily: 'monospace',
     fontWeight: 700,
     letterSpacing: '.3rem',
@@ -30,7 +27,6 @@ export const about = {
 
 export const presentation = {
     mr: 2,
-    flexGrow: 2,
     fontFamily: 'none',
     fontWeight: 300,
     letterSpacing: '.3rem',
@@ -41,7 +37,7 @@ export const presentation = {
 export const navButton = {
     mr: 2,
     display: { xs: 'flex', md: 'none' },
-    flexGrow: 1,
+    flexGrow: 2,
     fontFamily: 'monospace',
     fontWeight: 700,
     letterSpacing: '.3rem',
@@ -49,8 +45,6 @@ export const navButton = {
 };
 
 export const title = {
-    mr: 2,
-    flexGrow: 3,
     fontFamily: 'monospace',
     fontWeight: 700,
     letterSpacing: '.3rem',

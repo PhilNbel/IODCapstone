@@ -59,7 +59,7 @@ class Project {
         let result = keys[0]+" = \""+values[0]+'\"'
         for(let i=1;i<keys.length;i++){
             result+= `, ${keys[i]} = "${values[i]}"`
-        }
+        }   
         return result;
     }
 
@@ -80,7 +80,7 @@ class Project {
         let part2 = req2[0][0];
         let req4 = await Steps.readAll(toReadName, creatorName)
         
-        return {...part1,...part2,steps:req4[0]}
+        return {...part1,...part2,steps:req4}
     };
     
     static async readOneAdmin(toReadName, creatorName) {
