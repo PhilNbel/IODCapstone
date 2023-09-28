@@ -77,17 +77,6 @@ function NavBar() {
             </Menu>
           </Box>
 
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="/"
-            sx={navButton}
-          >
-            IOD : REACT
-          </Typography>
-
           {/* desktop menu items are here, grouped into a flex box */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {/* render our menu items as NavLinks to make sure we maintain state */}

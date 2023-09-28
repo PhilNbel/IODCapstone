@@ -1,6 +1,7 @@
 let express = require("express");
 let router = express.Router();
 let Controllers = require("../controllers"); //index.js
+let {uploadFile} = require("../middleware/uploads"); //index.js
 
 //Task methods
 
@@ -54,6 +55,9 @@ router.get('/', (req, res) => {
 })
 router.post('/create', (req, res) => {
     Controllers.userController.createUser(req.body, res)
+})
+router.post('/:name/image', uploadFile, (req, res) => { // uses multer middleware function to upload images before controller function runs
+    Controllers.userController.addProfileImage(req, res)
 })
 router.put('/:name', (req, res) => {
     Controllers.userController.updateUser(req, res)
