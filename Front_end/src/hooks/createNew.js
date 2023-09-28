@@ -1,4 +1,3 @@
-import { useState,useEffect } from "react";
 let path = "http://localhost:8080/api"
 
 // hooks are usually named exports rather than default

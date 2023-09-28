@@ -4,9 +4,10 @@ import SignUp from "../components/SignUp";
 
 export default function SignPage(){
     let salt = import.meta.env.VITE_SALT;
-    console.log(salt)
     return <>{
-        <Container sx={{display:"flex"}}>
+        <Container sx={{display:"flex",'@media screen and (max-width:768px)': {
+            flexDirection:'column'
+          }}}>
             <SignIn salt={salt}/>
             <SignUp salt={salt}/>
         </Container>

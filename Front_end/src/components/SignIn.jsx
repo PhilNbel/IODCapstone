@@ -21,8 +21,6 @@ export default function SignIn({salt}){
                 else
                     mayBeUser = mayBeUser.data
                 console.log(mayBeUser)
-                //var salt = Bcrypt.genSaltSync(10);
-                console.log(salt)
                 let hash = Bcrypt.hashSync(data.get("password"), salt);
                 console.log(hash)
                 
@@ -36,8 +34,26 @@ export default function SignIn({salt}){
             }).catch((err)=>console.log(err.message))
     }
 
-    return <Box sx={{width:"55%", display:"flex", backgroundColor:theme.colors[0], color:theme.colors[1],flexDirection:"column", padding: "5vh 0 10vh 0", borderTopLeftRadius:"25px", borderBottomLeftRadius:"25px"}}>
-        <Box sx={{display:"flex", margin: "10% 0 20% 0", position:"relative", justifyContent :"center"}}>
+    return <Box sx={{
+        width:"55%",
+        display:"flex",
+        backgroundColor:theme.colors[0],
+        color:theme.colors[1],
+        flexDirection:"column",
+        padding: "5vh 0 10vh 0",
+        borderTopLeftRadius:"25px",
+        borderBottomLeftRadius:"25px",
+        '@media screen and (max-width:768px)': {
+            borderTopLeftRadius:"25px",
+            borderBottomLeftRadius:"25px",
+        }
+    }}>
+        <Box sx={{
+            display:"flex",
+            margin: "10% 0 20% 0",
+            position:"relative",
+            justifyContent :"center"
+            }}>
             <Typography
                 variant="h2"
                 noWrap

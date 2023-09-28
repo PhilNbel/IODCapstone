@@ -1,6 +1,6 @@
 INSERT INTO users(firstName,lastName,nickName, password) VALUES
-    ('Philippe','Hennebelle', 'Eovius', '$2a$10$hXB3I9IxNEBQ5uq9.Pmrq.3PdrL/..MkRtMt/anjIOirBNuewiRIi'), -- 1234
-    ('Jo', 'Batkin', 'The great teacher in IOD', '$2a$10$hoM8XevovTn/ktXNEKy8veLgWmH63l0IJoaxuTj/3fdFLclSOZknu'), -- hig#leve!pa5sw0rd
+    ('Philippe','Hennebelle', 'Eovius', '$2a$10$qNhJZYMGtyrfEY2fjvhS.umPPBv/ErdVt93o5QkkRs5n7VDobv/8O'), -- 1234
+    ('Jo', 'Batkin', 'The great teacher in IOD', '$2a$10$qNhJZYMGtyrfEY2fjvhS.uAa2ZzK0oOfZwPuzABHIEUdPJSKe2Mb2'), -- hig#leve!pa5sw0rd
     ('Jordan', 'Klianis','Custodes Tech-priest', '$2a$10$wypS/rep72Lla7tqIL4UzOMLDLCaXWIpIWVXbJeo48ercsotIg9b.'), -- wa4a4a4ag#4mm3r
     ('Thomas', 'Knight','Fidji','$2a$10$4mG42I38aooTSxSPi4AGf.3fh8I9TuZx4AoDz0p6m0Wmwup4DHYvu'), -- mod3pas
     ('Justine', 'Villegas', "Adam's badminton partner",'$2a$10$P6sza6z1qbclwC.6Nm41dujNM6qpIG/r8YiI4hGa1ka4E5N9ATSZK'), -- badm!nt0n

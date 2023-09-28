@@ -62,6 +62,8 @@ export const signUpField = {
 };
 
 export const fieldStyle = {
-    borderRadius:"50%",
-    padding:"0.5rem 1rem"
+    height:"100%",
+    aspectRatio :"1 / 1",
+    borderRadius:"100%",
+    position:"absolute"
 };

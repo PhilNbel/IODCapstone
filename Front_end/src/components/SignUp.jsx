@@ -11,8 +11,6 @@ export default function SignUp({salt}){
     function createUser(e){
         e.preventDefault();
         const data = new FormData(e.currentTarget);
-        //var salt = Bcrypt.genSaltSync(10);
-        console.log(salt)
         let hash = Bcrypt.hashSync(data.get("password"), salt);
         let newUser = {
             firstName:data.get("first"),
@@ -21,7 +19,6 @@ export default function SignUp({salt}){
             email:data.get("email"),
             password:hash
         };
-        console.log(newUser)
         createNew('user',newUser).then((json)=>alert(JSON.stringify(json)))
     }
 

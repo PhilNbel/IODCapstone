@@ -6,7 +6,6 @@ export default function readThat(table, entity="", initialValue = []) {
 
   // state variable for holding fetched json data
   const [data, setData] = useState(initialValue);
-
   useEffect(() => {
     fetch(`${path}/${table}s/${entity}`)
     .then((response) => response.json())
@@ -14,7 +13,6 @@ export default function readThat(table, entity="", initialValue = []) {
       setData(json);
     })
   }, []); // re-run effect if url changes
-
   // return the data fetched from the given url
   return data;
 }
