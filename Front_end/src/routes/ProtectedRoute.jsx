@@ -1,11 +1,11 @@
 import { Outlet, Navigate } from "react-router-dom";
-import { useUserContext } from "../context/UserContext";
+import { useUserContext } from "../contexts/UserContext";
 
 // wrap around logged-in user only routes to protect them
 function ProtectedRoute({ redirectPath = "/", children }) {
   const { currentUser } = useUserContext();
 
-  if (!currentUser.email) {
+  if (!currentUser) {
     return <Navigate to={redirectPath} replace />;
   }
   // works for both nested and standalone routes

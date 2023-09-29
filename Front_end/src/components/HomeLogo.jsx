@@ -8,6 +8,7 @@ export default function HomeLogo(){
             <Container>
                 <Typography
                     variant="h1"
+                    fontSize="15rem"
                     noWrap
                     sx={homeLogo1}
                 >
@@ -18,6 +19,7 @@ export default function HomeLogo(){
                 <Typography
             variant="h6"
             noWrap
+            fontSize="3rem"
             textAlign={'right'}
             sx={{...homeLogo2, color:"inherit"}}
           >

@@ -4,7 +4,7 @@ const Models = require("../models");
 const getUser = (req,res) => {
 
     Models.Users.readOne(req.params.name).then(function (data) {
-        res.send({ result: 200, data: data[0][0] })
+        res.send({ result: 200, data: data })
     }).catch(err => {
         console.log(err.message)
         res.send({ result: 500, error:"No user corresponding to this name"} )

@@ -4,10 +4,25 @@ main {
   padding: 2rem;
   display: flex;
 }
-
-div, h2{
+div{
   display: inherit;
 }
+
+h2{
+  display: inherit;
+
+}
+
+
+/*p{
+  font-size: 1.5rem
+}
+
+@media (min-width>1200px) {
+  p{
+    font-size: 1.5vw;
+  }
+}*/
 
 .logo {
   height: 6em;
@@ -44,3 +59,4 @@ div, h2{
 .read-the-docs {
   color: #888;
 }
+

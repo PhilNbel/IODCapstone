@@ -13,7 +13,7 @@ async function test(url, method='GET',body=null){ //function to test the API rou
         });
     return promise
     .then((response) => response.json())
-    .then((json)=>console.log(JSON.stringify(json)))
+    .then((json)=>console.log(json))//JSON.stringify(json)))
     .catch((err)=>console.log('ERROR\n'+err))
 }
 
@@ -32,7 +32,7 @@ async function testReadOne(){//reads one element specifically, obtaining more in
     .then((res)=>res = test('fields/testField','GET'))
     .then((res)=>res = test('skills/testing%20skill','GET'))
     .then((res)=>res = test('users/eovius/capstone%20project','GET'))
-    .then((res)=>res = test('users/eovius/capstone%20project/test%20step','GET'))
+//    .then((res)=>res = test('users/eovius/capstone%20project/test%20step','GET'))
     .then((res)=>"Finished testing individual READ")
 }
 async function testReadAll(){//lists the general informations of all the elements of the field
@@ -59,7 +59,6 @@ async function testDelete(){//delete the elements created earlier to keep the da
 async function testBattery(){
     testReadAll()
     .then((result)=>{ console.log(result); return testCreate()})
-    .then((result)=>{ console.log(result); return testReadAll()})
     .then((result)=>{ console.log(result); return testReadOne()})
     .then((result)=>{ console.log(result); return testUpdate()})
     .then((result)=>{ console.log(result); return testReadOne()})
