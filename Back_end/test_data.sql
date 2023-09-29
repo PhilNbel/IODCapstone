@@ -1,4 +1,4 @@
-INSERT INTO users(firstName,lastName,nickName, password) VALUES
+INSERT INTO Users(firstName,lastName,nickName, password) VALUES
     ('Philippe','Hennebelle', 'Eovius', '$2a$10$qNhJZYMGtyrfEY2fjvhS.umPPBv/ErdVt93o5QkkRs5n7VDobv/8O'), -- 1234
     ('Jo', 'Batkin', 'The great teacher in IOD', '$2a$10$qNhJZYMGtyrfEY2fjvhS.uAa2ZzK0oOfZwPuzABHIEUdPJSKe2Mb2'), -- hig#leve!pa5sw0rd
     ('Jordan', 'Klianis','Custodes Tech-priest', '$2a$10$wypS/rep72Lla7tqIL4UzOMLDLCaXWIpIWVXbJeo48ercsotIg9b.'), -- wa4a4a4ag#4mm3r

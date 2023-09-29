@@ -4,7 +4,11 @@
   "description": "A project that is starting it's run",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-dev": "cd ./Back_End && npm run start-dev",
+    "start": "cd ./Back_End && npm start",
+    "init": "cd ./Back_End && npm run init",
+    "prod-init": "cd ./Back_End && npm run prod-init"
   },
   "author": "",
   "license": "ISC",

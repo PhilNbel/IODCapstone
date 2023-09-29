@@ -1,5 +1,9 @@
 'use strict'
-let path = "http://localhost:8080/api/"
+
+const dotenv = require("dotenv");
+dotenv.config({ path: `./.env.${process.env.NODE_ENV || "dev"}` }); // support multiple environments, see package.json
+
+let path = process.env.API+":"+process.env.PORT+"/api/"
 async function test(url, method='GET',body=null){ //function to test the API routes
     let promise = (method == "GET")?
         fetch(path+url)
