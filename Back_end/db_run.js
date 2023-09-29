@@ -14,17 +14,6 @@ const connection = mysql.createConnection({
 connection.connect(error => {
     if (error) throw error;
     console.log("Successfully connected to the database."); 
-    init().then((res)=>res = tests.testBattery())
 });
-
-async function init(){
-    //We initialize the database structure after connection
-    return connection.promise().query(fs.readFileSync("db_creation.sql").toString())    
-    .then(async(response)=> {
-        response = await connection.promise().query(fs.readFileSync("test_data.sql").toString());
-        return response[0];
-    })
-    //.catch (err=>(`Error "${err}" happened during initialization`))
-}
 
 module.exports = connection;

@@ -5,10 +5,11 @@
   "main": "db_run.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "local": "set NODE_ENV=dev&& node server.js",
-    "aws": "set NODE_ENV=prod&& node server.js",
-    "start-local": "concurrently \"cd ../frontend && npm run dev\" \"npm run local\"",
-    "start-aws": "concurrently \"cd ../frontend && npm run dev\" \"npm run aws\""
+    "dev": "set NODE_ENV=dev&& node server.js",
+    "prod": "set NODE_ENV=prod&& node server.js",
+    "start-dev": "concurrently \"cd ../frontend && npm run dev\" \"npm run dev\"",
+    "start": "concurrently \"cd ../frontend && npm run dev\" \"npm run prod\"",
+    "init": "node ./init.js"
   },
   "author": "",
   "license": "ISC",
