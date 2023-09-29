@@ -10,7 +10,9 @@ function App() {
       <UserProvider>
       
         <NavBar/>
-        <main> <AppRoutes/> </main>      
+        <main>
+          <AppRoutes/>
+        </main>      
       {//</MyThemeProvider>
   }   </UserProvider>
   </MyThemeProvider>
