@@ -13,6 +13,6 @@ export default function readThat(table, entity="", initialValue = []) {
       setData(json);
     })
   }, []); // re-run effect if url changes
-  // return the data fetched from the given url
+  // return the data fetched from the given
   return data;
 }

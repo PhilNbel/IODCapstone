@@ -45,7 +45,7 @@ export function AddFieldButton (fromSkills, notIn){
     </>
 }
 
-export default function FieldAdder({canAdd,list}){
+export default function FieldAdder({canAdd = false,list=[]}){
     return <>
         <Box sx={{flexWrap:"wrap"}}>
         { (!list)?"Loading":list.map((field,index)=><Field key={index} fieldInfo={field}/>)}
