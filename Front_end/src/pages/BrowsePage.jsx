@@ -1,22 +1,36 @@
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import Filter from '../components/Filter';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import readThat from "../hooks/readThat"
 import { useMyThemeContext } from '../contexts/MyThemeContext';
+import { Typography } from '@mui/material';
+import FieldAdder from '../components/FieldAdder';
 
-function format(project,index){
-    return (
-        <Container maxWidth="md" key={index}>
-            {project.name}
-        </Container>
-    )
-}
 
 export default function BrowsePage(){
-    const [projectList,setProjectList] = useState(readThat("project"));
-   const theme = useMyThemeContext();
+    const fullList = readThat("project")
+    const [projectList,setProjectList] = useState([]);
+    const [filterList, setFilterList] = useState([]);
 
+    const newList = (fullList.data)?[...fullList.data]:[];
+    //if(newList.length!=0)
+    useEffect(()=>{
+        if(projectList.length==0)
+            setProjectList(newList)
+        setFilterList(newList)
+    },[projectList])
+    const theme = useMyThemeContext();
+
+    function format(project,index){
+        return (
+            <Box maxWidth="md" key={index} width="16rem" height="10rem" sx={{backgroundColor:theme.colors[3], color:theme.colors[4], borderRadius:"13px", margin:"1rem 2rem"}}>
+                <Typography>
+                    {project.name}
+                </Typography>
+                <FieldAdder canAdd="false" list={project.fields}/>
+            </Box>
+        )
+    }
     return <Box
                 width="90vw"
                 sx={{
@@ -29,9 +43,9 @@ export default function BrowsePage(){
                     display: 'block'
                 }}
             >
-                <Filter list={projectList} handler={setProjectList}/>
-                <Box sx={{display:"block"}}>
-                    {projectList.map((project, index)=>format(project, index))}
+                <Filter list={projectList} handler={setFilterList}/>
+                <Box sx={{display:"flex"}}>
+                    {filterList.map((project, index)=>format(project, index))}
                 </Box>
             </Box>
 }

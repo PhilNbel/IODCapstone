@@ -51,13 +51,13 @@ class Field {
     };
 
     static async readOne(toReadName) {
-        let part1 = await connection.promise().query(`SELECT name,description FROM Fields WHERE name = "${toReadName}"`);
+        let part1 = await connection.promise().query(`SELECT name,description,color FROM Fields WHERE name = "${toReadName}"`);
         let part2 = await connection.promise().query(`SELECT Skills.name,Skills.description FROM Fields JOIN Skills ON Fields.fieldID=Skills.fieldID WHERE Fields.name = "${toReadName}"`)
         return {...part1[0][0], skills:part2[0]}
     };
 
     static async readAll(constraint = null) {
-        let query = "SELECT name,description FROM Fields";
+        let query = "SELECT name, description, color FROM Fields";
         if(constraint)
             query+= " WHERE "+constraint;
         return connection.promise().query(query)

@@ -20,9 +20,7 @@ export default function SignIn({salt}){
                     alert("Username does not exist")
                 else
                     mayBeUser = mayBeUser.data
-                console.log(mayBeUser)
                 let hash = Bcrypt.hashSync(data.get("password"), salt);
-                console.log(hash)
                 
                 let isUser = (mayBeUser.password == hash)
                 if(isUser){

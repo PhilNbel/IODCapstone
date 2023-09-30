@@ -94,7 +94,7 @@ class Project {
     };
     
     static async readAll(constraint = null) {
-        let query = "SELECT Projects.name, Users.nickName FROM Projects JOIN Users ON Users.userID=Projects.creatorID";
+        let query = "SELECT Projects.name, Projects.type, Users.nickName FROM Projects JOIN Users ON Users.userID=Projects.creatorID";
         if(constraint)
             query+= " WHERE "+constraint;
         return connection.promise().query(query)

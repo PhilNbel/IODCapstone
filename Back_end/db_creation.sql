@@ -29,6 +29,8 @@ CREATE TABLE Users (
     password varchar(256) NOT NULL,
     email varchar(128),
     themeID int unsigned,
+    color char(7) NOT NULL,
+    image varchar(256),
     PRIMARY KEY(userID),
     CONSTRAINT themeRef FOREIGN KEY (themeID) REFERENCES Themes(themeID),
     UNIQUE KEY(nickName)
@@ -38,7 +40,7 @@ CREATE TABLE Fields (
     fieldID int unsigned NOT NULL AUTO_INCREMENT,
     name varchar(128) NOT NULL,
     description varchar(2048) NOT NULL,
-    color char(7),
+    color char(7) NOT NULL,
     PRIMARY KEY(fieldID),
     UNIQUE KEY(name)
 );

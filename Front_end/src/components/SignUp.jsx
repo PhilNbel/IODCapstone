@@ -8,6 +8,26 @@ export default function SignUp({salt}){
     
     const theme = useMyThemeContext();
 
+    function explain(json){
+        if(json.result==200)
+            alert("User "+json.data.nickName+" created, you can now log in")
+        else
+            alert("An error occurred when trying to create a new user")
+    }
+
+    function randomColor(){
+        let red = Math.floor(Math.random()*256).toString(16)
+        let green = Math.floor(Math.random()*256).toString(16)
+        let blue = Math.floor(Math.random()*256).toString(16)
+        if(red.length==1)
+            red="0"+red
+        if(green.length==1)
+            green="0"+green
+        if(blue.length==1)
+            blue="0"+blue
+        return "#"+red+green+blue
+    }
+        
     function createUser(e){
         e.preventDefault();
         const data = new FormData(e.currentTarget);
@@ -17,9 +37,10 @@ export default function SignUp({salt}){
             lastName:data.get("last"),
             nickName:data.get("nick"),
             email:data.get("email"),
+            color:randomColor(),
             password:hash
         };
-        createNew('user',newUser).then((json)=>alert(JSON.stringify(json)))
+        createNew('user',newUser).then((json)=>explain(json))
     }
 
     return <Box sx={{width:"55%", display:"flex", backgroundColor:theme.colors[3], color:theme.colors[4],flexDirection:"column", padding: "5vh 0 10vh 0", borderTopRightRadius:"25px", borderBottomRightRadius:"25px"}}>
