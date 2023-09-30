@@ -1,33 +1,33 @@
-INSERT INTO users(firstName,lastName,nickName, password) VALUES
-    ('Philippe','Hennebelle', 'Eovius', '$2a$10$qNhJZYMGtyrfEY2fjvhS.umPPBv/ErdVt93o5QkkRs5n7VDobv/8O'), -- 1234
-    ('Jo', 'Batkin', 'The great teacher in IOD', '$2a$10$qNhJZYMGtyrfEY2fjvhS.uAa2ZzK0oOfZwPuzABHIEUdPJSKe2Mb2'), -- hig#leve!pa5sw0rd
-    ('Jordan', 'Klianis','Custodes Tech-priest', '$2a$10$wypS/rep72Lla7tqIL4UzOMLDLCaXWIpIWVXbJeo48ercsotIg9b.'), -- wa4a4a4ag#4mm3r
-    ('Thomas', 'Knight','Fidji','$2a$10$4mG42I38aooTSxSPi4AGf.3fh8I9TuZx4AoDz0p6m0Wmwup4DHYvu'), -- mod3pas
-    ('Justine', 'Villegas', "Adam's badminton partner",'$2a$10$P6sza6z1qbclwC.6Nm41dujNM6qpIG/r8YiI4hGa1ka4E5N9ATSZK'), -- badm!nt0n
-    ('Adam', 'DeGas', "Justine's badminton partner",'$2a$10$P6sza6z1qbclwC.6Nm41dujNM6qpIG/r8YiI4hGa1ka4E5N9ATSZK'), -- badm!nt0n
-    ('Chris', 'Marsh', 'The greatest Australian assistant in IOD','$2a$10$5tnpO6tiAt7vuBv00l0xduOe1IuqQQgKcc2o77YhnA4AP2EaozfbG'), -- !0D
-    ('Gareth', 'Wootton', 'The greatest Kiwi assistant in IOD','$2a$10$5tnpO6tiAt7vuBv00l0xduOe1IuqQQgKcc2o77YhnA4AP2EaozfbG'), -- !0D
-    ('Dahlia', 'Aly', 'Software and buildings architect','$2a$10$QkjDQElifbchvOxj0hEo0Opu70PzzfBSnP5ZBYAmH5/RD4hEK3RmOs'); -- 3¶yp7
+INSERT INTO users(firstName,lastName, color,nickName, password) VALUES
+    ('Philippe','Hennebelle','#FFFFFF', 'Eovius', '$2a$10$qNhJZYMGtyrfEY2fjvhS.umPPBv/ErdVt93o5QkkRs5n7VDobv/8O'), -- 1234
+    ('Jo', 'Batkin','#FFFFFF', 'The great teacher in IOD', '$2a$10$qNhJZYMGtyrfEY2fjvhS.uAa2ZzK0oOfZwPuzABHIEUdPJSKe2Mb2'), -- hig#leve!pa5sw0rd
+    ('Jordan', 'Klianis','#FFFFFF','Custodes Tech-priest', '$2a$10$wypS/rep72Lla7tqIL4UzOMLDLCaXWIpIWVXbJeo48ercsotIg9b.'), -- wa4a4a4ag#4mm3r
+    ('Thomas', 'Knight','#FFFFFF','Fidji','$2a$10$4mG42I38aooTSxSPi4AGf.3fh8I9TuZx4AoDz0p6m0Wmwup4DHYvu'), -- mod3pas
+    ('Justine', 'Villegas','#FFFFFF', "Adam's badminton partner",'$2a$10$P6sza6z1qbclwC.6Nm41dujNM6qpIG/r8YiI4hGa1ka4E5N9ATSZK'), -- badm!nt0n
+    ('Adam', 'DeGas','#FFFFFF', "Justine's badminton partner",'$2a$10$P6sza6z1qbclwC.6Nm41dujNM6qpIG/r8YiI4hGa1ka4E5N9ATSZK'), -- badm!nt0n
+    ('Chris', 'Marsh','#FFFFFF', 'The greatest Australian assistant in IOD','$2a$10$5tnpO6tiAt7vuBv00l0xduOe1IuqQQgKcc2o77YhnA4AP2EaozfbG'), -- !0D
+    ('Gareth', 'Wootton','#FFFFFF', 'The greatest Kiwi assistant in IOD','$2a$10$5tnpO6tiAt7vuBv00l0xduOe1IuqQQgKcc2o77YhnA4AP2EaozfbG'), -- !0D
+    ('Dahlia', 'Aly','#FFFFFF', 'Software and buildings architect','$2a$10$QkjDQElifbchvOxj0hEo0Opu70PzzfBSnP5ZBYAmH5/RD4hEK3RmOs'); -- 3¶yp7
 
-INSERT INTO Fields(name, description) VALUES
-    ('Software engineering','The art of solving real life problems with computer programs'),
-    ('Computer science','The art of mentally constructing programs and anticipating their behavior'),
-    ('Mathematics','The set of techniques to edit and manipulate abstract values'),
-    ('Badminton',"The sport with the weird thing that flies I don't know the name of (Shuttle!?)"),
-    ('Electronics','The regroupment of skills which concerns interfaces between the analoguous and digital worlds'),
-    ('Woodworking',''),
-    ('Metalsmithing',''),
-    ('Material processing',''),
-    ('Pyrotechnics',''),
-    ('Civil engineering',''),
-    ('Bartending',''),
-    ('Hosting',''),
-    ('Team management',''),
-    ('Business management',''),
-    ('Game Design',''),
-    ('Story writing',''),
-    ('Digital art',''),
-    ('Animation','');
+INSERT INTO Fields(name, description, color) VALUES
+    ('Software engineering','The art of solving real life problems with computer programs','#FFFFFF'),
+    ('Computer science','The art of mentally constructing programs and anticipating their behavior','#FFFFFF'),
+    ('Mathematics','The set of techniques to edit and manipulate abstract values','#FFFFFF'),
+    ('Badminton',"The sport with the weird thing that flies I don't know the name of (Shuttle!?)",'#FFFFFF'),
+    ('Electronics','The regroupment of skills which concerns interfaces between the analoguous and digital worlds','#FFFFFF'),
+    ('Woodworking','','#FFFFFF'),
+    ('Metalsmithing','','#FFFFFF'),
+    ('Material processing','','#FFFFFF'),
+    ('Pyrotechnics','','#FFFFFF'),
+    ('Civil engineering','','#FFFFFF'),
+    ('Bartending','','#FFFFFF'),
+    ('Hosting','','#FFFFFF'),
+    ('Team management','','#FFFFFF'),
+    ('Business management','','#FFFFFF'),
+    ('Game Design','','#CF37AF'),
+    ('Story writing','','#4AAA4A'),
+    ('Digital art','','#A035C0'),
+    ('Animation','','#AF37CF');
 
 INSERT INTO Skills(name, description,fieldID) VALUES
     ('Program writing','The ability to write a functioning program',1),

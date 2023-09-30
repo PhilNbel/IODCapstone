@@ -1,11 +1,16 @@
 let connection = require("../db_run");
+const { uploadFile } = require("../middleware/uploads");
 
 class User {
 
-    constructor({firstName, lastName, nickName=null, password=null, email=null, theme=null}) {
+    constructor({firstName, lastName, color, nickName=null, password=null, email=null, theme=null}) {//We get rid of undefined values and initialize to null
+        //we pass on the first name and the last name as well as the color
         this.firstName = firstName;
         this.lastName = lastName;
+        this.color = color;
+        //If the user did not choose a nickname, we create one from their full name
         this.nickName = (nickName)?nickName:(firstName+"-"+lastName);
+        //for the rest of the fields, we only keep the fields that have content
         if(password)
             this.password = password;
         if(email)
@@ -16,14 +21,17 @@ class User {
 
     //Formatting methods
 
-    toInsert(){
-        let keys = Object.keys(this);
-        let values = Object.values(this);
+    toInsert(){//We transform the object into a [fields] VALUES [corresponding values] for the SQL creation
+        let keys = Object.keys(this);//We build it from the keys in an automated fashion for scalability and re-use
+        let values = Object.values(this);//functions remain individual in case of special properties (like image, here) 
+
+        if(keys.indexOf("image")!=1)//if we are updating the image, we change the field from the data from the image
+            this["image"] = '/img/' + uploadFile(this["image"])//to it's path in the back end
 
         return `(${keys.reduce((fieldStr,currKey,index)=>`${fieldStr} ${(index>0)?',':''} ${currKey} `,"")}) VALUES (${values.reduce((fieldStr,currValue,index)=>fieldStr+`${(index>0)?',':''}"${currValue}"`,"")})`;
     }
 
-    static getSet(req_body){
+    static getSet(req_body){ //Transform the the object (the request body) into a succession of "[key] = [value]" with commas 
         let keys = Object.keys(req_body)
         let values = Object.values(req_body);
         if(keys.length==0)
