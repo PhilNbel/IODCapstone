@@ -122,3 +122,11 @@ INSERT INTO Tasks (name, description, status, stepID, userID, skillID) VALUES
     ('Doing the course', '', 'inProgress', 7, NULL, NULL),
     ('Learning more languages', '', 'toDo', 7, NULL, NULL),
     ('Creating a permit submission review website', '', 'toDo', 8, NULL, 6);
+
+INSERT INTO IsMember (role,userID,projectID) VALUES
+    ('creator',1,1),
+    ('creator',3,2),
+    ('creator',9,3),
+    ('creator',5,4),
+    ('admin',6,4),
+    ('member',1,2);

@@ -12,7 +12,7 @@ const getProject = (req,res) => {
 
 const getProjects = (res) => {
     Models.Projects.readAll().then(function (data) {
-        res.send({ result: 200, data:data[0]})
+        res.send({ result: 200, data:data})
     }).catch(err => {
         res.send({ result: 500, error: err.message })
     })
