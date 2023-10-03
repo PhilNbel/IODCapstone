@@ -20,7 +20,7 @@ app.use(cors());
 app.use(sqlSanitizer);
 
 app.get("/", (req, res) => {
-  res.json({ message: "You should not be here, go to localhost:5173" });
+  res.json({ message: "You should not be here, go to /api/" });
 });
 
 app.use('/api/users', userRoutes);

@@ -16,5 +16,5 @@ async function init(){
         response = await connection.promise().query(fs.readFileSync("test_data.sql").toString());
         return response[0];
     })
-    //.catch (err=>(`Error "${err}" happened during initialization`))
+    .catch (err=>(`Error "${err}" happened during initialization`))
 }

@@ -28,7 +28,7 @@ export default function BrowsePage(){
 
     function format(project,index){
         return (
-            <Button onClick={()=>navigate(project.creator+'/'+project.name)}>
+            <Button onClick={()=>navigate('/'+project.creator+'/'+project.name)}>
                 <Box maxWidth="md" key={index} sx={{...shortProject, backgroundColor:theme.colors[3], color:theme.colors[4]}}>
                     <Box>
                         <Typography>

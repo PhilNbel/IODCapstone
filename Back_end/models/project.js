@@ -88,7 +88,7 @@ class Project {
         let req5 = await connection.promise().query(`SELECT Fields.name, Fields.description, Fields.color FROM TouchesOn JOIN Fields ON Fields.fieldID=TouchesOn.fieldID JOIN Projects ON Projects.projectID=TouchesOn.projectID WHERE Projects.name = "${toReadName}" AND Projects.creatorID = ${creatorID}`);
         let part5 = req5[0]
         
-        return {...part1,...part2,steps:[...part3],members:[...part4],fields:[...part5]}
+        return { creator:creatorName,...part1,...part2,steps:[...part3],members:[...part4],fields:[...part5]}
     };
     
     static async readOneAdmin(toReadName, creatorName) {
@@ -101,8 +101,11 @@ class Project {
          
         let req3 = await connection.promise().query(`SELECT IsMember.role, Users.nickName, Users.image, Users.color FROM IsMember JOIN Users ON Users.userID=IsMember.userID JOIN Projects ON Projects.projectID=IsMember.projectID WHERE Projects.name = "${toReadName}" AND Projects.creatorID = ${creatorID}`);
         let part3 = req3[0]
+
+        let req4 = await connection.promise().query(`SELECT Fields.name, Fields.description, Fields.color FROM TouchesOn JOIN Fields ON Fields.fieldID=TouchesOn.fieldID JOIN Projects ON Projects.projectID=TouchesOn.projectID WHERE Projects.name = "${toReadName}" AND Projects.creatorID = ${creatorID}`);
+        let part4 = req4[0]
         
-        return {...part1,steps:[...part2], members:[...part3]}
+        return { creator:creatorName, ...part1, steps:[...part2], members:[...part3], fields:[...part4]}
     };
     
     static async readAll(constraint = null) {

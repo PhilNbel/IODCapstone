@@ -1,5 +1,5 @@
 import { useState,useEffect } from "react";
-let path = "http://localhost:8080/api"
+let path = "http://localhost:5000/api"
 
 // hooks are usually named exports rather than default
 export default function updateData(table, entity, body, initialValue = []) {

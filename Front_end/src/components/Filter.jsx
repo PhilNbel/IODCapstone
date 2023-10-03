@@ -1,6 +1,6 @@
-import { Box, Button, FormControl, InputLabel, Radio, RadioGroup, Select, MenuItem, FormLabel , FormControlLabel } from "@mui/material";
+import { Box, Button, FormControl, InputLabel, Radio, RadioGroup, Select, MenuItem, FormLabel , FormControlLabel, TextField } from "@mui/material";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 
 export default function Filter({list, handler}){//Returns a component where you can filter the list passed as argument by name, field, type or status
     const [settings, setSettings] = useState((<></>));
@@ -28,6 +28,12 @@ export default function Filter({list, handler}){//Returns a component where you 
                         <FormControlLabel value="Serious" control={<Radio />} label="Serious" />
                         <FormControlLabel value="Professional" control={<Radio />} label="Professional" />
                     </RadioGroup>
+                </>)
+                break;
+            case "name":
+                setSettings(<>
+                    <FormLabel id="project-name"> Project name: </FormLabel>
+                    <TextField variant="standard" sx={{backgroundColor:"#D9D9D9"}}/>
                 </>)
                 break;
             default:
