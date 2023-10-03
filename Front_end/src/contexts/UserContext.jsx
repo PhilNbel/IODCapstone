@@ -6,7 +6,6 @@ const UserContext = React.createContext();
 export const UserProvider = (props) => {
 
   const [cookies, setCookie, removeCookie] = useCookies(['user']); // get cookies and helper functions. empty array is dependencies
-  console.log(cookies);
 
   // const localStorageUser = JSON.parse(localStorage.getItem('user')); // alternative to cookies using localStorage
 
@@ -14,7 +13,7 @@ export const UserProvider = (props) => {
   const [currentUser, setCurrentUser] = useState(cookies.user ? cookies.user : {}); // default user object, read from cookies if possible
   
   const handleUpdateUser = (user) => {
-    if (user.token) {
+    if (user.nickName) {
         setCookie('user', JSON.stringify(user), { path: '/', maxAge: 60 * 60 * 24 * 3})
     } else {
         removeCookie('user')

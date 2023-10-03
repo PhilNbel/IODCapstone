@@ -94,11 +94,11 @@ INSERT INTO Interests (userID,fieldID) VALUES
     (3,2),
     (3,3);
 
-INSERT INTO Projects (type, name, description, isPrivate, altdescription, budget, budgetIsShared, isOpen,creatorID) VALUES
-    ('Hobby', 'Homemade soap', 'Using ashes to make lye and said lie to make a homemade soap', FALSE, NULL, NULL, NULL, TRUE , 1),
-    ('Serious', 'Waaaaaghammer', 'A Warhammer game aid to simplify and reduce the required time to play', FALSE, NULL, 500, FALSE, TRUE , 3),
-    ('Professional', 'Freelance career', 'Using prior and new knowledge to create new programs', TRUE, 'The furthering of my personal career', NULL, NULL, TRUE , 9),
-    ('Serious', 'Badminton tournament', 'Bringing in players to have a tournament', FALSE, NULL, 12500, TRUE, TRUE , 5);
+INSERT INTO Projects (type, name, description, isPrivate, altdescription, budget, spending, budgetIsShared, isOpen,creatorID) VALUES
+    ('Hobby', 'Homemade soap', 'Using ashes to make lye and said lie to make a homemade soap', FALSE, NULL, NULL, NULL, NULL, TRUE , 1),
+    ('Serious', 'Waaaaaghammer', 'A Warhammer game aid to simplify and reduce the required time to play', FALSE, NULL, 500, 50, FALSE, TRUE , 3),
+    ('Professional', 'Freelance career', 'Using prior and new knowledge to create new programs', TRUE, 'The furthering of my personal career', NULL, NULL, NULL, TRUE , 9),
+    ('Serious', 'Badminton tournament', 'Bringing in players to have a tournament', FALSE, NULL, 12500, 3600, TRUE, TRUE , 5);
 
 INSERT INTO Steps (name, description, status, hasResources, projectID) VALUES
     ('Preparing the materials', 'Preparing the different resources to ', 'toDo', FALSE, 1),
@@ -123,10 +123,20 @@ INSERT INTO Tasks (name, description, status, stepID, userID, skillID) VALUES
     ('Learning more languages', '', 'toDo', 7, NULL, NULL),
     ('Creating a permit submission review website', '', 'toDo', 8, NULL, 6);
 
-INSERT INTO IsMember (role,userID,projectID) VALUES
+INSERT INTO IsMember (role, userID, projectID) VALUES
     ('creator',1,1),
     ('creator',3,2),
     ('creator',9,3),
     ('creator',5,4),
     ('admin',6,4),
     ('member',1,2);
+
+INSERT INTO TouchesOn (projectID, fieldID) VALUES
+    (1,6),
+    (2,1),
+    (2,2),
+    (2,14),
+    (3,1),
+    (3,2),
+    (3,13),
+    (4,4);

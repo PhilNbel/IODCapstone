@@ -64,6 +64,7 @@ CREATE TABLE Projects (
     isPrivate boolean NOT NULL,
     altdescription varchar(4096) DEFAULT NULL,
     budget int unsigned DEFAULT NULL,
+    spending int unsigned DEFAULT NULL,
     budgetIsShared boolean DEFAULT NULL,
     isOpen boolean,
     creatorID int unsigned NOT NULL,
@@ -132,7 +133,7 @@ CREATE TABLE Masters (
 
 CREATE TABLE TouchesOn (
     projectID int unsigned,
-    fieldID int unsigned    ,
+    fieldID int unsigned,
     CONSTRAINT fkD FOREIGN KEY (projectID) REFERENCES Projects(projectID) ON DELETE CASCADE,
     CONSTRAINT fkE FOREIGN KEY (fieldID) REFERENCES Fields(fieldID) ON DELETE CASCADE,
     CONSTRAINT touchesonPK PRIMARY KEY CLUSTERED (projectID, fieldID)

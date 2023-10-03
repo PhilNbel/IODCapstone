@@ -6,7 +6,6 @@ import { useMyThemeContext } from '../contexts/MyThemeContext';
 
 export default function Field({fieldInfo}){
     const theme = useMyThemeContext();
-    console.log(fieldInfo)
     function randomColor(){
         let red = Math.floor(Math.random()*256).toString(16)
         let green = Math.floor(Math.random()*256).toString(16)

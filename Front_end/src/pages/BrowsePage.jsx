@@ -3,16 +3,21 @@ import Filter from '../components/Filter';
 import { useEffect, useState } from 'react';
 import readThat from "../hooks/readThat"
 import { useMyThemeContext } from '../contexts/MyThemeContext';
-import { Typography } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import FieldAdder from '../components/FieldAdder';
+import { useNavigate } from 'react-router-dom';
+import { shortProject } from '../MUIStyles';
 
 
 export default function BrowsePage(){
+
+    const navigate = useNavigate();
     const fullList = readThat("project")
     const [projectList,setProjectList] = useState([]);
     const [filterList, setFilterList] = useState([]);
 
     const newList = (fullList.data)?[...fullList.data]:[];
+
     //if(newList.length!=0)
     useEffect(()=>{
         if(projectList.length==0)
@@ -23,12 +28,18 @@ export default function BrowsePage(){
 
     function format(project,index){
         return (
-            <Box maxWidth="md" key={index} width="16rem" height="10rem" sx={{backgroundColor:theme.colors[3], color:theme.colors[4], borderRadius:"13px", margin:"1rem 2rem"}}>
-                <Typography>
-                    {project.name}
-                </Typography>
-                <FieldAdder canAdd="false" list={project.fields}/>
-            </Box>
+            <Button onClick={()=>navigate(project.creator+'/'+project.name)}>
+                <Box maxWidth="md" key={index} sx={{...shortProject, backgroundColor:theme.colors[3], color:theme.colors[4]}}>
+                    <Box>
+                        <Typography>
+                            {project.name}
+                        </Typography>
+                    </Box>
+                    <Box>
+                        <FieldAdder canAdd={false} list={project.fields}/>
+                    </Box>
+                </Box>
+            </Button>
         )
     }
     return <Box

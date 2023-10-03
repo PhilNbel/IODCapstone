@@ -1,5 +1,5 @@
 import { Box, TextField, Button, Typography } from "@mui/material";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { title, logInField } from '../MUIStyles';
 import { useMyThemeContext } from "../contexts/MyThemeContext";
 import { useUserContext } from "../contexts/UserContext";

@@ -61,12 +61,16 @@ export const signUpField = {
     padding:"1rem 0"
 };
 
-// export const roundEdge = {
-//     height:"100%",
-//     aspectRatio :"1 / 1",
-//     borderRadius:"100%",
-//     position:"absolute"
-// };
+export const shortProject = {
+    minWidth:"16rem",
+    minHeight:"10rem",
+    maxWidth:"50%",
+    maxHeight:"30%",
+    borderRadius:"13px",
+    margin:"1rem 2rem",
+    display:"flex",
+    flexDirection:"column"
+};
 
 export const browse = {
     backgroundColor:"transparent",
@@ -74,11 +78,41 @@ export const browse = {
 
 };
 export const browseBox = {
-    backgroundColor: '#f5f5f9',
-    position:"absolute"
+    backgroundColor: '#f5f5f9'
 };
 
 export const addButton={
     color: '#1B1B1B',
-    height:"15%"
+    height:"15%",
+    width:"20%",
+    position: "absolute",
+    bottom:"10px",
+    right:"5px"
+}
+
+export const userButton={
+    height:"100%",
+    aspectRatio :"1 / 1",
+    textAlign:"right",
+    borderRadius:"50%",
+    alignSelf:"end"
+}
+
+export const userField={
+    borderRadius:"15px",
+    padding:"calc(max(20px,5vw)) calc(max(10px,5vh))"
+}
+
+export const projectTitle={
+    color:"#989898",
+    fontSize:"3rem"
+}
+
+export const stepBox={
+    padding:"1.5 rem",
+    margin:"0.5 rem"
+}
+export const taskBox={
+    minHeight:"3 rem",
+    height:"5 vh"
 }

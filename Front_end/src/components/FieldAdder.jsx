@@ -1,56 +1,26 @@
 import readThat from '../hooks/readThat';
 import Field from '../components/Field';
-import { Box, Button, TextField } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useState } from 'react';
 import { useMyThemeContext } from '../contexts/MyThemeContext';
-import { addButton, browse, browseBox } from '../MUIStyles';
+import AddDialog from './AddDialog';
 
-export function AddFieldButton ({fromSkills, notIn=[]}){
-    console.log(notIn)
+export function AddFieldButton ({fromSkills, notIn}){
     const theme = useMyThemeContext();
-
-    const [currName,setCurrName] = useState("")
-    const [adder,setAdder] = useState(<PlusButton/>)//We set the button as a state to change it to a box later
-
+    const [showFinder,setShowFinder] = useState(false)
     const fullList = readThat("field")
-    let fieldList = (!fullList.data)?[]:fullList.data.filter((field)=>notIn.indexOf(field)==-1) //We only keep the fields that the user does not have 
-    let currList = [...fieldList]
-    console.log(currList)
+    let fieldList = (!fullList.data)?[]:fullList.data.filter((field)=>notIn.map(field=>field.name).indexOf(field.name)==-1) //We only keep the fields that the user does not have 
 
-    function lighten(e){
-        console.log(e.target.value)
-        setCurrName(e.target.value)
-        currList = fieldList.filter((field)=>field.name.startsWith(e.target.value))
-    }
-
-    function PlusButton(){
-        return <Button
-            onClick={()=>setAdder(<FieldFinder/>)}
+    return <>
+        {(!showFinder)?<Button
+            onClick={()=>{setShowFinder(true)}}//TODO: Change a boolean to display FieldFinder or not
             sx={{backgroundColor:"transparent", color:theme.colors[1],borderRadius:"50%", padding:0,height:"25px", width:"25px", minWidth:0, minHeight:0}}>
         +
-        </Button>
-    }
-
-    function FieldFinder(){
-        console.log(currList)
-        const bg={backgroundColor:"#214CE3"} //TODO Make into a Dialog
-        return <Box height="12vh" width="20vw" sx={browseBox}>
-                <Box height="100%" width="85%" sx={{display:"flex",flexDirection:"column"}}>
-                    <Box height="80%" sx={{}}>
-                        {currList.map((field,index)=><Button key={"AFB"+index} sx={browse}>{field.name}</Button>)}
-                    </Box>
-                    <TextField value={currName} onChange={e=>lighten(e)}></TextField>
-                </Box>
-                    <Button sx={{...addButton,...bg, whiteSpace:"nowrap", padding:"0 0.5rem", margin:"0 0.1rem", lineHeight:"1.8", borderRadius:"1rem/50%"}}>{(fromSkills)?"Add":"Change"}</Button>
-                </Box>
-    }
-    return <>
-        {adder}
+        </Button>:<AddDialog handler={setShowFinder} fromSkills={fromSkills} fieldList={fieldList}/>}
     </>
 }
 
 export default function FieldAdder({canAdd = false,list=[]}){
-    console.log(list)
     return <>
         <Box sx={{flexWrap:"wrap"}}>
         { (!list)?"Loading":list.map((field,index)=><Field key={index} fieldInfo={field}/>)}

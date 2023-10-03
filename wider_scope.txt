@@ -34,8 +34,3 @@ Develop skills valuation and reduce likelihood of fraud
     L-> Handle self-learning
         L-> Link skill proofs through pictures or files
 
-
-ERRORS:
-Cookies seem to be loaded but console log is empty
-Colors are received but not passed on?
-CurrList is not empty but does become empty in the FieldFinder
