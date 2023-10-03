@@ -3,7 +3,9 @@
 const dotenv = require("dotenv");
 dotenv.config({ path: `./.env.${process.env.NODE_ENV || "dev"}` }); // support multiple environments, see package.json
 
-let path = process.env.API+":"+process.env.PORT+"/api/"
+const PORT = process.env.PORT || 8080;
+
+let path = process.env.API+":"+PORT+"/api/"
 async function test(url, method='GET',body=null){ //function to test the API routes
     let promise = (method == "GET")?
         fetch(path+url)

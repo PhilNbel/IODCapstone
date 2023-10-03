@@ -4,10 +4,10 @@ const tests = require("./tests");
 const dotenv = require("dotenv");
 dotenv.config({ path: `./.env.${process.env.NODE_ENV || "dev"}` }); // support multiple environments, see package.json
 
-
+const server = require("./server")
 const connection = require("./db_run"); // example using mysql2 package - first run 'npm install mysql2'
 
-init()//.then((res)=>res = tests.testBattery())
+init().then((res)=>res = tests.testBattery())
 
 async function init(){
     //We initialize the database structure after connection
