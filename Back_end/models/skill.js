@@ -50,12 +50,12 @@ class Skill {
         let details = await connection.promise().query(`SELECT name,description,fieldID FROM Skills WHERE name = "${toReadName}"`);
         if(details[0].length == 0)
             throw new Error("No field with name "+toReadName)
-        let fieldInfo = await connection.promise().query(`SELECT name,description FROM Fields WHERE fieldID = "${details[0][0].fieldID}"`);
-        return  {name:details[0][0].name,description:details[0][0].description,field:{name:fieldInfo[0][0].name,description:fieldInfo[0][0].description}}
+        let fieldInfo = await connection.promise().query(`SELECT name,description,color FROM Fields WHERE fieldID = "${details[0][0].fieldID}"`);
+        return  {name:details[0][0].name,description:details[0][0].description,color:fieldInfo[0][0].color,field:{name:fieldInfo[0][0].name,description:fieldInfo[0][0].description,color:fieldInfo[0][0].color}}
     };
 
     static async readAll(constraint = null) {
-        let query = "SELECT Skills.name, Skills.description, Fields.name AS field FROM Skills JOIN Fields ON Skills.fieldID=Fields.fieldID";
+        let query = "SELECT Skills.name, Skills.description, Field.color AS color, Fields.name AS field FROM Skills JOIN Fields ON Skills.fieldID=Fields.fieldID";
         if(constraint)
             query+= " WHERE "+constraint;
         return connection.promise().query(query)

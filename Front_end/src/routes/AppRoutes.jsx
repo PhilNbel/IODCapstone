@@ -4,9 +4,9 @@ import AboutPage from "../pages/AboutPage";
 import BrowsePage from "../pages/BrowsePage";
 import ProtectedRoute from "../routes/ProtectedRoute";
 import SignPage from "../pages/SignPage";
-import UserPage from "../pages/UserPage";
 import ProjectPage from "../pages/ProjectPage";
 import StepPage from "../pages/StepPage";
+import LookUpPage from "../pages/LookUpPage";
 
 // special component containing all the possible routes for this app
 // any props passed into AppRoutes will also be passed onto
@@ -21,7 +21,7 @@ function AppRoutes(props) {
       <Route path="sign-in" element={<SignPage {...props} />} />
       <Route path="sign-up" element={<SignPage {...props} />} />
       <Route path="log-in" element={<SignPage {...props} />} />
-      <Route path="/:user" element={<UserPage {...props} />}/>
+      <Route path="/:user" element={<LookUpPage {...props} />}/>
       <Route path="/:user/:project" element={<ProjectPage {...props} />}/>
       <Route path="/:user/:project/:step" element={<StepPage {...props} />}/>        
       </Routes>    

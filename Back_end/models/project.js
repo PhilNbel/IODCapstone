@@ -76,29 +76,42 @@ class Project {
         let part1 = req1[0][0];
         if(!part1)
             throw new Error("Cannot find project "+toReadName+" created by "+creatorName)
-        let req2 = await connection.promise().query(`SELECT ${(part1.isPrivate)?"altDescription,":""}${(part1.budgetIsShared)?"budget,":""}isOpen FROM Projects WHERE name = "${toReadName}" AND creatorID = ${creatorID}`);
+        let req2 = await connection.promise().query(`SELECT ${(part1.isPrivate)?"altDescription,":""}${(part1.budgetIsShared)?"budget,spending,":""}isOpen FROM Projects WHERE name = "${toReadName}" AND creatorID = ${creatorID}`);
         let part2 = req2[0][0];
-        let req4 = await Steps.readAll(toReadName, creatorName)
         
-        return {...part1,...part2,steps:req4}
+        let part3 = await Steps.readAll(toReadName, creatorName)
+        console.log(part3)
+        
+        let req4 = await connection.promise().query(`SELECT IsMember.role, Users.nickName, Users.image, Users.color FROM IsMember JOIN Users ON Users.userID=IsMember.userID JOIN Projects ON Projects.projectID=IsMember.projectID WHERE Projects.name = "${toReadName}" AND Projects.creatorID = ${creatorID}`);
+        let part4 = req4[0]
+
+        let req5 = await connection.promise().query(`SELECT Fields.name, Fields.description, Fields.color FROM TouchesOn JOIN Fields ON Fields.fieldID=TouchesOn.fieldID JOIN Projects ON Projects.projectID=TouchesOn.projectID WHERE Projects.name = "${toReadName}" AND Projects.creatorID = ${creatorID}`);
+        let part5 = req5[0]
+        
+        return {...part1,...part2,steps:[...part3],members:[...part4],fields:[...part5]}
     };
     
     static async readOneAdmin(toReadName, creatorName) {
         let creatorID  = await Users.getUserInfoName("userID",creatorName)
-        let req = await connection.promise().query(`SELECT type, name, description, isPrivate, altDescription, budget, budgetIsShared, isOpen, creatorID FROM Projects WHERE name = "${toReadName}" AND creatorID = ${creatorID}`);
+        let req = await connection.promise().query(`SELECT type, name, description, isPrivate, altDescription, budget, spending, budgetIsShared, isOpen, creatorID FROM Projects WHERE name = "${toReadName}" AND creatorID = ${creatorID}`);
         let part1 = req[0][0]
         
         let req2 = await Steps.readAll(toReadName, creatorName)
+        let part2 = req2[0]
+         
+        let req3 = await connection.promise().query(`SELECT IsMember.role, Users.nickName, Users.image, Users.color FROM IsMember JOIN Users ON Users.userID=IsMember.userID JOIN Projects ON Projects.projectID=IsMember.projectID WHERE Projects.name = "${toReadName}" AND Projects.creatorID = ${creatorID}`);
+        let part3 = req3[0]
         
-        return {...part1,steps:req2[0]}
+        return {...part1,steps:[...part2], members:[...part3]}
     };
     
     static async readAll(constraint = null) {
-        let query = "SELECT Projects.name, Users.nickName FROM Projects JOIN Users ON Users.userID=Projects.creatorID";
+        let query = "SELECT Projects.name, Users.nickName AS creator FROM Projects JOIN Users ON Users.userID=Projects.creatorID";
         if(constraint)
-            query+= " WHERE "+constraint;
-        return connection.promise().query(query)
+            query+= " AND "+constraint;
+        return connection.promise().query(query).then( (nameList)=>Promise.all( nameList[0].map((project)=>Project.readOne(project.name, project.creator)) ) )
     };
+
 
     static async update(toUpdate) {
         let set = Project.getSet(toUpdate[0])

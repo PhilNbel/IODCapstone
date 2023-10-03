@@ -1,5 +1,5 @@
 import { Box, TextField, Button, Typography } from "@mui/material";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { title, logInField } from '../MUIStyles';
 import { useMyThemeContext } from "../contexts/MyThemeContext";
 import { useUserContext } from "../contexts/UserContext";
@@ -20,9 +20,7 @@ export default function SignIn({salt}){
                     alert("Username does not exist")
                 else
                     mayBeUser = mayBeUser.data
-                console.log(mayBeUser)
                 let hash = Bcrypt.hashSync(data.get("password"), salt);
-                console.log(hash)
                 
                 let isUser = (mayBeUser.password == hash)
                 if(isUser){
