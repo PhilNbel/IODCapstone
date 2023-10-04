@@ -1,4 +1,4 @@
-let path = "http://localhost:3000/api"
+let path = "/api"
 
 // hooks are usually named exports rather than default
 export default function createNew(table, body, initialValue = []) {

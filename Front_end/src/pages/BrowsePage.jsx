@@ -1,9 +1,9 @@
 import Box from '@mui/material/Box';
 import Filter from '../components/Filter';
 import { useEffect, useState } from 'react';
-import readThat from "../hooks/readThat"
+import useRead from "../hooks/useRead"
 import { useMyThemeContext } from '../contexts/MyThemeContext';
-import { Button, Typography } from '@mui/material';
+import { Button, CircularProgress, Typography } from '@mui/material';
 import FieldAdder from '../components/FieldAdder';
 import { useNavigate } from 'react-router-dom';
 import { shortProject } from '../MUIStyles';
@@ -12,18 +12,13 @@ import { shortProject } from '../MUIStyles';
 export default function BrowsePage(){
 
     const navigate = useNavigate();
-    const fullList = readThat("projects")
-    const [projectList,setProjectList] = useState([]);
-    const [filterList, setFilterList] = useState([]);
+    const fullList = useRead("projects")
 
     const newList = (fullList.data)?[...fullList.data]:[];
-
+    const [filterList, setFilterList] = useState(newList);
+    //useEffect(()=>setFilterList(newList),[newList])
+    console.log(filterList)
     //if(newList.length!=0)
-    useEffect(()=>{
-        if(projectList.length==0)
-            setProjectList(newList)
-        setFilterList(newList)
-    },[projectList])
     const theme = useMyThemeContext();
 
     function format(project,index){
@@ -37,9 +32,9 @@ export default function BrowsePage(){
                         <FieldAdder canAdd={false} list={project.fields}/>
                     </Box>
                 </Box>
+                <CircularProgress variant="determinate" value={30} />
             </Button>
             //On hover, display dark transparent 
-            //<CircularProgress variant="determinate" value={100} />
             
         )
     }
@@ -55,8 +50,8 @@ export default function BrowsePage(){
                     display: 'block'
                 }}
             >
-                <Filter list={projectList} handler={setFilterList}/>
-                <Box sx={{display:"flex"}}>
+                <Filter list={newList} handler={setFilterList}/>
+                <Box sx={{display:"flex", flexWrap:'wrap',justifyContent:'center'}}>
                     {filterList.map((project, index)=>format(project, index))}
                 </Box>
             </Box>

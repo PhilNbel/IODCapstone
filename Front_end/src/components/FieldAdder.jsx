@@ -1,11 +1,11 @@
-import readThat from '../hooks/readThat';
+import readThat from '../hooks/useRead';
 import Field from '../components/Field';
 import { Box, Button } from '@mui/material';
 import { useState } from 'react';
 import { useMyThemeContext } from '../contexts/MyThemeContext';
 import AddDialog from './AddDialog';
 
-export function AddFieldButton ({fromSkills, notIn}){
+export function AddFieldButton ({fromSkills, notIn, handler}){
     const theme = useMyThemeContext();
     const [showFinder,setShowFinder] = useState(false)
     const fullList = readThat("fields")
@@ -16,15 +16,19 @@ export function AddFieldButton ({fromSkills, notIn}){
             onClick={()=>{setShowFinder(true)}}//TODO: Change a boolean to display FieldFinder or not
             style={{backgroundColor:"transparent", color:theme.colors[1],borderRadius:"50%", padding:0,height:"25px", width:"25px", minWidth:0, minHeight:0}}>
         +
-        </Button>:<AddDialog handler={setShowFinder} fromSkills={fromSkills} fieldList={fieldList}/>}
+        </Button>:<AddDialog displayHandler={setShowFinder} addHandler={handler} fromSkills={fromSkills} fieldList={fieldList}/>}
     </>
 }
 
-export default function FieldAdder({canAdd = false,list=[]}){
+export default function FieldAdder({canAdd = false,list=[],remHandler,addHandler}){
     return <>
         <Box sx={{flexWrap:"wrap"}}>
-        { (!list)?"Loading":list.sort((field1,field2)=>field1.name>field2.name).map((field,index)=><Field key={index} fieldInfo={field}/>)}
-        {(!canAdd)?<></>:<AddFieldButton fromSkills={false} notIn={list}/>}
+        { (!list)?
+            "Loading"
+            :
+            list.sort((field1,field2)=>field1.name>field2.name)
+            .map((field,index)=><Button key={index} onClick={()=>{remHandler(field)}}><Field fieldInfo={field}/></Button>)}
+        {(!canAdd)?<></>:<AddFieldButton fromSkills={false} notIn={list} handler={addHandler}/>}
         </Box>
 
     </>

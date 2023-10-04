@@ -79,6 +79,7 @@ export const shortProject = {
 export const browse = {
     backgroundColor:"transparent",
     color: 'rgba(0, 0, 0, 0.87)',
+    borderRadius:0
 
 };
 export const browseBox = {
@@ -91,7 +92,12 @@ export const addButton={
     width:"20%",
     position: "absolute",
     bottom:"10px",
-    right:"5px"
+    right:"5px",
+    whiteSpace:"nowrap",
+    padding:"0 0.5rem",
+    margin:"0 0.1rem",
+    lineHeight:"1.8",
+    borderRadius:"1rem/50%"
 }
 
 export const userButton={

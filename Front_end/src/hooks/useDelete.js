@@ -1,19 +1,27 @@
 import { useState,useEffect } from "react";
-let path = "http://localhost:3000/api"
+let path = "/api"
 
 // hooks are usually named exports rather than default
-export default function readThat(table, entity="", initialValue = []) {
+export default function useDelete(table, entity, body, initialValue = []) {
+
   // state variable for holding fetched json data
-  console.log(`${path}/${encodeURI(table)}/${encodeURI(entity)}`)
   const [data, setData] = useState(initialValue);
+
   useEffect(() => {
-    fetch(`${path}/${encodeURI(table)}/${encodeURI(entity)}`)
+    fetch(`${path}/${table}s/${entity}`,{
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: 'DELETE',
+      body:JSON.stringify(body)
+    })
     .then((response) => response.json())
     .then((json) => {
-      console.log(json)
       setData(json);
-    })
+    });
+
   }, []); // re-run effect if url changes
-  // return the data fetched from the given
+
+  // return the data fetched from the given url
   return data;
 }

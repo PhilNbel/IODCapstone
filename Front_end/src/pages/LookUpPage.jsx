@@ -1,5 +1,5 @@
 import {useParams} from 'react-router-dom'
-import readThat from '../hooks/readThat';
+import useRead from '../hooks/useRead';
 import PageNotFound from "./PageNotFound"
 import UserPage from './UserPage';
 import ProjectPage from './ProjectPage';
@@ -12,16 +12,16 @@ export default function LookUpPage({type}){
     let child = <></>
 
     if(toLook == "user"){
-        res = readThat("users",params.user);
+        res = useRead("users",params.user);
         child = <UserPage user={res.data}/>
     }
 
     if(toLook == "project"){
-        res = readThat("users/"+params.user,params.project);
+        res = useRead("users/"+params.user,params.project);
         child = <ProjectPage project={res.data}/>
     }
     if(toLook == "step"){
-        res = readThat("users/"+params.user+"/"+params.project,params.step);
+        res = useRead("users/"+params.user+"/"+params.project,params.step);
         child = <StepPage step={res.data}/>
     }
 

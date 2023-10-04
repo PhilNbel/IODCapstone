@@ -84,7 +84,8 @@ class User {
             throw new Error("User "+toReadName+" does not exist")
         let req2 = await connection.promise().query(`SELECT Fields.name,Fields.description,Fields.color FROM Interests JOIN Users ON Interests.userID=Users.userID JOIN Fields ON Interests.fieldID=Fields.fieldID WHERE Users.nickName ="${toReadName}"`)
         let req3 = await connection.promise().query(`SELECT Skills.name,Skills.description FROM Masters JOIN Users ON Masters.userID=Users.userID JOIN Skills ON Masters.skillID=Skills.skillID WHERE Users.nickName ="${toReadName}"`)
-        return {...req1[0][0],interests:req2[0],masters:req3[0]}
+        let req4 = await connection.promise().query(`SELECT Skills.name,Skills.description FROM Masters JOIN Users ON Masters.userID=Users.userID JOIN Skills ON Masters.skillID=Skills.skillID WHERE Users.nickName ="${toReadName}"`)
+        return {...req1[0][0],interests:req2[0],masters:req3[0],theme:req4[0][0]}
     };
     
     static async readOneAdmin(toReadName) {

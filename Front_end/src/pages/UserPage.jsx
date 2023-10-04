@@ -5,8 +5,8 @@ import { userField } from '../MUIStyles';
 import { useMyThemeContext } from '../contexts/MyThemeContext';
 import { useUserContext } from '../contexts/UserContext';
 import { Button } from '@mui/base';
-import readThat from '../hooks/readThat';
-import updateData from '../hooks/updateData';
+import readThat from '../hooks/useRead';
+import updateData from '../helpers/updateData';
 
 function EditBox({user,handler}){
     let details = readThat('users',user.nickName)//set token for more info
@@ -17,11 +17,13 @@ function EditBox({user,handler}){
     const [newLastName,setNewLastName] = useState('')
     const [newNickName,setNewNickName] = useState('')
     const [newMail,setNewMail] = useState('')
+    const [newInterests,setNewInterests] = useState([])
     useEffect(()=>{
         setNewFirstName(newUser.firstName)
         setNewLastName(newUser.lastName)
         setNewNickName(newUser.nickName)
         setNewMail((newUser.email)?newUser.email:"")
+        setNewInterests(newUser.interests)
     },[newUser])
     const [changeTheme,setChangeTheme] = useState(false)
     const [newTheme,setNewTheme] = useState(theme)
@@ -34,7 +36,16 @@ function EditBox({user,handler}){
         handler(event.target.value)
     }
 
+    function removeFromList(field){
+        setNewInterests(newInterests.filter((currField)=>currField.name!=field.name))
+    }
+    function addToList(field){
+        if(!newInterests.find(currField=>currField.name==field.name))
+            setNewInterests([...newInterests,field])
+    }
+
     return <Box sx={{display:"flex",flexDirection:"column", justifyContent:'center'}}>
+        
         <Box sx={{color:theme.colors[1], flexDirection:"column"}}>
             <Button style={{width:'16vw',backgroundColor:"transparent"}}>
                 {(user.image)?<Avatar alt={user.nickName} src={user.image} sx={{
@@ -51,19 +62,23 @@ function EditBox({user,handler}){
                 <TextField variant="standard" value={newLastName} onChange={(e)=>updateValue(setNewLastName,e)}></TextField>
             </Box>
         </Box>
+        
         <Box sx={{...userField,color:theme.colors[1]}}>
             <Typography>Username: </Typography>
             <TextField variant="standard" value={newNickName} onChange={(e)=>updateValue(setNewNickName,e)}></TextField>
         </Box>
+        
         <Box sx={{...userField,color:theme.colors[1]}}>
             <Typography>Email: </Typography>
             <TextField variant="standard" value={newMail} onChange={(e)=>updateValue(setNewMail,e)}></TextField>
         </Box>
+
         <Box sx={{...userField,flexDirection:"column",color:theme.colors[1]}}>
             <Typography width="100%" sx={{textAlign:"start "}}>Fields of interest: </Typography>
-            <FieldAdder canAdd={true} list={user.interests}/>
+            <FieldAdder canAdd={true} list={newInterests} remHandler={removeFromList} addHandler={addToList}/>
         </Box>
-        <Box> <Button onClick={()=>setChangeTheme(!changeTheme)}> Edit theme </Button>
+
+        <Box> <Button onClick={()=>setChangeTheme(!changeTheme)} style={{backgroundColor:theme.colors[3],color:theme.colors[4]}}> Edit theme </Button>
             {
                 (changeTheme)?<Box>
                     <input type="color" name="primary"/>
@@ -74,7 +89,7 @@ function EditBox({user,handler}){
                 </Box>:<></>
             }
         </Box>
-        <Button onClick={()=>handler(false)} sx={{backgroundColor:theme.colors[0],color:theme.colors[1]}}> Edit </Button>
+        <Button onClick={()=>handler(false)} style={{backgroundColor:theme.colors[3],color:theme.colors[4]}}> Edit </Button>
     </Box>
 }
 
@@ -104,8 +119,8 @@ function DisplayBox({user,handler}){
                 <FieldAdder canAdd={false} list={user.interests}/>
             </Box>
         </Box>
-        <Box sx={{backgroundColor:theme.colors[3],color:theme.colors[4]}}>
-            {(userContext.currentUser.nickName == user.nickName)?<Button onClick={()=>handler(true)}> Edit </Button>:<></>}
+        <Box>
+            {(userContext.currentUser.nickName == user.nickName)?<Button onClick={()=>handler(true)} style={{backgroundColor:theme.colors[3],color:theme.colors[4]}}> Edit </Button>:<></>}
         </Box>
     </Box>
 
@@ -116,7 +131,7 @@ export default function UserPage({user}){
     console.log(user)
     const [editMode,setEditMode] = useState(false)
 
-    return <Container sx={{ maxWidth:"90%", height:'86vh',borderRadius:'35px' ,backgroundColor:theme.colors[0]}}>
+    return <Container sx={{ maxWidth:"90%", minHeight:'86vh', padding:'3rem', borderRadius:'35px', justifyContent:'center',display:"flex", backgroundColor:theme.colors[0]}}>
         {(editMode)?<EditBox user={user} handler={setEditMode}/>:<DisplayBox user={user} handler={setEditMode}/>}
     </Container>
 }

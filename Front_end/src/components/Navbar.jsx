@@ -124,7 +124,9 @@ function NavBar() {
                   </IconButton>
                 </Tooltip>
                 <Menu
-                  sx={{ mt: '45px'}}
+                  sx={{ mt: '45px', "& .MuiMenu-paper": 
+                  { backgroundColor: "grey",padding:0,margin:0 }
+                }}
                   id="menu-appbar"
                   anchorEl={anchorElUser}
                   anchorOrigin={{

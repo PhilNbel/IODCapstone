@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Filter from '../components/Filter';
 import { useEffect, useState } from 'react';
-import readThat from "../hooks/readThat"
+import readThat from "../hooks/useRead"
 import { useMyThemeContext } from '../contexts/MyThemeContext';
 import { Button, Typography } from '@mui/material';
 import FieldAdder from '../components/FieldAdder';
@@ -53,7 +53,7 @@ export default function UserProjectsPage(){
                 }}
             >
                 <Filter list={projectList} handler={setFilterList}/>
-                <Box sx={{display:"flex"}}>
+                <Box sx={{display:"flex", flexWrap:'wrap',justifyContent:'center'}}>
                     {filterList.map((project, index)=>format(project, index))}
                 </Box>
                     <Button onClick={()=>navigate("/create")} >Create new project</Button>

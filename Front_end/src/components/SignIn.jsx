@@ -13,7 +13,7 @@ export default function SignIn({salt}){
     async function login(e){
         e.preventDefault();
         const data = new FormData(e.currentTarget);
-        fetch('http://localhost:3000/api/users/'+data.get("username"))
+        fetch('/api/users/'+data.get("username"))
             .then((result)=>result.json())
             .then((mayBeUser)=>{
                 if(mayBeUser.result == 500)
@@ -33,58 +33,58 @@ export default function SignIn({salt}){
     }
 
     return <Box sx={{
-        width:"55%",
-        height: "100%",
-        display:"flex",
-        backgroundColor:theme.colors[0],
-        color:theme.colors[1],
-        flexDirection:"column",
-        padding: "5vh 0 10vh 0",
-        borderTopLeftRadius:"25px",
-        borderBottomLeftRadius:"25px",
-        '@media screen and (max-width:900px)': {
-            width:"90%",
-            borderTopLeftRadius:"25px",
-            borderTopRightRadius:"25px",
-            borderBottomLeftRadius:"0"
-        }
-    }}>
-        <Box sx={{
+            width:"55%",
             display:"flex",
-            margin: "10% 0 20% 0",
-            position:"relative",
-            justifyContent :"center"
-            }}>
-            <Typography
-                variant="h2"
-                noWrap
-                sx={title}
-            >
-            Log in
-            </Typography>
-            <Typography
-                        variant="h2"
-                        noWrap
-                        sx={{
-                            position:"absolute",
-                            right:"0",
-                            ...title,
-                            '@media screen and (max-width:900px)': {
-                                display:"none"
-                            }
-                        }}
-                    >
-                    O
-            </Typography>
-        </Box>
-        <Box component="form" onSubmit={login} sx={{display:"block"}}>
-            <Box sx={{...logInField, color:theme.colors[1]}}>
-                <TextField name="username" label="Username ([first name]-[last name] by default)" variant="standard" type="text" />
+            backgroundColor:theme.colors[0],
+            color:theme.colors[1],
+            flexDirection:"column",
+            padding: "5vh 0 10vh 0",
+            borderTopLeftRadius:"25px",
+            borderBottomLeftRadius:"25px",
+            '@media screen and (max-width:900px)': {
+                boxSizing:'content-box',
+                width:"90%",
+                borderTopLeftRadius:"25px",
+                borderTopRightRadius:"25px",
+                borderBottomLeftRadius:"0"
+            }
+        }}>
+            <Box sx={{
+                display:"flex",
+                margin: "10% 0 20% 0",
+                position:"relative",
+                justifyContent :"center"
+                }}>
+                <Typography
+                    variant="h2"
+                    noWrap
+                    sx={title}
+                >
+                Log in
+                </Typography>
+                <Typography
+                            variant="h2"
+                            noWrap
+                            sx={{
+                                position:"absolute",
+                                right:"0",
+                                ...title,
+                                '@media screen and (max-width:900px)': {
+                                    display:"none"
+                                }
+                            }}
+                        >
+                        O
+                </Typography>
             </Box>
-            <Box sx={{...logInField, color:theme.colors[1]}}>
-                <TextField name="password" label="Password" variant="standard" type="password" />
+            <Box component="form" onSubmit={login} sx={{display:"block"}}>
+                <Box sx={{...logInField, color:theme.colors[1]}}>
+                    <TextField name="username" label="Username ([first name]-[last name] by default)" variant="standard" type="text" />
+                </Box>
+                <Box sx={{...logInField, color:theme.colors[1]}}>
+                    <TextField name="password" label="Password" variant="standard" type="password" />
+                </Box>
+                <Button type="submit">Log In</Button>
             </Box>
-            <Button type="submit">Log In</Button>
         </Box>
-    </Box>
 }

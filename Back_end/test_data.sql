@@ -1,12 +1,12 @@
-INSERT INTO users(firstName,lastName, color,nickName, password) VALUES
-    ('Philippe','Hennebelle','#00000F', 'Eovius', '$2a$10$qNhJZYMGtyrfEY2fjvhS.umPPBv/ErdVt93o5QkkRs5n7VDobv/8O'), -- 1234
+INSERT INTO Users(firstName,lastName, color,nickName, password) VALUES
+    ('Philippe','Hennebelle','#00008F', 'Eovius', '$2a$10$qNhJZYMGtyrfEY2fjvhS.umPPBv/ErdVt93o5QkkRs5n7VDobv/8O'), -- 1234
     ('Jo', 'Batkin','#0000F0', 'The great teacher in IOD', '$2a$10$qNhJZYMGtyrfEY2fjvhS.uAa2ZzK0oOfZwPuzABHIEUdPJSKe2Mb2'), -- hig#leve!pa5sw0rd
-    ('Jordan', 'Klianis','#000F00','Custodes Tech-priest', '$2a$10$wypS/rep72Lla7tqIL4UzOMLDLCaXWIpIWVXbJeo48ercsotIg9b.'), -- wa4a4a4ag#4mm3r
+    ('Jordan', 'Klianis','#008F00','Custodes Tech-priest', '$2a$10$wypS/rep72Lla7tqIL4UzOMLDLCaXWIpIWVXbJeo48ercsotIg9b.'), -- wa4a4a4ag#4mm3r
     ('Thomas', 'Knight','#00F000','Fidji','$2a$10$4mG42I38aooTSxSPi4AGf.3fh8I9TuZx4AoDz0p6m0Wmwup4DHYvu'), -- mod3pas
-    ('Justine', 'Villegas','#0F0000', "Adam's badminton partner",'$2a$10$P6sza6z1qbclwC.6Nm41dujNM6qpIG/r8YiI4hGa1ka4E5N9ATSZK'), -- badm!nt0n
+    ('Justine', 'Villegas','#8F0000', "Adam's badminton partner",'$2a$10$P6sza6z1qbclwC.6Nm41dujNM6qpIG/r8YiI4hGa1ka4E5N9ATSZK'), -- badm!nt0n
     ('Adam', 'DeGas','#F00000', "Justine's badminton partner",'$2a$10$P6sza6z1qbclwC.6Nm41dujNM6qpIG/r8YiI4hGa1ka4E5N9ATSZK'), -- badm!nt0n
     ('Chris', 'Marsh','#F0F0F0', 'The greatest Australian assistant in IOD','$2a$10$5tnpO6tiAt7vuBv00l0xduOe1IuqQQgKcc2o77YhnA4AP2EaozfbG'), -- !0D
-    ('Gareth', 'Wootton','#0F0F0F', 'The greatest Kiwi assistant in IOD','$2a$10$5tnpO6tiAt7vuBv00l0xduOe1IuqQQgKcc2o77YhnA4AP2EaozfbG'), -- !0D
+    ('Gareth', 'Wootton','#8F8F8F', 'The greatest Kiwi assistant in IOD','$2a$10$5tnpO6tiAt7vuBv00l0xduOe1IuqQQgKcc2o77YhnA4AP2EaozfbG'), -- !0D
     ('Dahlia', 'Aly','#000000', 'Software and buildings architect','$2a$10$QkjDQElifbchvOxj0hEo0Opu70PzzfBSnP5ZBYAmH5/RD4hEK3RmOs'); -- 3¶yp7
 
 INSERT INTO Fields(name, description, color) VALUES
@@ -140,3 +140,6 @@ INSERT INTO TouchesOn (projectID, fieldID) VALUES
     (3,2),
     (3,13),
     (4,4);
+
+INSERT INTO Themes(primary_color,secondary_color,ternary_color,quaternary_color,quinary_color) VALUES
+    ("#37A978","#1B1B1B","#623E11","#77491E","#FFEBCD")

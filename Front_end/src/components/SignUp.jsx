@@ -1,7 +1,7 @@
 import { Box, TextField, Button, Typography } from "@mui/material";
 import { title,signUpField } from '../MUIStyles';
 import { useMyThemeContext } from "../contexts/MyThemeContext";
-import createNew from "../hooks/createNew";
+import createNew from "../helpers/createNew";
 import * as Bcrypt from "bcryptjs";
 
 export default function SignUp({salt}){
@@ -31,7 +31,6 @@ export default function SignUp({salt}){
 
     return <Box sx={{
                 width:"55%",
-                height: "100%",
                 display:"flex",
                 backgroundColor:theme.colors[3],
                 color:theme.colors[4],
@@ -41,6 +40,7 @@ export default function SignUp({salt}){
                 borderBottomRightRadius:"25px",
                 '@media screen and (max-width:900px)': {
                     width:"90%",
+                    boxSizing:'content-box',
                     borderTopRightRadius:"0",
                     borderBottomLeftRadius:"25px"
         }

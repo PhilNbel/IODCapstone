@@ -8,12 +8,12 @@ export default function SignPage(){
         <Container maxWidth='xl' sx={{
             display:"flex",
             justifyContent:"center",
-            alignItems:"center",
-            height:"calc(100vh - 64px)",
-            maxHeight:"800px",
+            alignItems:"stretch",
             marginBottom:'5vh',
             '@media screen and (max-width:900px)': {
-                flexDirection:'column'
+                flexDirection:'column',
+                alignItems:"inherit",
+                marginBottom:'0'
             },
             '@media screen and (max-height:1000px)': {
                 marginBottom:'0',
