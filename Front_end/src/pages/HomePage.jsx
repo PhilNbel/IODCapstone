@@ -7,7 +7,7 @@ import { useMyThemeContext } from '../contexts/MyThemeContext';
 
 export default function HomePage(){
     const theme = useMyThemeContext();
-    return <Container maxWidth="xl">
+    return <Container maxWidth="96%" sx={{ height:'86vh',borderRadius:'13px' ,backgroundColor:theme.colors[2]}}>
         <HomeLogo/>
         <Container maxWidth={false}>
             <Typography

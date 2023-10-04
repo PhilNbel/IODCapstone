@@ -1,13 +1,31 @@
 import {useParams} from 'react-router-dom'
 import readThat from '../hooks/readThat';
-import UserPage from "./UserPage";
 import PageNotFound from "./PageNotFound"
+import UserPage from './UserPage';
+import ProjectPage from './ProjectPage';
+import StepPage from './StepPage';
 
-export default function LookUpPage(){
+export default function LookUpPage({type}){
     const params = useParams();
-    const user = readThat("user",params.user);
-    let currUser = (!user.result)?{}:user;
+    let toLook = type
+    let res = {}
+    let child = <></>
+
+    if(toLook == "user"){
+        res = readThat("users",params.user);
+        child = <UserPage user={res.data}/>
+    }
+
+    if(toLook == "project"){
+        res = readThat("users/"+params.user,params.project);
+        child = <ProjectPage project={res.data}/>
+    }
+    if(toLook == "step"){
+        res = readThat("users/"+params.user+"/"+params.project,params.step);
+        child = <StepPage step={res.data}/>
+    }
+
     return <>
-        {(currUser.result==200)?<UserPage user={currUser.data}/>:<PageNotFound/>}
+        {(res.result==200)?child:<PageNotFound/>}
     </>
 }

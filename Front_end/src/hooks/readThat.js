@@ -1,15 +1,16 @@
 import { useState,useEffect } from "react";
-let path = "http://localhost:5000/api"
+let path = "http://localhost:3000/api"
 
 // hooks are usually named exports rather than default
 export default function readThat(table, entity="", initialValue = []) {
-
   // state variable for holding fetched json data
+  console.log(`${path}/${encodeURI(table)}/${encodeURI(entity)}`)
   const [data, setData] = useState(initialValue);
   useEffect(() => {
-    fetch(`${path}/${table}s/${entity}`)
+    fetch(`${path}/${encodeURI(table)}/${encodeURI(entity)}`)
     .then((response) => response.json())
     .then((json) => {
+      console.log(json)
       setData(json);
     })
   }, []); // re-run effect if url changes

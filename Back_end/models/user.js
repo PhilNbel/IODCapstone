@@ -3,7 +3,7 @@ const { uploadFile } = require("../middleware/uploads");
 
 class User {
 
-    constructor({firstName, lastName, color, nickName=null, password=null, email=null, theme=null}) {//We get rid of undefined values and initialize to null
+    constructor({firstName, lastName, color, nickName=null, password=null, email=null, image=null, theme=null}) {//We get rid of undefined values and initialize to null
         //we pass on the first name and the last name as well as the color
         this.firstName = firstName;
         this.lastName = lastName;
@@ -15,10 +15,24 @@ class User {
             this.password = password;
         if(email)
             this.email = email;
-        if(theme)
+        if(image)
+            this.image = image;
+        if(theme&&theme.length>0)
             this.theme = theme;
     }
 
+    static randomColor(){
+        let red = Math.floor(Math.random()*256).toString(16)
+        let green = Math.floor(Math.random()*256).toString(16)
+        let blue = Math.floor(Math.random()*256).toString(16)
+        if(red.length==1)
+            red="0"+red
+        if(green.length==1)
+            green="0"+green
+        if(blue.length==1)
+            blue="0"+blue
+        return "#"+red+green+blue
+    }
     //Formatting methods
 
     toInsert(){//We transform the object into a [fields] VALUES [corresponding values] for the SQL creation
@@ -28,7 +42,7 @@ class User {
         if(keys.indexOf("image")!=1)//if we are updating the image, we change the field from the data from the image
             this["image"] = '/img/' + uploadFile(this["image"])//to it's path in the back end
 
-        return `(${keys.reduce((fieldStr,currKey,index)=>`${fieldStr} ${(index>0)?',':''} ${currKey} `,"")}) VALUES (${values.reduce((fieldStr,currValue,index)=>fieldStr+`${(index>0)?',':''}"${currValue}"`,"")})`;
+        return `(${keys.reduce((fieldStr,currKey,index)=>`${fieldStr} ${(index>0)?',':''} ${currKey} `,"")},color) VALUES (${values.reduce((fieldStr,currValue,index)=>fieldStr+`${(index>0)?',':''}"${currValue}"`,"")},${randomColor()})`;
     }
 
     static getSet(req_body){ //Transform the the object (the request body) into a succession of "[key] = [value]" with commas 
@@ -65,7 +79,7 @@ class User {
     };
 
     static async readOne(toReadName) {
-        let req1 = await connection.promise().query(`SELECT nickName, email, password FROM Users WHERE nickName = "${toReadName}"`);
+        let req1 = await connection.promise().query(`SELECT firstName,lastName,nickName, color, image, email, password FROM Users WHERE nickName = "${toReadName}"`);
         if(req1[0].length==0)
             throw new Error("User "+toReadName+" does not exist")
         let req2 = await connection.promise().query(`SELECT Fields.name,Fields.description,Fields.color FROM Interests JOIN Users ON Interests.userID=Users.userID JOIN Fields ON Interests.fieldID=Fields.fieldID WHERE Users.nickName ="${toReadName}"`)
@@ -74,14 +88,14 @@ class User {
     };
     
     static async readOneAdmin(toReadName) {
-        let req1 = await connection.promise().query(`SELECT firstName,lastName,nickName,password,email FROM Users WHERE nickName = "${toReadName}"`);
+        let req1 = await connection.promise().query(`SELECT firstName,lastName,nickName,color, image,email,password FROM Users WHERE nickName = "${toReadName}"`);
         let req2 = await connection.promise().query(`SELECT Fields.name,Fields.description,Fields.color FROM Interests JOIN Users ON Interests.userID=Users.userID JOIN Fields ON Interests.fieldID=Fields.fieldID WHERE Users.nickName ="${toReadName}"`)
         let req3 = await connection.promise().query(`SELECT Skills.name,Skills.description FROM Masters JOIN Users ON Masters.userID=Users.userID JOIN Skills ON Masters.skillID=Skills.skillID WHERE Users.nickName ="${toReadName}"`)
         return {...req1[0][0],interests:req2[0],masters:req3[0]}
     };
 
     static async readAll(constraint = null) {
-        let query = "SELECT nickName FROM Users";
+        let query = "SELECT nickName, color, image FROM Users";
         if(constraint)
             query+= " WHERE "+constraint;
         return connection.promise().query(query)

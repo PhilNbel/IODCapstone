@@ -36,12 +36,16 @@ export const presentation = {
 
 export const navButton = {
     mr: 2,
-    display: { xs: 'flex', md: 'none' },
+    //display: { xs: 'flex', md: 'none' },
     flexGrow: 2,
-    fontFamily: 'monospace',
-    fontWeight: 700,
-    letterSpacing: '.3rem',
-    textDecoration: 'none'
+    /*fontFamily: 'monospace',
+    fontWeight: 700,*/
+    letterSpacing: '.1rem',
+    textDecoration: 'none',
+    borderRadius: '3px',
+    padding:"0.5rem",
+    margin: "0 0.3rem",
+    cursor:"pointer",
 };
 
 export const title = {
@@ -64,12 +68,12 @@ export const signUpField = {
 export const shortProject = {
     minWidth:"16rem",
     minHeight:"10rem",
-    maxWidth:"50%",
+    width:"20vw",
+    height:"16vh",
     maxHeight:"30%",
-    borderRadius:"13px",
-    margin:"1rem 2rem",
-    display:"flex",
-    flexDirection:"column"
+    flexWrap:"wrap",
+    margin:"0.6rem 0.8rem",
+    borderRadius:"13px"
 };
 
 export const browse = {
@@ -92,6 +96,7 @@ export const addButton={
 
 export const userButton={
     height:"100%",
+    width:'auto',
     aspectRatio :"1 / 1",
     textAlign:"right",
     borderRadius:"50%",
@@ -100,7 +105,9 @@ export const userButton={
 
 export const userField={
     borderRadius:"15px",
-    padding:"calc(max(20px,5vw)) calc(max(10px,5vh))"
+    padding:"max(20px,5vw) max(10px,5vh)",
+    alignItems:"center"
+    //justifyContent:"center"
 }
 
 export const projectTitle={
@@ -110,9 +117,12 @@ export const projectTitle={
 
 export const stepBox={
     padding:"1.5 rem",
-    margin:"0.5 rem"
+    margin:"0.5 rem",
+    flexDirection:"column"
 }
 export const taskBox={
+    padding:"1rem",
     minHeight:"3 rem",
-    height:"5 vh"
+    height:"5 vh",
+    justifyContent:"space-between"
 }

@@ -2,21 +2,22 @@ import * as React from 'react';
 import { AppBar,Box,Toolbar,IconButton,Typography, Menu, MenuItem, Icon} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
-import { NavLink } from 'react-router-dom';
-import { navButton, userButton } from '../MUIStyles';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { navButton } from '../MUIStyles';
 import { useUserContext } from '../contexts/UserContext';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
+import { Button } from '@mui/base';
+import { useMyThemeContext } from '../contexts/MyThemeContext';
 
 
 const pages = [
   {link: '/', label: 'Home'},
-  {link: '/about/', label: 'About'},
-  {link: '/browse/', label: 'Projects'},
-  {link: '/learn/', label: 'Learn skills'}
+  {link: '/projects/', label: 'My projects'},
+  {link: '/browse/', label: 'Look for more'},
+  {link: '/learn/', label: 'Learn skills'},
+  {link: '/about/', label: 'About'}
 ];
-
-const settings = ['Profile', 'Logout'];
 
 // see https://mui.com/material-ui/react-app-bar/
 function NavBar() { 
@@ -24,10 +25,23 @@ function NavBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
+  let theme = useMyThemeContext()
   let contextUser = useUserContext()
-  let user = contextUser.currentUser
-  console.log(user)
+  let currUser = contextUser.currentUser
+  let navigate = useNavigate()
+  //console.log(currUser)
   
+  const settings = [
+    {name:'Profile', func:()=>{
+      navigate(`/${currUser.nickName}`);
+      window.location.reload();
+    }},
+    {name:'Logout', func:()=>{
+      contextUser.handleUpdateUser({});
+      handleCloseUserMenu();
+    }}
+  ];
+
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -43,31 +57,21 @@ function NavBar() {
     setAnchorElUser(null);
   };
   
-
-  function UserButton({user}){
-    return <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-      <Avatar alt={user.nickName} src={user.image} sx={{backgroundColor:user.color}}/>
-    </IconButton>
+  function UserAvatar({user}){
+    return (user.image)?
+        <Avatar alt={user.nickName} src={user.image}/>
+      :
+        <Avatar sx={{ bgcolor: user.color}}>{user.nickName.toUpperCase().charAt(0)}</Avatar>
+      
   }
 
   return (
     <AppBar position="sticky" sx={{backgroundColor:"#64732C"}}>
-      <Box marginLeft={"2rem"}>
+      <Box margin={"0 2rem"} sx={{display:"flex", justifyContent:"space-between"}}>
         <Toolbar disableGutters>
 
           {/* desktop menu logo and icon */}
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={navButton}
-          >
-            Eovia
-          </Typography>
-
-          {/* mobile menu items in a flexbox */}
+          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 3 }} />
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
                 size="large"
@@ -91,66 +95,66 @@ function NavBar() {
               }}
               open={Boolean(anchorElNav)} onClose={handleCloseNavMenu}
               sx={{
-                display: { xs: 'block', md: 'none' },
+                display: { xs: 'block', md: 'none' }, margin:"8px 0", padding:0
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page.link} component={NavLink} to={page.link}>{page.label}</MenuItem>
+                <MenuItem key={page.link} onClick={()=>{navigate(page.link);window.location.reload()}} style={{backgroundColor:theme.colors[0], color:theme.colors[1]}}>{page.label}</MenuItem>
               ))}
             </Menu>
           </Box>
 
-          {/* desktop menu items are here, grouped into a flex box */}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {/* render our menu items as NavLinks to make sure we maintain state */}
+            
             {pages.map((page) => 
-              <MenuItem key={page.link} component={NavLink} to={page.link}>{page.label}</MenuItem>
+              <Button key={page.link} onClick={()=>{navigate(page.link);window.location.reload()}} style={{...navButton,backgroundColor:theme.colors[0], color:theme.colors[1]}}>
+                <Box sx={{}}>
+                  {page.label}
+                </Box>
+              </Button>
             )}
-          </Box>
-            <MenuItem key={"sign-button"} component={NavLink} to={(user.nickName)?"/"+user.nickName:'/sign-in/'} sx={userButton}>
-              {
-                user.nickName?
-                  <UserButton user={user}/>
-                :
-                "Sign-In"
-                }
-              </MenuItem>
-
-              <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-            {
-                user.nickName?
-                  <UserButton user={user}/>
-                :
-                "Sign-In"
-                }
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-
-
+          </Box>  
         </Toolbar>
+        <Box>
+            { currUser.nickName?
+              <>
+                <Tooltip title="Settings">
+                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                    <UserAvatar user={currUser}/>
+                  </IconButton>
+                </Tooltip>
+                <Menu
+                  sx={{ mt: '45px'}}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  {
+                  settings.map((setting) => (
+                    
+                    <MenuItem key={setting.name} sx={{padding:0, margin:"2px 0", display:'flex', justifyContent:'center', flexDirection:"column"}}>
+                      <Button onClick={setting.func} style={{width:'100%',padding:"0.5rem 1rem",borderRadius:0,backgroundColor:theme.colors[0], color:theme.colors[1]}}>
+                        <Typography textAlign="center">{setting.name}</Typography>
+                      </Button>
+                    </MenuItem>
+                  ))}
+                </Menu>
+              </>
+              :
+              <MenuItem key={"sign-in"} component={NavLink} to={"sign-in"}>{"Log In"}</MenuItem>
+            }
+            
+          </Box>
       </Box>
     </AppBar>
   );

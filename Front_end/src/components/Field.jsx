@@ -18,17 +18,6 @@ export default function Field({fieldInfo}){
             blue="0"+blue
         return "#"+red+green+blue
     }
-        
-    let Detail = styled(({ className, ...props }) => (
-        <Tooltip {...props} arrow classes={{ popper: className }} />
-      ))(({ theme }) => ({
-        [`& .${tooltipClasses.tooltip}`]: {
-          backgroundColor: '#f5f5f9',
-          color: 'rgba(0, 0, 0, 0.87)',
-          fontSize: theme.typography.pxToRem(12),
-          border: '1px solid #dadde9',
-        },
-      }));
 
     let bg = (fieldInfo.color)?{backgroundColor:fieldInfo.color}:{backgroundColor:randomColor()};
 
@@ -37,7 +26,7 @@ export default function Field({fieldInfo}){
             </Box>)
 
     return (<Box>
-            <Detail
+            <Tooltip
                 title={
                     <React.Fragment>
                         {fieldInfo.description}
@@ -45,6 +34,6 @@ export default function Field({fieldInfo}){
                 }
             >
                 {fieldText}
-            </Detail>
+            </Tooltip>
         </Box>)           
 }

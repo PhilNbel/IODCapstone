@@ -14,19 +14,6 @@ export default function SignUp({salt}){
         else
             alert("An error occurred when trying to create a new user")
     }
-
-    function randomColor(){
-        let red = Math.floor(Math.random()*256).toString(16)
-        let green = Math.floor(Math.random()*256).toString(16)
-        let blue = Math.floor(Math.random()*256).toString(16)
-        if(red.length==1)
-            red="0"+red
-        if(green.length==1)
-            green="0"+green
-        if(blue.length==1)
-            blue="0"+blue
-        return "#"+red+green+blue
-    }
         
     function createUser(e){
         e.preventDefault();
@@ -37,18 +24,39 @@ export default function SignUp({salt}){
             lastName:data.get("last"),
             nickName:data.get("nick"),
             email:data.get("email"),
-            color:randomColor(),
             password:hash
         };
         createNew('user',newUser).then((json)=>explain(json))
     }
 
-    return <Box sx={{width:"55%", display:"flex", backgroundColor:theme.colors[3], color:theme.colors[4],flexDirection:"column", padding: "5vh 0 10vh 0", borderTopRightRadius:"25px", borderBottomRightRadius:"25px"}}>
+    return <Box sx={{
+                width:"55%",
+                height: "100%",
+                display:"flex",
+                backgroundColor:theme.colors[3],
+                color:theme.colors[4],
+                flexDirection:"column",
+                padding: "5vh 0 10vh 0",
+                borderTopRightRadius:"25px",
+                borderBottomRightRadius:"25px",
+                '@media screen and (max-width:900px)': {
+                    width:"90%",
+                    borderTopRightRadius:"0",
+                    borderBottomLeftRadius:"25px"
+        }
+                }}>
             <Box sx={{display:"flex", margin: "10% 0 5% 0",position: "relative", justifyContent :"center"}}>
                 <Typography
                             variant="h2"
                             noWrap
-                            sx={{position:"absolute",left:"4px", ...title}}
+                            sx={{
+                                position:"absolute",
+                                left:"4px",
+                                ...title,
+                                '@media screen and (max-width:900px)': {
+                                    display:"none"
+                                }
+                            }}
                         >
                         R
                 </Typography>

@@ -1,11 +1,10 @@
-import { Box, Button, Dialog, DialogContent, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Switch, TextField } from '@mui/material';
+import { Box, Button, Dialog, DialogContent, FormControl, FormControlLabel, InputLabel, MenuItem, Select, Switch, TextField, Tooltip } from '@mui/material';
 import { useState } from 'react';
 import { addButton, browse, browseBox } from '../MUIStyles';
 
 export default function AddDialog({handler,fromSkills, fieldList}){
 
     const [currList,setCurrList] = useState(fieldList)
-    console.log(currList)
 
     function lighten(e){
         setCurrName(e.target.value)
@@ -16,7 +15,6 @@ export default function AddDialog({handler,fromSkills, fieldList}){
 
     const [currName,setCurrName] = useState("")
 
-    console.log(currList)
     const bg={backgroundColor:"#214CE3"} //TODO Make into a Dialog
     return <Dialog
             open={true}
@@ -29,7 +27,13 @@ export default function AddDialog({handler,fromSkills, fieldList}){
                         sx={browseBox} >
                             <Box height="100%" width="75%" sx={{display:"flex",flexDirection:"column",padding:"5px"}}>
                                 <Box height="83%" sx={{flexDirection:"column", overflowY:"scroll"}}>
-                                    {currList.map((field,index)=><Button key={"AFB"+index} sx={browse}>{field.name}</Button>)}
+                                    {currList.map((field,index)=>(
+                                        <Tooltip title={field.description} key={"AFB"+index} >
+                                            <Button onClick={()=>setCurrName(field.name)} sx={{...browse, backgroundColor:field.color}}>
+                                                {field.name}
+                                            </Button>
+                                        </Tooltip>)
+                                    )}
                                 </Box>
                                 <TextField variant={"standard"} value={currName} onChange={lighten} sx={{maxHeight:"2vh"}}></TextField>
                             </Box>

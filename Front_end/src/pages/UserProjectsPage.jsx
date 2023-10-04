@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { shortProject } from '../MUIStyles';
 
 
-export default function BrowsePage(){
+export default function UserProjectsPage(){
 
     const navigate = useNavigate();
     const fullList = readThat("projects")
@@ -38,9 +38,6 @@ export default function BrowsePage(){
                     </Box>
                 </Box>
             </Button>
-            //On hover, display dark transparent 
-            //<CircularProgress variant="determinate" value={100} />
-            
         )
     }
     return <Box
@@ -59,5 +56,6 @@ export default function BrowsePage(){
                 <Box sx={{display:"flex"}}>
                     {filterList.map((project, index)=>format(project, index))}
                 </Box>
+                    <Button onClick={()=>navigate("/create")} >Create new project</Button>
             </Box>
 }

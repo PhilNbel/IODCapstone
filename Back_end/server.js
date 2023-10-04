@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const sqlSanitizer = require('sql-sanitizer');
 
 const dotenv = require("dotenv");
 dotenv.config({ path: `./.env.${process.env.NODE_ENV || "dev"}` }); // support multiple environments, see package.json
@@ -17,7 +16,6 @@ let projectRoutes = require('./routes/projectRoutes')
 app.use(express.json());
 //app.use("/", express.static("public")); // required for image mappings
 app.use(cors());
-app.use(sqlSanitizer);
 
 app.get("/", (req, res) => {
   res.json({ message: "You should not be here, go to /api/" });

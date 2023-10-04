@@ -1,27 +1,28 @@
-import {useParams} from 'react-router-dom'
-import readThat from '../hooks/readThat';
-import PageNotFound from './PageNotFound';
 import { Avatar, Box, LinearProgress, Typography } from '@mui/material';
-import { projectTitle, stepBox } from '../MUIStyles';
+import { projectTitle, stepBox,taskBox } from '../MUIStyles';
 import { useUserContext } from '../contexts/UserContext';
+import { useMyThemeContext } from '../contexts/MyThemeContext';
 
 function format(step){
+    let theme = useMyThemeContext();
     return <Box sx={stepBox}>
-        { step.tasks.map( (task)=> <Box>
+            <Typography>
+                {step.name}
+            </Typography>
+        { step.tasks.map( (task)=> <Box sx={{...taskBox, backgroundColor:theme.colors[0]}}>
                 <Typography>
                     {task.name}
                 </Typography>
-                {task.assigned.map((assignee) => <Avatar href={assignee.image}> </Avatar>)}
+                {(!task.assigned)?"No user assigned":task.assigned.map((assignee) => <Avatar href={assignee.image}> </Avatar>)}
             </Box> ) }
     </Box>
 }
 
 function detail(project){
     let user = useUserContext();
+    let theme = useMyThemeContext();
 
-    if(project.result==500)
-        return <PageNotFound/>
-    return <Box sx={{display:"flex",flexDirection:"row"}}>
+    return <Box width="90vw" height="75vh" sx={{display:"flex",flexDirection:"row", backgroundColor:theme.colors[3],color:theme.colors[4]}}>
         <Box sx={{width:"50%", display:"flex", flexDirection:"column"}}>
             <Box>
                 <Typography sx={projectTitle}>
@@ -33,17 +34,15 @@ function detail(project){
                 { ( !project.isPrivate || project.members.map(user=>user.nickName).indexOf(user.currentUser.nickName)!=-1 )? project.description : project.altDescription }
             </Box>
         </Box>
-        <Box sx={{width:"50%"}}>
+        <Box sx={{width:"50%", display:"flex", flexDirection:"column"}}>
             { project.steps.map((step)=>format(step)) }
         </Box>
     </Box>
 }
 
-export default function ProjectPage(){
-    const params = useParams();
-    let projectInfo = readThat(params.user+'/'+params.project)
+export default function ProjectPage({project}){
     return <Box>
-        {(projectInfo.result)?detail(projectInfo):<></>}
+        {(project.name)?detail(project):<></>}
     </Box>
 
 

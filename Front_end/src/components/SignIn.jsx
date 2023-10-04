@@ -13,7 +13,7 @@ export default function SignIn({salt}){
     async function login(e){
         e.preventDefault();
         const data = new FormData(e.currentTarget);
-        fetch('http://localhost:8080/api/users/'+data.get("username"))
+        fetch('http://localhost:3000/api/users/'+data.get("username"))
             .then((result)=>result.json())
             .then((mayBeUser)=>{
                 if(mayBeUser.result == 500)
@@ -34,6 +34,7 @@ export default function SignIn({salt}){
 
     return <Box sx={{
         width:"55%",
+        height: "100%",
         display:"flex",
         backgroundColor:theme.colors[0],
         color:theme.colors[1],
@@ -41,9 +42,11 @@ export default function SignIn({salt}){
         padding: "5vh 0 10vh 0",
         borderTopLeftRadius:"25px",
         borderBottomLeftRadius:"25px",
-        '@media screen and (max-width:768px)': {
+        '@media screen and (max-width:900px)': {
+            width:"90%",
             borderTopLeftRadius:"25px",
-            borderBottomLeftRadius:"25px",
+            borderTopRightRadius:"25px",
+            borderBottomLeftRadius:"0"
         }
     }}>
         <Box sx={{
@@ -64,8 +67,11 @@ export default function SignIn({salt}){
                         noWrap
                         sx={{
                             position:"absolute",
-                            right:0,
-                            ...title
+                            right:"0",
+                            ...title,
+                            '@media screen and (max-width:900px)': {
+                                display:"none"
+                            }
                         }}
                     >
                     O
