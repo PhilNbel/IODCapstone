@@ -16,7 +16,7 @@ export default function BrowsePage(){
 
     const newList = (fullList.data)?[...fullList.data]:[]; // based on fullList, which will be empty initially and then populated on re-render after running the effect
     const [filterList, setFilterList] = useState([]);
-    if (newList.length > 0) setFilterList(newList);
+    if (filterList.length == 0 && newList.length > 0) setFilterList(newList);
 
     console.log(newList)
     const theme = useMyThemeContext();

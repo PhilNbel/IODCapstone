@@ -9,8 +9,9 @@ export default function SignUp({salt}){
     const theme = useMyThemeContext();
 
     function explain(json){
+        console.log(json)
         if(json.result==200)
-            alert("User "+json.data.nickName+" created, you can now log in")
+            alert(json.message + ", you can now log in")
         else
             alert("An error occurred when trying to create a new user")
     }

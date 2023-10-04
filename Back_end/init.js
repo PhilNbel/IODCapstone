@@ -15,6 +15,7 @@ async function init(){
     .then(async(response)=> {
         try{
             response = await connection.promise().query(fs.readFileSync("test_data.sql").toString());
+            console.log('Initialised successfully')
         }catch(err){
             console.log(err)
         }

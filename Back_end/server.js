@@ -15,9 +15,9 @@ let skillRoutes = require('./routes/skillRoutes')
 let projectRoutes = require('./routes/projectRoutes')
 
 // parse requests of content-type - application / json;
+app.use(cors());
 app.use(express.json());
 //app.use("/", express.static("public")); // required for image mappings
-app.use(cors());
 
 app.use('/api/users', userRoutes);
 app.use('/api/fields', fieldRoutes);
