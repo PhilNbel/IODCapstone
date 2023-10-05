@@ -11,10 +11,10 @@ import { useUserContext } from '../contexts/UserContext';
 import UserAvatar from '../components/UserAvatar';
 
 
-export default function UserProjectsPage(){
+export default function UserProjectsPage(){//shows the projects the current user is a member of
 
-    let user=useUserContext();
-
+    const user = useUserContext();
+    const theme = useMyThemeContext();
     const navigate = useNavigate();
     const fullList = useRead("projects") // runs side effect to load projects data into fullList
 
@@ -23,9 +23,7 @@ export default function UserProjectsPage(){
     let reducedList = newList.filter(project=>project.members.map(member=>member.nickName).indexOf(user.currentUser.nickName)!=-1)
     if (!filterList && newList.length > 0) setFilterList(reducedList);
 
-    const theme = useMyThemeContext();
-
-    function getProgress(project){
+    function getProgress(project){//returns the number of tasks that are not yet finished
         let toDo = 0;
         let isDone = 0;
         project.steps.forEach(
@@ -41,8 +39,8 @@ export default function UserProjectsPage(){
     }
 
 
-    function format(project,index){
-        return (
+    function format(project,index){//returns a more detailed overview of the project
+        return (//formatted project
             <Button key={index} onClick={()=>navigate('/'+project.creator+'/'+project.name)} sx={{...longProject, backgroundColor:theme.colors[3], color:theme.colors[4]}}>
                 <Box sx={{width:"90%",display:"flex", flexDirection:"column"}}>
                     <Typography sx={{marginBottom:"4rem"}}>
@@ -85,6 +83,8 @@ export default function UserProjectsPage(){
                     display: 'block'
                 }}
             >
+            {/*UserProjectsPage component*/}
+
                 <Filter list={reducedList} handler={setFilterList}/>
                 <Box sx={{display:"flex", flexWrap:'wrap',justifyContent:'center'}}>
                     {(filterList)?filterList.map((project, index)=>format(project, index)):<CircularProgress/>}

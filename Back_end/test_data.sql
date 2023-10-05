@@ -13,8 +13,8 @@ INSERT INTO Users(firstName,lastName, color,nickName, password) VALUES
     ('Dahlia', 'Aly','#000000', 'Software and buildings architect','$2a$10$qNhJZYMGtyrfEY2fjvhS.uYgjvpTkQH7KmcLAq752Eswe8SMwLSS6'); -- 3¶yp7
 
 INSERT INTO Fields(name, description, color) VALUES
-    ('Software engineering','The art of solving real life problems with computer programs','#FFFFFF'),
-    ('Computer science','The art of mentally constructing programs and anticipating their behavior','#FFFFFF'),
+    ('Software engineering','The art of solving real life problems with computer programs','#3F3CCD'),
+    ('Computer science','The art of mentally constructing programs and anticipating their behavior','#7622DD'),
     ('Mathematics','The set of techniques to edit and manipulate abstract values','#FFFFFF'),
     ('Badminton',"The sport with the weird thing that flies I don't know the name of (Shuttle!?)",'#FFFFFF'),
     ('Electronics','The regroupment of skills which concerns interfaces between the analoguous and digital worlds','#FFFFFF'),

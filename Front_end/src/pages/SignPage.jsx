@@ -2,7 +2,7 @@ import { Container } from "@mui/material";
 import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp";
 
-export default function SignPage(){
+export default function SignPage(){//lets the user create and access their user
     let salt = import.meta.env.VITE_SALT;
     return (
         <Container maxWidth='xl' sx={{

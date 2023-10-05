@@ -4,9 +4,12 @@ import SkillAdder from "../components/SkillAdder";
 import { memberCore } from "../MUIStyles";
 import { useMyThemeContext } from "../contexts/MyThemeContext";
 
-export default function MembersPage({memberList}){
+export default function MembersPage({memberList}){ //display all the members of the project,
+    //their skills and their role
+
     let theme = useMyThemeContext()
-    return (
+
+    return (//MembersPage component
         <Box width="90vw" minHeight="75vh" sx={{display:"flex",flexDirection:"column",justifyContent:"center",alignItems:"center", backgroundColor:theme.colors[3],color:theme.colors[4]}}>
             {
             memberList.map((member)=><Box key={member.nickName} sx={{display:"flex",alignItems:"center"}}>

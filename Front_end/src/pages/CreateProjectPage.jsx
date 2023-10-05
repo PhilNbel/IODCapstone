@@ -7,20 +7,24 @@ import { title } from "../MUIStyles";
 import createNew from "../helpers/createNew";
 import { useNavigate } from "react-router-dom";
 
-export default function CreateProjectPage(){
+export default function CreateProjectPage(){//the page to create a new project
     let user = useUserContext();
     let theme = useMyThemeContext();
     let navigate = useNavigate();
+
     const [budget, setBudget] = useState('');
     const [isPrivate, setIsPrivate] = useState(false);
     let creator = user.currentUser.nickName;
 
     async function createProject(e){
+
         e.preventDefault();
         const data = new FormData(e.currentTarget);
-        if(data.get("name")=="")
-            return
-        let newProject = {
+        
+        if(data.get("name")=="")//prevents the creation of a project with an empty name
+            return  //otherwise 
+        
+        let newProject = {//packs the project with minimal information
             type: data.get("type"),
             name: data.get("name"),
             description: data.get("description"),
@@ -28,6 +32,9 @@ export default function CreateProjectPage(){
             isOpen: (data.get("isOpen")=="true")?1:0,
             creator: creator,
         };
+
+        //add more information if needed
+
         if(isPrivate)
             newProject={ ...newProject ,altDescription: data.get("altDescription"),}
         if(budget)
@@ -36,15 +43,17 @@ export default function CreateProjectPage(){
                 budget: budget,
                 budgetIsShared: (data.get("budgetIsShared")=="true")?1:0,
             }
+
         createNew('project',newProject).then((res)=>{
-            console.log(res)
-            if(res.result==200)
+            if(res.result==200)//if the project is created, we display it
                 navigate("/"+creator+"/"+data.get("name"))
-        })
+        }).catch(err=>alert(err.message))
         
     }
 
     return (<Box component="form" onSubmit={createProject} sx={{ maxWidth:"90%", minHeight:'86vh', padding:'1rem', borderRadius:'35px', justifyContent:'start',display:"flex", flexDirection:"column", backgroundColor:theme.colors[2]}}>
+        {/*CreateProjectPage component*/}
+        
         <Box sx={{margin:"5rem 1rem",display:"flex",flexDirection:"column",justifyContent:"center"}}>
             <Typography sx={title}>Creating new project: </Typography>
             <TextField variant="standard" name="name"></TextField>
@@ -72,6 +81,8 @@ export default function CreateProjectPage(){
                 <Typography>(Do you want random people to see this?)</Typography>
             </Box>
             {(isPrivate)?
+            //only choose altDescription if the project is private
+
                 <Box sx={{margin:"1rem 3rem"}}>
                     <Typography>Public description: </Typography>
                     <TextField variant="standard" name="altDescription" sx={{width:"100%"}}></TextField>
@@ -82,8 +93,10 @@ export default function CreateProjectPage(){
         </Box>
         <Box sx={{margin:"3rem 1rem", display:"flex",flexDirection:"row",alignItems:"center"}}>
             <Typography>Budget: </Typography>
-            <input value={budget} onChange={(e)=>setBudget(e.target.value)} type="number" style={{padding:"0.2rem 0.5rem"}}></input>
+            <input value={budget} min={0} onChange={(e)=>setBudget(e.target.value)} type="number" style={{padding:"0.2rem 0.5rem"}}></input>
             {(budget)?
+            //only choose to shared the budget or not if there is one
+
             <>
                 <Checkbox name="budgetIsShared" sx={{maxHeight:"100%"}}/>
                 <Typography>Share budget</Typography>

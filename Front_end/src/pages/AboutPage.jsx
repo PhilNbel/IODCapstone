@@ -3,10 +3,12 @@ import { Box, Container, Typography } from "@mui/material";
 import { about,presentation } from '../MUIStyles';
 import { useMyThemeContext } from '../contexts/MyThemeContext';
 
-export default function AboutPage(){
+export default function AboutPage(){//Pretty simple, returns a
     const theme = useMyThemeContext();
 
     return <Container maxWidth="96%" sx={{ height:'86vh',borderRadius:'13px' ,backgroundColor:theme.colors[2]}}>
+        {/*AboutPage component*/}
+        
             <Box
                     padding="5rem" >
                 <Typography

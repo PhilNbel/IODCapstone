@@ -5,11 +5,13 @@ import UserPage from './UserPage';
 import ProjectPage from './ProjectPage';
 import StepPage from './StepPage';
 
-export default function LookUpPage({type}){
+export default function LookUpPage({type}){//check if the element exists. Displays PageNotFound otherwise
     const params = useParams();
     let toLook = type
     let res = {}
     let child = <></>
+
+    //change the child depending on the type of page we want
 
     if(toLook == "user"){
         res = useRead("users",params.user);
@@ -27,6 +29,8 @@ export default function LookUpPage({type}){
     }
 
     return <>
-        {(res.result==200)?child:<PageNotFound/>}
-    </>
+        {/*LookUpPage component*/}
+            
+            {(res.result==200)?child:<PageNotFound/>}
+        </>
 }

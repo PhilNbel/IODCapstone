@@ -32,7 +32,7 @@ export default function FieldAdder({canAdd = false,list=[],remHandler,addHandler
                 list.sort((field1,field2)=>(field1.name>field2.name)?1:-1)
                 .map((field,index)=>
                         {return (canAdd)?
-                            <Button key={index} onClick={()=>{remHandler(field)}}>
+                            <Button key={index} onClick={()=>{remHandler(field)}} style={{color:"black"}}>
                             {/*if the list can be modified, we can remove fields by clicking them*/}
 
                                 <Field fieldInfo={field}/>

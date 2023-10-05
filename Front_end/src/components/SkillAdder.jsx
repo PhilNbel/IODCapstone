@@ -32,7 +32,7 @@ export default function SkillAdder({canAdd = false,list=[],remHandler,addHandler
                 .map((skill,index)=>
                         {return (canAdd)?
                         //returns a button to remove them if the list can be edited
-                            <Button key={index} onClick={()=>{remHandler(skill)}}>
+                            <Button key={index} onClick={()=>{remHandler(skill)}} style={{color:"black"}}>
                                 <Skill skillInfo={skill}/>
                             </Button>
                             :

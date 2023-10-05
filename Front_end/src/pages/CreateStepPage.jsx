@@ -7,7 +7,9 @@ import { title } from "../MUIStyles";
 import createNew from "../helpers/createNew";
 import { useNavigate } from "react-router-dom";
 
-export default function CreateStepPage(){
+export default function CreateStepPage(){//page to create a new step. Currently a copy of CreateProjectPage
+    //not accessible
+
     let user = useUserContext();
     let theme = useMyThemeContext();
     let navigate = useNavigate();
