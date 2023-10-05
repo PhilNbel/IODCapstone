@@ -1,3 +1,7 @@
+Link step creation and deletion to the front end
+Link task creation and deletion to the front end
+Automatically link the task's skills' list to their project's field list
+
 Add a messaging system between users (within projects of as direct messages)
     L-> Add notifications
         L-> Completion notification for tasks and steps

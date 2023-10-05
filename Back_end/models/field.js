@@ -9,13 +9,14 @@ class Field {
 
     //Formatting methods
 
+        //[allKeys] VALUES [allValues] for create
     toInsert(){
         let keys = Object.keys(this);
         let values = Object.values(this);
 
         return `(${keys.reduce((fieldStr,currKey,index)=>`${fieldStr} ${(index>0)?',':''} ${currKey} `,"")}) VALUES (${values.reduce((fieldStr,currValue,index)=>fieldStr+`${(index>0)?',':''}"${currValue}"`,"")})`;
     }
-
+        //all [key = value] for update
     static getSet(req_body){
         let keys = Object.keys(req_body)
         let values = Object.values(req_body);
@@ -45,25 +46,25 @@ class Field {
 
     //CRUD operations
     
-    static async create(newField) {
+    static async create(newField) {//creates a new field through the formatting method
         let fieldToInsert = new Field(newField)
         return connection.promise().query("INSERT INTO Fields"+ fieldToInsert.toInsert()).then((result)=>({result :result, insertName:fieldToInsert.name}));
     };
 
-    static async readOne(toReadName) {
+    static async readOne(toReadName) {//returns a field and all its skills
         let part1 = await connection.promise().query(`SELECT name,description,color FROM Fields WHERE name = "${toReadName}"`);
         let part2 = await connection.promise().query(`SELECT Skills.name,Skills.description FROM Fields JOIN Skills ON Fields.fieldID=Skills.fieldID WHERE Fields.name = "${toReadName}"`)
         return {...part1[0][0], skills:part2[0]}
     };
 
-    static async readAll(constraint = null) {
+    static async readAll(constraint = null) {//lists all fields and then look them up individually
         let query = "SELECT name, description, color FROM Fields";
         if(constraint)
             query+= " WHERE "+constraint;
         return connection.promise().query(query)
     };     
 
-    static async update(toUpdate) {
+    static async update(toUpdate) {//modifies a field through the formatting methods
         let set = Field.getSet(toUpdate[0])
         return connection.promise().query("UPDATE Fields SET "+set+" WHERE name = \""+toUpdate[1]+"\"")
             .catch((err)=>{
@@ -72,7 +73,7 @@ class Field {
     };
     
     
-    static async destroy(bountyName) {
+    static async destroy(bountyName) { //deletes the corresponding field
         return connection.promise().query("DELETE FROM Fields WHERE name = \""+bountyName+"\"").then((result)=>({deletedRows:result[0].affectedRows, deletedName:bountyName}));
     };     
 

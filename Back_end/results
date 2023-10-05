@@ -1,6 +1,0 @@
-
-> back_end@1.0.0 start
-> node server.js
-
-Server is running on port 8080.
-Successfully connected to the database.

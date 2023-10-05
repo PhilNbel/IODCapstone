@@ -1,6 +1,6 @@
 "use strict";
 const Models = require("../models");
-
+//Basic CRUD operations for skills
 const getSkill = (req,res) => {
     Models.Skills.readOne(req.params.name).then(function (data) {
         res.send({ result: 200, data: data })
@@ -13,6 +13,7 @@ const getSkills = (res) => {
     Models.Skills.readAll().then(function (data) {
         res.send({ result: 200, data: data[0] })
     }).catch(err => {
+        console.log(err)
         res.send({ result: 500, error:"An error occured while fetching skills"} )
     })
 }

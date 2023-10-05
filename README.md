@@ -1,38 +1,24 @@
-# IOD SE Capstone Example Application
-Includes deployment instructions for EC2 - there are many other options as well, but hopefully this will give some guidance. It assumes you have a DB already running in the Cloud, either MySQL on AWS RDS or Mongo on MongoDB Atlas.
+# IOD SE Capstone : Eovia
+Complete code for a website named **Eovia**. It's purpose is improve one's life through an opportunity to connect with others who share similar passions to improve social life in an individualistic society, improve self-esteem through the realization of projects with proofs and records of those feats and improve one's career through the ability to learn from others and show one's skills.
 
-To run both backend and frontend on a single port, taking into account both development and production environments, we need to make several changes to support multiple ways of starting the app using different configurations for different purposes.
+# DOCKER
+*The docker will most likely be the easiest solution. Pull the docker image `eovius/eovia`*
 
-## Frontend (Vite)
-- **vite.config.js**: Add a proxy server to allow internally fetched URLs to be proxied from front to back end. This lets us use relative URLs like `/api/users` instead of hardcoding a localhost port like `http://localhost:8080/api/users`, and should work in both dev and prod environments
-- **components**: Change all localhost type URLs to use a relative format that makes use of the proxy
+Once pulled, you will simply need to run the image with `docker run -d -p [PORT]:3000 eovius/eovia` ([PORT] needs to be replaced with the port you want the website to be running on)
+*(currently unavailable, working on repairing it)*
 
-## Backend (Express)
-- **concurrently**: Do `npm install concurrently` to install the concurrently package to allow back and front ends to be started together with a single command
-- **package.json**: Add custom start scripts. I've added 5 - 
-    - `npm run dev`: starts just the backend using local configuration, 
-    - `npm run prod`: starts just the backend using AWS or production configuration (assumes frontend is built into dist folder), 
-    - `npm run aws`: starts just the backend on Linux type servers using production configuration (assumes frontend is built into dist folder),
-    - `npm run start-local`: starts both front and backend concurrently using local configuration, and 
-    - `npm run start`: builds the frontend into a static site and starts the backend using AWS or production configuration.
-- **server.js**: Change the way the dotenv module loads configuration from a .env file to support both local and aws configuration options. If we're not running in development mode, add support to the Express app for serving the 'built' or 'distribution' versions of the React frontend
+# Github
+*The Github repository is hosted at `https://github.com/PhilNbel/IODCapstone`*
 
-# DEVELOPMENT
-*Needs separate environment config to use a local database server on localhost: set this config in `.env.local`*
+Choose a folder to host the website and run `git clone "https://github.com/PhilNbel/IODCapstone"`. Once there, go into the newly created IODCapstone, then into **Front_end** and run `npm install`. Move to Back_end and repeat the operation.
+Once the modules are installed, run `npm start` and *voila*!
 
-We want to keep both backend and frontend running and restarting when changes are made.
-Start the app with `npm run start-local` and access the app in a browser by using the dev React port, usually http://localhost:5173/
+# Development
+*If you want to fork, re-use or simply test the code and be able to have your own database, you will need a MySQL database and to change the information in `.env.dev`*
 
-# PRODUCTION
-*Needs separate environment config to use a cloud-based database server on AWS or Atlas: set this config in `.env.production`*
+Follow the Github step, then go to your **Back_end** folder and run:
 
-We need to create a static 'distribution' or 'built' version of the React frontend that doesn't need to run independently, but can just be served from the backend.
-Then we can run just the backend on a single port with a single command, and this makes deployment much more simple.
-Access the app in a browser by using the backend port defined in .env.production, on whatever server is used for deployment (could be EC2 via Docker, or EC2 via Beanstalk, or something else).
-
-If the Docker build (see below) is causing problems or timing out, it may be simpler to skip it and simply create an EC2 server and run the build commands from there using SSH.
-1. Install git and nodejs - `sudo yum install git` and `sudo yum install nodejs`
-2. Clone your git repo - `git clone <url of repository>`
-3. Install the dependencies - `cd backend && npm install` and `cd frontend && npm install && npm run build`
-4. Make sure the `.env.production` file is present and contains the right config - you may want to change the PORT to 80
-5. Start the backend - `sudo npm run prod` from the `backend` folder
+1. `npm run init-dev` to update the database with the structure in `db_creation.sql` and the initial information in `test_data.sql`
+2. `npm run start-dev` to run on a local machine with the 'DEV' environment
+3. `npm run init` to update your production database, with it's information in `.env.prod`. Although nothing is copyrighted, I would like if you didn't try to make any concurrence to my website. This is here to help you start your own project
+4. `npm start` to run build your front end in a 'dist' folder and run your website. This is useful if you plan to run your website on a distant Dockerimage. If you want to first build the image in your development environment, use `npm run build-dev`

@@ -42,15 +42,17 @@ class Project {
         return null
     }
 
+
     //Formatting methods
 
+        //[allKeys] VALUES [allValues] for create
     toInsert(){
         let keys = Object.keys(this);
         let values = Object.values(this);
 
         return `(${keys.reduce((fieldStr,currKey,index)=>`${fieldStr} ${(index>0)?',':''} ${currKey} `,"")}) VALUES (${values.reduce((fieldStr,currValue,index)=>fieldStr+`${(index>0)?',':''}"${currValue}"`,"")})`;
     }
-
+        //all [key = value] for update
     static getSet(req_body){
         let keys = Object.keys(req_body)
         let values = Object.values(req_body);
@@ -59,13 +61,14 @@ class Project {
         let result = keys[0]+" = \""+values[0]+'\"'
         for(let i=1;i<keys.length;i++){
             result+= `, ${keys[i]} = "${values[i]}"`
-        }   
+        }
         return result;
     }
 
+
     //CRUD operations
     
-    static async create(newProject) {
+    static async create(newProject) { //creates a new project and links the creator to it
         let projectToInsert = await Project.init(newProject)
         return connection.promise().query("INSERT INTO Projects"+ projectToInsert.toInsert())
             .then((result)=>connection.promise().query(`INSERT INTO IsMember(role,projectID,userID) VALUES ("creator",${result[0].insertId},${projectToInsert.creatorID})`))
@@ -73,29 +76,33 @@ class Project {
             .catch((err)=>{
                 console.log(err);
                 throw new Error("Error during creation")
-            });;
+            });
     };
 
-    static async readOne(toReadName, creatorName) {
+    static async readOne(toReadName, creatorName) {//fetches the public information for the project "toReadName"
         let creatorID  = await Users.getUserInfoName("userID",creatorName)
         let req1 = await connection.promise().query(`SELECT type, name, isPrivate, budgetIsShared FROM Projects WHERE name = "${toReadName}" AND creatorID = ${creatorID}`);
-        let part1 = req1[0][0];
+        let part1 = req1[0][0]; //first the guaranteed information
         if(!part1)
             throw new Error("Cannot find project "+toReadName+" created by "+creatorName)
         let req2 = await connection.promise().query(`SELECT ${(part1.isPrivate)?"altDescription,":"description,"}${(part1.budgetIsShared)?"budget,spending,":""}isOpen FROM Projects WHERE name = "${toReadName}" AND creatorID = ${creatorID}`);
-        let part2 = req2[0][0];
+        let part2 = req2[0][0]; //then the right information (description if the project is, alternative one if the project is private)
         
-        let part3 = await Steps.readAll(toReadName, creatorName)
+        let part3 = await Steps.readAll(toReadName, creatorName) //read all the steps from this budget
         
         let req4 = await connection.promise().query(`SELECT IsMember.role, Users.nickName, Users.image, Users.color FROM IsMember JOIN Users ON Users.userID=IsMember.userID JOIN Projects ON Projects.projectID=IsMember.projectID WHERE Projects.name = "${toReadName}" AND Projects.creatorID = ${creatorID}`);
         let part4 = await Promise.all(req4[0].map(async(member)=>({...member,masters:await Users.getUserInfoName("skills",member.nickName)})))
+        //check all the members' info and fetches their skills to be displayed on the "members" page of the corresponding project
+
         let req5 = await connection.promise().query(`SELECT Fields.name, Fields.description, Fields.color FROM TouchesOn JOIN Fields ON Fields.fieldID=TouchesOn.fieldID JOIN Projects ON Projects.projectID=TouchesOn.projectID WHERE Projects.name = "${toReadName}" AND Projects.creatorID = ${creatorID}`);
         let part5 = req5[0]
+        //fetches the fields linked to the project
         
         return { creator:creatorName,...part1,...part2,steps:[...part3],members:[...part4],fields:[...part5]}
     };
     
-    static async readOneAdmin(toReadName, creatorName) {
+    static async readOneAdmin(toReadName, creatorName) {//gets ALL information
+        //to understand detailed parts, check readOne
         let creatorID  = await Users.getUserInfoName("userID",creatorName)
         let req = await connection.promise().query(`SELECT type, name, description, isPrivate, altDescription, budget, spending, budgetIsShared, isOpen, creatorID FROM Projects WHERE name = "${toReadName}" AND creatorID = ${creatorID}`);
         let part1 = req[0][0]
@@ -120,7 +127,9 @@ class Project {
     };
 
 
-    static async update(toUpdate) {
+    static async update(toUpdate) {//modifies the project
+        //currently has no way to modify the project's fields or members
+        //
         let set = Project.getSet(toUpdate[0])
         return connection.promise().query("UPDATE Projects SET "+set+" WHERE name = \""+toUpdate[1]+"\" AND name = \""+await Users.getUserInfoName("id",toUpdate[2])+"\"")
             .catch((err)=>{

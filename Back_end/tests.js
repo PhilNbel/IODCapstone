@@ -1,5 +1,6 @@
 'use strict'
-
+//This file contains the api calls to modify the database and test the CRUD operations
+//It is currently testing for users, fields, skills and projects
 const dotenv = require("dotenv");
 dotenv.config({ path: `./.env.${process.env.NODE_ENV || "dev"}` }); // support multiple environments, see package.json
 
@@ -23,7 +24,7 @@ async function test(url, method='GET',body=null){ //function to test the API rou
     .catch((err)=>console.log(err))//console.log('ERROR\n'+err))
 }
 
-async function testCreate(){
+async function testCreate(){//Tests the creation of different elements
     return test('users/create','POST', {"firstName":"Thomas", "lastName":"Knight", "nickName":"FidjiC7", "password":"motdepasse"})   
     .then((res)=>res = test('fields/create','POST', {"name":"testField", "description":"testingArea"}))
     .then((res)=>res = test('skills/create','POST', {"name":"testing skill", "description":"toTest", "field":"testField"}))
@@ -63,13 +64,13 @@ async function testDelete(){//delete the elements created earlier to keep the da
 }
 
 async function testBattery(){
-    testReadAll()
-    .then((result)=>{ console.log(result); return testCreate()})
-    .then((result)=>{ console.log(result); return testReadOne()})
-    .then((result)=>{ console.log(result); return testUpdate()})
-    .then((result)=>{ console.log(result); return testReadOne()})
-    .then((result)=>{ console.log(result); return testDelete()})
-    .then((result)=>{ console.log(result); return testReadAll()})
+    testReadAll() //We list the existing elements
+    .then((result)=>{ console.log(result); return testCreate()}) //We create new ones
+    .then((result)=>{ console.log(result); return testReadOne()}) //We look them up
+    .then((result)=>{ console.log(result); return testUpdate()}) //We modify them
+    .then((result)=>{ console.log(result); return testReadOne()}) //We check they changed
+    .then((result)=>{ console.log(result); return testDelete()}) //We delete them
+    .then((result)=>{ console.log(result); return testReadAll()}) //We checked they do not exist anymore
 }
 
 module.exports={

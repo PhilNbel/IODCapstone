@@ -26,6 +26,7 @@ class Step {
 
     //Formatting methods
 
+        //[allKeys] VALUES [allValues] for create
     toInsert(){
         let keys = Object.keys(this);
         let values = Object.values(this);
@@ -33,6 +34,7 @@ class Step {
         return `(${keys.reduce((fieldStr,currKey,index)=>`${fieldStr} ${(index>0)?',':''} ${currKey} `,"")}) VALUES (${values.reduce((fieldStr,currValue,index)=>fieldStr+`${(index>0)?',':''}"${currValue}"`,"")})`;
     }
 
+        //all [key = value] for update
     static getSet(req_body){
         let keys = Object.keys(req_body)
         let values = Object.values(req_body);

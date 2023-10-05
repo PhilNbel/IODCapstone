@@ -1,5 +1,4 @@
 import { Box, Button, FormControl, InputLabel, Radio, RadioGroup, Select, MenuItem, FormLabel , FormControlLabel, TextField } from "@mui/material";
-
 import { useState } from "react";
 import FieldAdder from "./FieldAdder";
 import { useMyThemeContext } from "../contexts/MyThemeContext";
@@ -10,7 +9,6 @@ export default function Filter({list, handler}){//Returns a component where you 
     const [filterType, setFilterType] = useState("name");
     const [radioVal, setRadioVal] = useState("Hobby");
     const [nameVal, setNameVal] = useState("");
-    console.log(nameVal)
     const [settings, setSettings] = useState((<>
         <FormLabel id="project-name"> Project name: </FormLabel>
         <TextField variant="standard" value={nameVal} onChange={(e)=>setNameVal(e.target.value)} sx={{backgroundColor:"#D9D9D9"}}/>
@@ -68,21 +66,20 @@ export default function Filter({list, handler}){//Returns a component where you 
     }
 
     function modifyList(){
-        console.log(nameVal)
-        console.log(list)
+        
         let newList =[]
         switch (filterType){
             case "type":
                 newList = list.filter((project)=>project.type == radioVal);
-                handler(newList)
+                handler(newList);
                 break;
             case "name":
-                newList = list.filter((project)=>project.name.startsWith(nameVal));
-                handler(newList)
+                newList = list.filter((project)=>project.name.toLowerCase().startsWith(nameVal.toLowerCase()));
+                handler(newList);
                 break;
             case "field":
-                newList = list.filter((project)=>fieldList.every((targetField)=>project.fields.map(field=>field.name).indexOf(targetField)!=-1));
-                handler(newList)
+                newList = list.filter((project)=>fieldList.every((targetField)=>project.fields.map(field=>field.name).indexOf(targetField.name)!=-1));
+                handler(newList);
                 break;
             default:
                 setSettings((<></>))

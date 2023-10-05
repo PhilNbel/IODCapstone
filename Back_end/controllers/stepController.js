@@ -1,8 +1,9 @@
 "use strict";
 const Models = require("../models");
+//Methods for steps and tasks, as tasks should not be interacted with individually
+//They should only be interacted with through steps
 
 //Step methods
-
 const getStep = (req,res) => {
 
     Models.Steps.readOne(req.params.step, req.params.project,req.params.name).then(function (data) {

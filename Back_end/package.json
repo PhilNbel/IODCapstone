@@ -8,8 +8,8 @@
     "dev": "set NODE_ENV=dev&& node server.js",
     "prod": "set NODE_ENV=prod&& node server.js",
     "start-dev": "concurrently \"cd ../Front_end && npm run dev\" \"npm run dev\"",
-    "start-build": "concurrently \"cd ../Front_end && npm run build\" \"npm run dev\"",
     "start": "concurrently \"cd ../Front_end && npm run build\" \"npm run prod\"",
+    "build-dev": "cd ../Front_end && npm run build",
     "init-dev": "set NODE_ENV=dev&& node ./init.js",
     "init": "set NODE_ENV=prod&& node ./init.js"
   },

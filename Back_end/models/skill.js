@@ -19,13 +19,16 @@ class Skill {
 
     //Formatting methods
 
+        //[allKeys] VALUES [allValues] for create
     toInsert(){
         let keys = Object.keys(this);
         let values = Object.values(this);
         return `(${keys.reduce((fieldStr,currKey,index)=>`${fieldStr} ${(index>0)?',':''} ${currKey} `,"")}) VALUES (${values.reduce((fieldStr,currValue,index)=>fieldStr+`${(index>0)?',':''}"${currValue}"`,"")})`;
     }
 
+        //all [key = value] for update
     getSet(){
+        //if passed a fieldID, ignores it
         let keys = Object.keys(this)
         let values = Object.values(this);
         keys = keys.filter((key)=>key!="fieldID")
@@ -55,7 +58,7 @@ class Skill {
     };
 
     static async readAll(constraint = null) {
-        let query = "SELECT Skills.name, Skills.description, Field.color AS color, Fields.name AS field FROM Skills JOIN Fields ON Skills.fieldID=Fields.fieldID";
+        let query = "SELECT Skills.name, Skills.description, Fields.color AS color, Fields.name AS field FROM Skills JOIN Fields ON Skills.fieldID=Fields.fieldID";
         if(constraint)
             query+= " WHERE "+constraint;
         return connection.promise().query(query)

@@ -1,6 +1,6 @@
 "use strict";
 const Models = require("../models");
-
+//Basic CRUD operations for fields
 const getField = (req,res) => {
     Models.Fields.readOne(req.params.name).then(function (data) {
         res.send({ result: 200, data: data })

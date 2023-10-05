@@ -1,8 +1,7 @@
 "use strict";
 const Models = require("../models");
-
+//Basic CRUD operations for projects
 const getProject = (req,res) => {
-
     Models.Projects.readOne(req.params.project,req.params.name).then(function (data) {
         res.send({ result: 200, data: data });
     }).catch(err => {

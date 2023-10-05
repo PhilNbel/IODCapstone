@@ -57,7 +57,7 @@ router.post('/create', (req, res) => {
     Controllers.userController.createUser(req.body, res)
 })
 router.post('/:name/image', uploadFile, (req, res) => { // uses multer middleware function to upload images before controller function runs
-    Controllers.userController.addProfileImage(req, res)
+    Controllers.userController.addProfileImage(req, res)//not tested
 })
 router.put('/:name', (req, res) => {
     Controllers.userController.updateUser(req, res)

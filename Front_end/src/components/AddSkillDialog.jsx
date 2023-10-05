@@ -5,7 +5,7 @@ import { addButton, browse, browseBox } from '../MUIStyles';
 export default function AddSkillDialog({displayHandler,addHandler, skillList}){
 
     const [currList,setCurrList] = useState(skillList)
-    const [currField,setCurrField] = useState(<></>)
+    const [currSkill,setCurrSkill] = useState(<></>)
 
     function lighten(e){
         setCurrName(e.target.value)

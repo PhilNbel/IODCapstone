@@ -1,6 +1,7 @@
 "use strict";
 const Models = require("../models");
 
+//Basic CRUD operations for users
 const getUser = (req,res) => {
 
     Models.Users.readOne(req.params.name).then(function (data) {
