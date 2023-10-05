@@ -3,7 +3,7 @@ const { uploadFile } = require("../middleware/uploads");
 
 class User {
 
-    constructor({firstName, lastName, color, nickName=null, password=null, email=null, image=null, theme=null}) {//We get rid of undefined values and initialize to null
+    constructor({firstName, lastName, color=User.randomColor(), nickName=null, password=null, email=null, image=null, theme=null}) {//We get rid of undefined values and initialize to null
         //we pass on the first name and the last name as well as the color
         this.firstName = firstName;
         this.lastName = lastName;
@@ -39,10 +39,10 @@ class User {
         let keys = Object.keys(this);//We build it from the keys in an automated fashion for scalability and re-use
         let values = Object.values(this);//functions remain individual in case of special properties (like image, here) 
 
-        if(keys.indexOf("image")!=1)//if we are updating the image, we change the field from the data from the image
+        if(keys.indexOf("image")!=-1)//if we are updating the image, we change the field from the data from the image
             this["image"] = '/img/' + uploadFile(this["image"])//to it's path in the back end
 
-        return `(${keys.reduce((fieldStr,currKey,index)=>`${fieldStr} ${(index>0)?',':''} ${currKey} `,"")},color) VALUES (${values.reduce((fieldStr,currValue,index)=>fieldStr+`${(index>0)?',':''}"${currValue}"`,"")},${randomColor()})`;
+        return `(${keys.reduce((fieldStr,currKey,index)=>`${fieldStr} ${(index>0)?',':''} ${currKey} `,"")}) VALUES (${values.reduce((fieldStr,currValue,index)=>fieldStr+`${(index>0)?',':''}"${currValue}"`,"")})`;
     }
 
     static getSet(req_body){ //Transform the the object (the request body) into a succession of "[key] = [value]" with commas 

@@ -12,13 +12,13 @@ import { shortProject } from '../MUIStyles';
 export default function BrowsePage(){
 
     const navigate = useNavigate();
-    const fullList = useRead("projects")
+    const fullList = useRead("projects") // runs side effect to load projects data into fullList
 
-    const newList = (fullList.data)?[...fullList.data]:[];
-    const [filterList, setFilterList] = useState(newList);
-    //useEffect(()=>setFilterList(newList),[newList])
-    console.log(filterList)
-    //if(newList.length!=0)
+    const newList = (fullList.data)?[...fullList.data]:[]; // based on fullList, which will be empty initially and then populated on re-render after running the effect
+    const [filterList, setFilterList] = useState([]);
+    if (filterList.length == 0 && newList.length > 0) setFilterList(newList);
+
+    console.log(newList)
     const theme = useMyThemeContext();
 
     function format(project,index){
