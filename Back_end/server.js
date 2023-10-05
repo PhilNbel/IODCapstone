@@ -29,12 +29,12 @@ app.use('/api/projects', projectRoutes);
 
 // only load the distribution/production version of frontend if we aren't running our local/dev server
 if (environment != 'dev') {
-
-  app.use(express.static(path.join(__dirname, './Front_end/dist')))
+  let front=(process.env.SOURCE=="DOCKER")?'./Front_end/dist':'../Front_end/dist'
+  app.use(express.static(path.join(__dirname, front)))
 
   app.get("*", (req, res) => {
     res.sendFile(
-      path.join(__dirname, "./Front_end/dist/index.html")
+      path.join(__dirname, front+"/index.html")
     );
   });
 }

@@ -11,7 +11,7 @@ Once pulled, you will simply need to run the image with `docker run -d -p [PORT]
 *The Github repository is hosted at `https://github.com/PhilNbel/IODCapstone`*
 
 Choose a folder to host the website and run `git clone "https://github.com/PhilNbel/IODCapstone"`. Once there, go into the newly created IODCapstone, then into **Front_end** and run `npm install`. Move to Back_end and repeat the operation.
-Once the modules are installed, run `npm start` and *voila*!
+Once the modules are installed, run `npm run start-dist` from the root folder and *voila*!
 
 # Development
 *If you want to fork, re-use or simply test the code and be able to have your own database, you will need a MySQL database and to change the information in `.env.dev`*
@@ -21,4 +21,4 @@ Follow the Github step, then go to your **Back_end** folder and run:
 1. `npm run init-dev` to update the database with the structure in `db_creation.sql` and the initial information in `test_data.sql`
 2. `npm run start-dev` to run on a local machine with the 'DEV' environment
 3. `npm run init` to update your production database, with it's information in `.env.prod`. Although nothing is copyrighted, I would like if you didn't try to make any concurrence to my website. This is here to help you start your own project
-4. `npm start` to run build your front end in a 'dist' folder and run your website. This is useful if you plan to run your website on a distant Dockerimage. If you want to first build the image in your development environment, use `npm run build-dev`
+4. `npm run start-dist` to run build your front end in a 'dist' folder and run your website. This is useful if you plan to run your website on a distant Dockerimage. If you want to first build the image in your development environment, use `npm run build-dev`
