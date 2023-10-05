@@ -3,20 +3,23 @@ import Filter from '../components/Filter';
 import { useEffect, useState } from 'react';
 import readThat from "../hooks/useRead"
 import { useMyThemeContext } from '../contexts/MyThemeContext';
-import { Button, Typography } from '@mui/material';
+import { Button, CircularProgress, Stack, Typography } from '@mui/material';
 import FieldAdder from '../components/FieldAdder';
 import { useNavigate } from 'react-router-dom';
-import { shortProject } from '../MUIStyles';
+import { longProject } from '../MUIStyles';
+import { useUserContext } from '../contexts/UserContext';
 
 
 export default function UserProjectsPage(){
+
+    let user=useUserContext();
 
     const navigate = useNavigate();
     const fullList = readThat("projects")
     const [projectList,setProjectList] = useState([]);
     const [filterList, setFilterList] = useState([]);
 
-    const newList = (fullList.data)?[...fullList.data]:[];
+    const newList = (fullList.data)?[...fullList.data].filter((project)=>project.members.indexOf(user.currentUser.nickName)):[];
 
     //if(newList.length!=0)
     useEffect(()=>{
@@ -26,18 +29,41 @@ export default function UserProjectsPage(){
     },[projectList])
     const theme = useMyThemeContext();
 
+    function getProgress(project){
+        let toDo = 0;
+        let isDone = 0;
+        project.steps.forEach(
+            (step)=>step.tasks.forEach((task)=>{
+                if(task.status=="isDone")
+                    isDone++
+                else
+                    toDo++
+            })
+        )
+        console.log(isDone+"/"+toDo)
+        return (toDo==0)?100:(isDone/toDo)*100
+    }
+
+
     function format(project,index){
         return (
-            <Button key={index} onClick={()=>navigate('/'+project.creator+'/'+project.name)} sx={{...shortProject, backgroundColor:theme.colors[3], color:theme.colors[4]}}>
+            <Button key={index} onClick={()=>navigate('/'+project.creator+'/'+project.name)} sx={{...longProject, backgroundColor:theme.colors[3], color:theme.colors[4]}}>
                 <Box sx={{display:"flex", flexDirection:"column"}}>
-                    <Typography>
+                    <Typography sx={{marginBottom:"4rem"}}>
                         {project.name}
                     </Typography>
-                    <Box>
+                    <Box sx={{marginY:"4rem"}}>
                         <FieldAdder canAdd={false} list={project.fields}/>
                     </Box>
                 </Box>
+                <Stack sx={{color:"white"}}>
+                    <CircularProgress variant="determinate" color='success' value={getProgress(project)}>
+                        <CircularProgress variant="determinate" color='inherit' value={100}/>
+                    </CircularProgress>
+                </Stack>
             </Button>
+            //On hover, display dark transparent 
+            
         )
     }
     return <Box

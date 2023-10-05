@@ -1,14 +1,13 @@
 import * as React from 'react';
-import { AppBar,Box,Toolbar,IconButton,Typography, Menu, MenuItem, Icon} from '@mui/material';
+import { AppBar,Box,Toolbar,IconButton,Typography, Menu, MenuItem, Avatar, Tooltip} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AdbIcon from '@mui/icons-material/Adb';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { navButton } from '../MUIStyles';
 import { useUserContext } from '../contexts/UserContext';
-import Avatar from '@mui/material/Avatar';
-import Tooltip from '@mui/material/Tooltip';
 import { Button } from '@mui/base';
-import { useMyThemeContext } from '../contexts/MyThemeContext';
+import { defaultTheme, useMyThemeContext } from '../contexts/MyThemeContext';
+import UserAvatar from './UserAvatar';
 
 
 const pages = [
@@ -38,6 +37,7 @@ function NavBar() {
     }},
     {name:'Logout', func:()=>{
       contextUser.handleUpdateUser({});
+      theme.updateTheme(defaultTheme)
       handleCloseUserMenu();
     }}
   ];
@@ -57,14 +57,6 @@ function NavBar() {
     setAnchorElUser(null);
   };
   
-  function UserAvatar({user}){
-    return (user.image)?
-        <Avatar alt={user.nickName} src={user.image}/>
-      :
-        <Avatar sx={{ bgcolor: user.color}}>{user.nickName.toUpperCase().charAt(0)}</Avatar>
-      
-  }
-
   return (
     <AppBar position="sticky" sx={{backgroundColor:"#64732C"}}>
       <Box margin={"0 2rem"} sx={{display:"flex", justifyContent:"space-between"}}>

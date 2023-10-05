@@ -53,7 +53,6 @@ class Step {
     };
 
     static async readOne(toReadName,project,creator) {
-        console.log(toReadName)
         let queryRes = await connection.promise().query(`SELECT projectID FROM Projects JOIN Users ON Projects.creatorID=Users.userID WHERE Projects.name = "${project}" AND Users.nickName="${creator}"`)
         if(queryRes[0].length==0)
             throw new Error("Project does not exist")
@@ -80,7 +79,6 @@ class Step {
         let set = Step.getSet(toUpdate[0])
         return connection.promise().query("UPDATE Steps SET "+set+" WHERE nickName = \""+toUpdate[1]+"\"")
             .catch((err)=>{
-                console.log(err);
                 throw new Error("No Step corresponding to this ID")
             });
     };

@@ -66,11 +66,22 @@ export const signUpField = {
 };
 
 export const shortProject = {
-    minWidth:"16rem",
+    minWidth:"24rem",
     minHeight:"10rem",
-    width:"20vw",
-    height:"16vh",
-    maxHeight:"30%",
+    width:"25vw",
+    height:"35vh",
+    maxHeight:"70%",
+    flexWrap:"wrap",
+    margin:"0.6rem 0.8rem",
+    borderRadius:"13px"
+};
+
+export const longProject = {
+    minWidth:"24rem",
+    minHeight:"10rem",
+    width:"60vw",
+    height:"35vh",
+    maxHeight:"70%",
     flexWrap:"wrap",
     margin:"0.6rem 0.8rem",
     borderRadius:"13px"

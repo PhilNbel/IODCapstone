@@ -27,7 +27,15 @@ export default function FieldAdder({canAdd = false,list=[],remHandler,addHandler
             "Loading"
             :
             list.sort((field1,field2)=>field1.name>field2.name)
-            .map((field,index)=><Button key={index} onClick={()=>{remHandler(field)}}><Field fieldInfo={field}/></Button>)}
+            .map((field,index)=>
+                    {return (canAdd)?
+                        <Button key={index} onClick={()=>{remHandler(field)}}>
+                            <Field fieldInfo={field}/>
+                        </Button>
+                        :
+                        <Field key={index} fieldInfo={field}/>
+                    }
+                )}
         {(!canAdd)?<></>:<AddFieldButton fromSkills={false} notIn={list} handler={addHandler}/>}
         </Box>
 

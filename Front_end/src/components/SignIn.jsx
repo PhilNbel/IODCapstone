@@ -21,11 +21,13 @@ export default function SignIn({salt}){
                 else
                     mayBeUser = mayBeUser.data
                 let hash = Bcrypt.hashSync(data.get("password"), salt);
+                console.log(hash)
                 
                 let isUser = (mayBeUser.password == hash)
                 if(isUser){
                     user.handleUpdateUser(mayBeUser);
                     navigate("/")
+                    window.location.reload();
                 }else{
                     alert("Username and password do not match")
                 }

@@ -6,16 +6,15 @@ import { UserProvider } from './contexts/UserContext.jsx'
 
 function App() {
 
-  return (<MyThemeProvider>
+  return (
       <UserProvider>
-      
-        <NavBar/>
-        <main>
-          <AppRoutes/>
-        </main>      
-      {//</MyThemeProvider>
-  }   </UserProvider>
-  </MyThemeProvider>
+        <MyThemeProvider>
+          <NavBar/>
+          <main>
+            <AppRoutes/>
+          </main>
+        </MyThemeProvider>
+      </UserProvider>
   )
 }
 

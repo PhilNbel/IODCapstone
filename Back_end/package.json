@@ -11,9 +11,7 @@
     "start-build": "concurrently \"cd ../Front_End && npm run build\" \"npm run dev\"",
     "start": "concurrently \"cd ../Front_End && npm run prod\" \"npm run prod\"",
     "init-dev": "set NODE_ENV=dev&& node ./init.js",
-    "init": "set NODE_ENV=prod&& node ./init.js",
-    "init-test": "nodemon server.js",
-    "prod-init": "set NODE_ENV=prod&& node ./init.js"
+    "init": "set NODE_ENV=prod&& node ./init.js"
   },
   "author": "",
   "license": "ISC",

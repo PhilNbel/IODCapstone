@@ -28,9 +28,9 @@ CREATE TABLE Users (
     nickName varchar(256) NOT NULL,
     password varchar(256) NOT NULL,
     email varchar(128),
-    themeID int unsigned,
+    themeID int unsigned DEFAULT 1,
     color char(7) NOT NULL,
-    image varchar(256) DEFAULT 1,
+    image varchar(256),
     PRIMARY KEY(userID),
     CONSTRAINT themeRef FOREIGN KEY (themeID) REFERENCES Themes(themeID),
     UNIQUE KEY(nickName)

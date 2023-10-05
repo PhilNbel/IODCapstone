@@ -17,7 +17,7 @@ class User {
             this.email = email;
         if(image)
             this.image = image;
-        if(theme&&theme.length>0)
+        if(theme)
             this.theme = theme;
     }
 
@@ -41,20 +41,32 @@ class User {
 
         if(keys.indexOf("image")!=1)//if we are updating the image, we change the field from the data from the image
             this["image"] = '/img/' + uploadFile(this["image"])//to it's path in the back end
-
+        
         return `(${keys.reduce((fieldStr,currKey,index)=>`${fieldStr} ${(index>0)?',':''} ${currKey} `,"")},color) VALUES (${values.reduce((fieldStr,currValue,index)=>fieldStr+`${(index>0)?',':''}"${currValue}"`,"")},${randomColor()})`;
     }
 
-    static getSet(req_body){ //Transform the the object (the request body) into a succession of "[key] = [value]" with commas 
+    static async getSet(req_body,toChange){ //Transform the the object (the request body) into a succession of "[key] = [value]" with commas 
         let keys = Object.keys(req_body)
         let values = Object.values(req_body);
         if(keys.length==0)
             throw new Error("Error: Empty body")
         let result = keys[0]+" = \""+values[0]+'\"'
         for(let i=1;i<keys.length;i++){
-            result+= `, ${keys[i]} = "${values[i]}"`
+            if(keys[i]=="fields"){
+                User.updateFields(toChange,req_body["fields"])
+            }else{
+                if(keys[i]=="theme"){
+                    keys[i]="themeID"
+                    values[i] = await User.updateTheme(req_body["theme"])
+                }
+                result+= `, ${keys[i]} = "${values[i]}"`
+            }
         }
         return result;
+    }
+
+    static getTheme(themeObject){
+        return [themeObject.primary_color,themeObject.secondary_color,themeObject.ternary_color,themeObject.quaternary_color,themeObject.quinary_color]
     }
 
     //Remote getters
@@ -84,15 +96,16 @@ class User {
             throw new Error("User "+toReadName+" does not exist")
         let req2 = await connection.promise().query(`SELECT Fields.name,Fields.description,Fields.color FROM Interests JOIN Users ON Interests.userID=Users.userID JOIN Fields ON Interests.fieldID=Fields.fieldID WHERE Users.nickName ="${toReadName}"`)
         let req3 = await connection.promise().query(`SELECT Skills.name,Skills.description FROM Masters JOIN Users ON Masters.userID=Users.userID JOIN Skills ON Masters.skillID=Skills.skillID WHERE Users.nickName ="${toReadName}"`)
-        let req4 = await connection.promise().query(`SELECT Skills.name,Skills.description FROM Masters JOIN Users ON Masters.userID=Users.userID JOIN Skills ON Masters.skillID=Skills.skillID WHERE Users.nickName ="${toReadName}"`)
-        return {...req1[0][0],interests:req2[0],masters:req3[0],theme:req4[0][0]}
+        let req4 = await connection.promise().query(`SELECT Themes.primary_color,Themes.secondary_color,Themes.ternary_color,Themes.quaternary_color,Themes.quinary_color FROM Themes JOIN Users ON Users.themeID=Themes.themeID WHERE Users.nickName ="${toReadName}"`)
+        return {...req1[0][0],interests:req2[0],masters:req3[0],theme:User.getTheme(req4[0][0])}
     };
     
     static async readOneAdmin(toReadName) {
         let req1 = await connection.promise().query(`SELECT firstName,lastName,nickName,color, image,email,password FROM Users WHERE nickName = "${toReadName}"`);
         let req2 = await connection.promise().query(`SELECT Fields.name,Fields.description,Fields.color FROM Interests JOIN Users ON Interests.userID=Users.userID JOIN Fields ON Interests.fieldID=Fields.fieldID WHERE Users.nickName ="${toReadName}"`)
         let req3 = await connection.promise().query(`SELECT Skills.name,Skills.description FROM Masters JOIN Users ON Masters.userID=Users.userID JOIN Skills ON Masters.skillID=Skills.skillID WHERE Users.nickName ="${toReadName}"`)
-        return {...req1[0][0],interests:req2[0],masters:req3[0]}
+        let req4 = await connection.promise().query(`SELECT Themes.primary_color,Themes.secondary_color,Themes.ternary_color,Themes.quaternary_color,Themes.quinary_color FROM Themes JOIN Users ON Users.themeID=Themes.themeID WHERE Users.nickName ="${toReadName}"`)
+        return {...req1[0][0],interests:req2[0],masters:req3[0],theme:User.getTheme(req4[0][0])}
     };
 
     static async readAll(constraint = null) {
@@ -103,10 +116,9 @@ class User {
     };     
 
     static async update(toUpdate) {
-        let set = User.getSet(toUpdate[0])
+        let set = await User.getSet(toUpdate[0],toUpdate[1])
         return connection.promise().query("UPDATE Users SET "+set+" WHERE nickName = \""+toUpdate[1]+"\"")
             .catch((err)=>{
-                console.log(err);
                 throw new Error("No User corresponding to this ID")
             });
     };
@@ -117,12 +129,33 @@ class User {
     };     
 
     //Relationship modifications
-    static addInterest(userName, fieldName){
-        let userID = User.getUserInfoName("userID", userName)
+
+    static async addInterest(userName,fieldName){
+        let userID = await User.getUserInfoName("userID", userName)
+        let fieldID = await connection.promise().query(`SELECT fieldID FROM Fields WHERE name="${fieldName}"`);
+        connection.promise().query(`INSERT INTO Interests(userID,fieldID) VALUES ("${userID}","${fieldID[0][0].fieldID}")`);
     }
 
-    static addMastery(userName, skillName){
-        let userID = User.getUserInfoName("userID", userName)
+    static removeInterest(userName,fieldName){
+        connection.promise().query(`DELETE Interests FROM Interests JOIN Users ON Interests.userID=Users.userID JOIN Fields ON Interests.fieldID=Fields.fieldID WHERE Users.nickName ="${userName}" AND Fields.name ="${fieldName}"`);
+    }
+
+    static async updateFields(userName, fields){
+        let previous = await connection.promise().query(`SELECT Fields.name,Fields.description,Fields.color FROM Interests JOIN Users ON Interests.userID=Users.userID JOIN Fields ON Interests.fieldID=Fields.fieldID WHERE Users.nickName ="${userName}"`)
+        let toAdd = fields.filter((field)=>previous[0].map(prevField=>prevField.name).indexOf(field.name)==-1)
+        let toRem = previous[0].filter((field)=>fields.map(newField=>newField.name).indexOf(field.name)==-1)
+        toAdd.forEach(field=>User.addInterest(userName,field.name))
+        toRem.forEach(field=>User.removeInterest(userName,field.name))
+    }
+    static async updateTheme(colors){
+        let insert = await connection.promise().query(`INSERT INTO Themes(primary_color,secondary_color,ternary_color,quaternary_color,quinary_color) VALUES ("${colors[0]}","${colors[1]}","${colors[2]}","${colors[3]}","${colors[4]}")`)
+        return insert[0].insertId
+    }
+
+    static async addMastery(userName, skillName){
+        let userID = await User.getUserInfoName("userID", userName)
+        let skillID = await connection.promise().query(`SELECT skillID FROM Skills WHERE name="${skillName}"`);
+        connection.promise().query(`INSERT INTO Masters(userID,skillID) VALUES ("${userID}","${skillID}")`);
     }
 
 }

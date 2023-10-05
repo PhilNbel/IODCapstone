@@ -21,18 +21,32 @@ export default function BrowsePage(){
     //if(newList.length!=0)
     const theme = useMyThemeContext();
 
+    function getProgress(project){
+        let toDo = 0;
+        let isDone = 0;
+        project.steps.forEach(
+            (step)=>step.tasks.forEach((task)=>{
+                if(task.status=="isDone")
+                    isDone++
+                else
+                    toDo++
+            })
+        )
+        return (toDo==0)?100:(isDone/toDo)*100
+    }
+
     function format(project,index){
         return (
             <Button key={index} onClick={()=>navigate('/'+project.creator+'/'+project.name)} sx={{...shortProject, backgroundColor:theme.colors[3], color:theme.colors[4]}}>
                 <Box sx={{display:"flex", flexDirection:"column"}}>
-                    <Typography>
+                    <Typography sx={{marginBottom:"4rem"}}>
                         {project.name}
                     </Typography>
-                    <Box>
+                    <Box sx={{marginY:"4rem"}}>
                         <FieldAdder canAdd={false} list={project.fields}/>
                     </Box>
                 </Box>
-                <CircularProgress variant="determinate" value={30} />
+                <CircularProgress variant="determinate" value={getProgress(project)} />
             </Button>
             //On hover, display dark transparent 
             
@@ -51,8 +65,10 @@ export default function BrowsePage(){
                 }}
             >
                 <Filter list={newList} handler={setFilterList}/>
-                <Box sx={{display:"flex", flexWrap:'wrap',justifyContent:'center'}}>
-                    {filterList.map((project, index)=>format(project, index))}
+                <Box sx={{display:'flex',justifyContent:'center'}}>
+                    <Box sx={{display:"flex", flexWrap:'wrap', justifyContent:"flex-start"}}>
+                        {filterList.map((project, index)=>format(project, index))}
+                    </Box>
                 </Box>
             </Box>
 }

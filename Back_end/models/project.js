@@ -80,7 +80,6 @@ class Project {
         let part2 = req2[0][0];
         
         let part3 = await Steps.readAll(toReadName, creatorName)
-        console.log(part3)
         
         let req4 = await connection.promise().query(`SELECT IsMember.role, Users.nickName, Users.image, Users.color FROM IsMember JOIN Users ON Users.userID=IsMember.userID JOIN Projects ON Projects.projectID=IsMember.projectID WHERE Projects.name = "${toReadName}" AND Projects.creatorID = ${creatorID}`);
         let part4 = req4[0]
@@ -120,7 +119,6 @@ class Project {
         let set = Project.getSet(toUpdate[0])
         return connection.promise().query("UPDATE Projects SET "+set+" WHERE name = \""+toUpdate[1]+"\" AND name = \""+await Users.getUserInfoName("id",toUpdate[2])+"\"")
             .catch((err)=>{
-                console.log(err);
                 throw new Error("No Project corresponding to this ID")
             });
     };
