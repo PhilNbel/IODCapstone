@@ -2,14 +2,12 @@ import { useContext, useState } from 'react'
 import { Container, CssBaseline, Box, TextField, Button } from '@mui/material'
 import { useUserContext } from '../context/UserContext'
 
-function ImageForm() {
+function ImageForm() {//currently unused
 
     const [image, setImage] = useState({ preview: '', data: '' })
     const [imageTitle, setImageTitle] = useState('')
     const [status, setStatus] = useState('')
     const {currentUser, handleUpdateUser} = useUserContext();
-
-    console.log(currentUser);
     
     const handleSubmit = async (e) => {
         e.preventDefault()

@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { AppBar,Box,Toolbar,IconButton,Typography, Menu, MenuItem, Avatar, Tooltip} from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import AdbIcon from '@mui/icons-material/Adb';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { navButton } from '../MUIStyles';
 import { useUserContext } from '../contexts/UserContext';
@@ -10,7 +9,7 @@ import { defaultTheme, useMyThemeContext } from '../contexts/MyThemeContext';
 import UserAvatar from './UserAvatar';
 
 
-const pages = [
+const pages = [//All the navbar buttons and their corresponding link
   {link: '/', label: 'Home'},
   {link: '/projects/', label: 'My projects'},
   {link: '/browse/', label: 'Look for more'},
@@ -19,7 +18,7 @@ const pages = [
 ];
 
 // see https://mui.com/material-ui/react-app-bar/
-function NavBar() { 
+function NavBar() {//displays a navbar on top of the screen to help with navigation
   
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -30,7 +29,7 @@ function NavBar() {
   let navigate = useNavigate()
   //console.log(currUser)
   
-  const settings = [
+  const settings = [//all the settings button and their corresponding function
     {name:'Profile', func:()=>{
       navigate(`/${currUser.nickName}`);
       window.location.reload();
@@ -42,6 +41,7 @@ function NavBar() {
     }}
   ];
 
+  //functions to anchor the MenuLists in space
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -57,13 +57,13 @@ function NavBar() {
     setAnchorElUser(null);
   };
   
-  return (
+  return (//NavBar component
     <AppBar position="sticky" sx={{backgroundColor:"#64732C"}}>
       <Box margin={"0 2rem"} sx={{display:"flex", justifyContent:"space-between"}}>
         <Toolbar disableGutters>
-
-          {/* desktop menu logo and icon */}
           <img alt="E" src="/src/assets/Learn.png" />
+          {/*The logo*/}
+
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
                 size="large"
@@ -73,6 +73,8 @@ function NavBar() {
                 onClick={handleOpenNavMenu}
                 color="inherit"
                 >
+            {/*The button to list the navbar buttons when on phone*/}
+
               <MenuIcon />
             </IconButton>            
             <Menu id="menu-appbar" anchorEl={anchorElNav}
@@ -90,6 +92,8 @@ function NavBar() {
                 display: { xs: 'block', md: 'none' }, margin:"8px 0", padding:0
               }}
             >
+            {/*Phone navbar button list*/}
+
               {pages.map((page) => (
                 <MenuItem key={page.link} onClick={()=>{navigate(page.link);window.location.reload()}} style={{backgroundColor:theme.colors[0], color:theme.colors[1]}}>{page.label}</MenuItem>
               ))}
@@ -97,7 +101,8 @@ function NavBar() {
           </Box>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            
+          {/*Desktop navbar button list*/}
+
             {pages.map((page) => 
               <Button key={page.link} onClick={()=>{navigate(page.link);window.location.reload()}} style={{...navButton,backgroundColor:theme.colors[0], color:theme.colors[1]}}>
                 <Box sx={{}}>
@@ -108,10 +113,14 @@ function NavBar() {
           </Box>  
         </Toolbar>
         <Box>
-            { currUser.nickName?
+            { currUser.nickName?//if there is a user, displays the settings
+              //displays a log-in button otherwise
+
               <>
                 <Tooltip title="Settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  {/*The avatar button to display the settings*/}
+
                     <UserAvatar user={currUser}/>
                   </IconButton>
                 </Tooltip>
@@ -133,6 +142,8 @@ function NavBar() {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
+                {/*The setting buttons list*/}
+
                   {
                   settings.map((setting) => (
                     
@@ -146,6 +157,8 @@ function NavBar() {
               </>
               :
               <MenuItem key={"sign-in"} component={NavLink} to={"sign-in"}>{"Log In"}</MenuItem>
+              //The Log-In button
+
             }
             
           </Box>

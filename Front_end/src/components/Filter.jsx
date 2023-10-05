@@ -20,6 +20,7 @@ export default function Filter({list, handler}){//Returns a component where you 
         setRadioVal(event.target.value)
     }
 
+    //functions to edit the field list we are filtering by (for the FieldAdder)
     function remHandler(field){
         setFieldList(fieldList.filter((currField)=>currField.name!=field.name))
     }
@@ -28,7 +29,8 @@ export default function Filter({list, handler}){//Returns a component where you 
             setFieldList([...fieldList,field])
     }
 
-    function changeSettings(event){
+    function changeSettings(event){ //changes the parameter we are filtering by
+        //needs to be redrawn to update the state in it
         setFilterType(event.target.value);
         switch (event.target.value){
             case "type":
@@ -65,8 +67,8 @@ export default function Filter({list, handler}){//Returns a component where you 
 
     }
 
-    function modifyList(){
-        
+    function modifyList(){//filters the list depending on filterType
+
         let newList =[]
         switch (filterType){
             case "type":
@@ -86,13 +88,18 @@ export default function Filter({list, handler}){//Returns a component where you 
                 break;
         }
     }
-    function reset(){
+
+    function reset(){//resets the list to display all the projects
         handler(initList);
         list = [...initList];
     }
 
     return (<Box sx={{display:"flex", justifyContent:"space-between", padding:"1rem", alignContent:"center"}}>
+            {/*Filter component*/}
+
             <FormControl sx={{width:"20%", marginX:"1rem"}}>
+            {/*First form, to choose what we filter by*/}
+
                 <InputLabel id="filter-type">Filter by</InputLabel>
                 <Select
                     labelId="filter-type"
@@ -113,6 +120,8 @@ export default function Filter({list, handler}){//Returns a component where you 
                 </Select>
             </FormControl>
             <FormControl fullWidth sx={{display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"space-between"}}>
+            {/*Second form, to choose what we filter with*/}
+
                 <Box sx={{display:"flex",flexDirection:"row",alignItems:"center"}}>
                     {settings}
                 </Box>
@@ -122,6 +131,8 @@ export default function Filter({list, handler}){//Returns a component where you 
             </FormControl>
             <Box sx={{height:"60%",padding:"0.6rem 1rem", display:"flex",alignItems:"center"}}>
                 <Button onClick={reset} style={{backgroundColor:"#D9D9D9",color:theme.colors[1]}}>
+                    {/*Reset button*/}
+
                     Reset
                 </Button>
             </Box>

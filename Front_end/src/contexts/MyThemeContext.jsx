@@ -14,6 +14,7 @@ export const defaultTheme = [
 export const MyThemeProvider = (props) => {
   let user = useUserContext()
   let currColors = (user.currentUser.theme)?user.currentUser.theme:defaultTheme
+  //if there is a usere, use their theme. Use the default theme otherwise
 
   const [colors, setColors] = useState(currColors);
 

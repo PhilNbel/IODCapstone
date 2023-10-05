@@ -3,8 +3,11 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { homeLogo1,homeLogo2 } from '../MUIStyles';
 
-export default function HomeLogo(){
+export default function HomeLogo(){//The logo on the home page
+  
     return <Container sx={{padding:"3rem 0"}}>
+          {/*HomeLogo component*/}
+
             <Container>
                 <Typography
                     variant="h1"
