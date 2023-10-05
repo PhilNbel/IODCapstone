@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start-dev": "cd ./Back_End && npm run start-dev",
-    "start-dist": "cd ./Back_End && npm run start-dist",
-    "start": "cd ./Back_End && npm start",
-    "init": "cd ./Back_End && npm run init",
-    "prod-init": "cd ./Back_End && npm run prod-init"
+    "start-dev": "cd ./Back_end && npm run start-dev",
+    "start-dist": "cd ./Back_end && npm run start-dist",
+    "start": "cd ./Back_end && npm start",
+    "init": "cd ./Back_end && npm run init",
+    "prod-init": "cd ./Back_end && npm run prod-init"
   },
   "author": "",
   "license": "ISC",

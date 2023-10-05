@@ -17,4 +17,4 @@ ENV NODE_ENV prod
 
 # expose the port from .env.production and start the backend 
 EXPOSE 3000
-CMD ["npm","run","prod"]
+CMD ["npm","run","dist"]
