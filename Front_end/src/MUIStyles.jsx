@@ -51,8 +51,9 @@ export const navButton = {
 export const title = {
     fontFamily: 'monospace',
     fontWeight: 700,
-    letterSpacing: '.3rem',
-    textDecoration: 'none'
+    letterSpacing: '.2rem',
+    textDecoration: 'none',
+    fontSize:"2.2rem"
 };
 
 export const logInField = {
@@ -143,4 +144,14 @@ export const taskBox={
     minHeight:"3rem",
     height:"5vh",
     justifyContent:"space-between"
+}
+export const memberCore={
+    display:"flex",
+    flexDirection:"column",
+    justifyContent:"start",
+    maxWidth:"30vw",
+    '@media screen and (max-width:900px)': {
+        maxWidth:"50vw"
+    },
+
 }

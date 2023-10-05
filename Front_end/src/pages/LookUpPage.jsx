@@ -21,8 +21,9 @@ export default function LookUpPage({type}){
         child = <ProjectPage project={res.data}/>
     }
     if(toLook == "step"){
-        res = useRead("users/"+params.user+"/"+params.project,params.step);
-        child = <StepPage step={res.data}/>
+        res = useRead("users/"+params.user+"/",params.project);
+        let step = (res.result==200)?res.data.steps[res.data.steps.map(step=>step.name).indexOf(params.step)]:{}
+        child = <StepPage project={res.data} step={step}/>
     }
 
     return <>

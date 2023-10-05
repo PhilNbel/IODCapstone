@@ -21,7 +21,6 @@ const getUsers = (res) => {
 }
 
 const createUser = (data, res) => {
-    console.log(data)
     Models.Users.create(data).then(function (data) {
         res.send({ result: 200, message: "Successfully created user "+data.name })
     }).catch(err => {
@@ -32,7 +31,6 @@ const createUser = (data, res) => {
 
 const updateUser = (req, res) => {
     Models.Users.update([req.body,req.params.name]).then(function (data) {
-        console.log(data)
         if(data[0].affectedRows ==0)
             throw new Error("No user "+req.params.name+" to update");
         res.send({ result: 200, message: "User "+req.params.name+" updated succesfully" })

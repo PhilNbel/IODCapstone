@@ -21,23 +21,22 @@ export function AddFieldButton ({fromSkills, notIn=[], handler}){
 }
 
 export default function FieldAdder({canAdd = false,list=[],remHandler,addHandler}){
-    return <>
-        <Box sx={{flexWrap:"wrap"}}>
-        { (!list)?
-            "Loading"
-            :
-            list.sort((field1,field2)=>(field1.name>field2.name)?1:-1)
-            .map((field,index)=>
-                    {return (canAdd)?
-                        <Button key={index} onClick={()=>{remHandler(field)}}>
-                            <Field fieldInfo={field}/>
-                        </Button>
-                        :
-                        <Field key={index} fieldInfo={field}/>
-                    }
-                )}
-        {(!canAdd)?<></>:<AddFieldButton fromSkills={false} notIn={list} handler={addHandler}/>}
+    return (
+        <Box sx={{flexWrap:"wrap",color:"black"}}>
+            { (!list)?
+                "Loading"
+                :
+                list.sort((field1,field2)=>(field1.name>field2.name)?1:-1)
+                .map((field,index)=>
+                        {return (canAdd)?
+                            <Button key={index} onClick={()=>{remHandler(field)}}>
+                                <Field fieldInfo={field}/>
+                            </Button>
+                            :
+                            <Field key={index} fieldInfo={field}/>
+                        }
+                    )}
+            {(!canAdd)?<></>:<AddFieldButton fromSkills={false} notIn={list} handler={addHandler}/>}
         </Box>
-
-    </>
+    )
 }

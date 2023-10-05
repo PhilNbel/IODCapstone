@@ -42,7 +42,7 @@ const deleteProject = (req, res) => {
 
     Models.Projects.destroy(projectName,projectCreator).then(function (data) {
         if(data.deleted == 0) throw new Error("No project \""+projectName+"\" to delete");
-        res.send({ result: 200, message:`Successfully deleted project ${data.name}` })
+        res.send({ result: 200, message:`Successfully deleted project ${data.deletedName}` })
     }).catch(err => {
         res.send({ result: 500, error: err.message })
     })

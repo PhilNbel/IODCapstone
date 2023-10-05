@@ -7,6 +7,7 @@ import SignPage from "../pages/SignPage";
 import LookUpPage from "../pages/LookUpPage";
 import UserProjectsPage from "../pages/UserProjectsPage";
 import CreateProjectPage from "../pages/CreateProjectPage";
+import CreateStepPage from "../pages/CreateStepPage";
 import PageNotFound from "../pages/PageNotFound";
 
 // special component containing all the possible routes for this app
@@ -26,6 +27,7 @@ function AppRoutes(props) {
       <Route path="log-in" element={<SignPage {...props} />} />
       <Route path="/:user" element={<LookUpPage type="user"/>}/>
       <Route path="/:user/:project" element={<LookUpPage type="project"/>}/>
+      <Route path="/:user/:project/create" element={<CreateStepPage type="step"/>}/>
       <Route path="/:user/:project/:step" element={<LookUpPage type="step"/>}/>
       <Route path="*" element={<PageNotFound/>}/> 
       </Routes>    

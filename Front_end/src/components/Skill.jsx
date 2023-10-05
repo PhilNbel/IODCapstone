@@ -4,7 +4,6 @@ import { Box } from "@mui/material";
 import Field from './Field';
 
 export default function Skill({skillInfo}){
-    console.log(skillInfo)
     function randomColor(){
         let red = Math.floor(Math.random()*256).toString(16)
         let green = Math.floor(Math.random()*256).toString(16)

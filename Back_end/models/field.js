@@ -38,8 +38,8 @@ class Field {
     }
 
     static async getFieldInfoID(info,id){ //to get an info with the id
-        await connection.promise().query(`SELECT ${info} FROM Fields WHERE description = descriptionid}"`)[0][0][info]
-        return
+        let res = await connection.promise().query(`SELECT ${info} FROM Fields WHERE fieldID = ${id}}"`)
+        return res[0][0][info]
     }
 
 

@@ -51,7 +51,7 @@ CREATE TABLE Skills (
     description varchar(2048) NOT NULL,
     fieldID int unsigned NOT NULL,
     color char(7),
-    CONSTRAINT fk FOREIGN KEY (fieldID) REFERENCES Fields(fieldID),
+    CONSTRAINT fk FOREIGN KEY (fieldID) REFERENCES Fields(fieldID) ON DELETE CASCADE,
     PRIMARY KEY(skillID),
     CONSTRAINT skillsUQ UNIQUE (name,fieldID)
 );
@@ -103,15 +103,15 @@ CREATE TABLE Resources (
     amount int unsigned,
     initialAmount int unsigned,
     stepID int unsigned,
-    CONSTRAINT fk6 FOREIGN KEY (stepID) REFERENCES Steps(stepID)
+    CONSTRAINT fk6 FOREIGN KEY (stepID) REFERENCES Steps(stepID) ON DELETE CASCADE
 );
 
 CREATE TABLE IsMember (
     role ENUM('creator','admin','member') NOT NULL,
     projectID int unsigned,
     userID int unsigned,
-    CONSTRAINT fk7 FOREIGN KEY (projectID) REFERENCES Projects(projectID),
-    CONSTRAINT fk8 FOREIGN KEY (userID) REFERENCES Users(userID),
+    CONSTRAINT fk7 FOREIGN KEY (projectID) REFERENCES Projects(projectID) ON DELETE CASCADE,
+    CONSTRAINT fk8 FOREIGN KEY (userID) REFERENCES Users(userID) ON DELETE CASCADE,
     CONSTRAINT ismemberPK PRIMARY KEY CLUSTERED (projectID, userID)   
 );
 

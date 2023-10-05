@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import UserAvatar from "../components/UserAvatar";
 import SkillAdder from "../components/SkillAdder";
+import { memberCore } from "../MUIStyles";
 import { useMyThemeContext } from "../contexts/MyThemeContext";
 
 export default function MembersPage({memberList}){
@@ -13,7 +14,7 @@ export default function MembersPage({memberList}){
                     <Box sx={{margin:"1rem"}}>
                         <UserAvatar user={member}/>
                     </Box>
-                    <Box>
+                    <Box sx={memberCore}>
                         <Typography>{member.nickName}</Typography>
                         <SkillAdder canAdd={false} list={member.masters}/>
                     </Box>

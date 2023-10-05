@@ -21,23 +21,22 @@ export function AddSkillButton ({notIn=[], handler}){
 }
 
 export default function skillAdder({canAdd = false,list=[],remHandler,addHandler}){
-    return <>
-        <Box sx={{flexWrap:"wrap"}}>
-        { (!list)?
-            "Loading"
-            :
-            list.sort((skill1,skill2)=>(skill1.name>skill2.name)?1:-1)
-            .map((skill,index)=>
-                    {return (canAdd)?
-                        <Button key={index} onClick={()=>{remHandler(skill)}}>
-                            <Skill skillInfo={skill}/>
-                        </Button>
-                        :
-                        <Skill key={index} skillInfo={skill}/>
-                    }
-                )}
-        {(!canAdd)?<></>:<AddSkillButton fromSkills={false} notIn={list} handler={addHandler}/>}
+    return (
+        <Box sx={{flexWrap:"wrap", color:"black"}}>
+            { (!list)?
+                "Loading"
+                :
+                list.sort((skill1,skill2)=>(skill1.name>skill2.name)?1:-1)
+                .map((skill,index)=>
+                        {return (canAdd)?
+                            <Button key={index} onClick={()=>{remHandler(skill)}}>
+                                <Skill skillInfo={skill}/>
+                            </Button>
+                            :
+                            <Skill key={index} skillInfo={skill}/>
+                        }
+                    )}
+            {(!canAdd)?<></>:<AddSkillButton fromSkills={false} notIn={list} handler={addHandler}/>}
         </Box>
-
-    </>
+    )
 }

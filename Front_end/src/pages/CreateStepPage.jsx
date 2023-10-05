@@ -7,7 +7,7 @@ import { title } from "../MUIStyles";
 import createNew from "../helpers/createNew";
 import { useNavigate } from "react-router-dom";
 
-export default function CreateProjectPage(){
+export default function CreateStepPage(){
     let user = useUserContext();
     let theme = useMyThemeContext();
     let navigate = useNavigate();
@@ -15,7 +15,7 @@ export default function CreateProjectPage(){
     const [isPrivate, setIsPrivate] = useState(false);
     let creator = user.currentUser.nickName;
 
-    async function createProject(e){
+    async function createStep(e){
         e.preventDefault();
         const data = new FormData(e.currentTarget);
         if(data.get("name")=="")

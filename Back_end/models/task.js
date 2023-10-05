@@ -38,7 +38,12 @@ class Task {
     
     static async create(newTask) {
         let TaskToInsert = new Task(newTask)
-        return connection.promise().query("INSERT INTO Tasks"+ TaskToInsert.toInsert()).then((result)=>({result :result, name:TaskToInsert.nickName}));
+        return connection.promise().query("INSERT INTO Tasks"+ TaskToInsert.toInsert())
+        .then((result)=>({result :result, name:TaskToInsert.nickName}))
+        .catch((err)=>{
+            console.log(err);
+            throw new Error("Error during creation")
+        });
     };
 
     static async read(stepName,projectName,creator) {

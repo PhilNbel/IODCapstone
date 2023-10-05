@@ -20,7 +20,7 @@ async function test(url, method='GET',body=null){ //function to test the API rou
     return promise
     .then((response) => response.json())
     .then((json)=>console.log(json))//JSON.stringify(json)))
-    .catch((err)=>console.log('ERROR\n'+err))
+    .catch((err)=>console.log(err))//console.log('ERROR\n'+err))
 }
 
 async function testCreate(){

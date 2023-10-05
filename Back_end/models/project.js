@@ -67,7 +67,13 @@ class Project {
     
     static async create(newProject) {
         let projectToInsert = await Project.init(newProject)
-        return connection.promise().query("INSERT INTO Projects"+ projectToInsert.toInsert()).then((result)=>({result :result, name:projectToInsert.name}));
+        return connection.promise().query("INSERT INTO Projects"+ projectToInsert.toInsert())
+            .then((result)=>connection.promise().query(`INSERT INTO IsMember(role,projectID,userID) VALUES ("creator",${result[0].insertId},${projectToInsert.creatorID})`))
+            .then((result)=>({result :result, name:projectToInsert.name}))
+            .catch((err)=>{
+                console.log(err);
+                throw new Error("Error during creation")
+            });;
     };
 
     static async readOne(toReadName, creatorName) {
@@ -124,8 +130,17 @@ class Project {
     
     
     static async destroy(bountyName,creator) {
-        return connection.promise().query("DELETE FROM Projects WHERE name = \""+bountyName+"\" AND name = \""+await Users.getUserInfoName("id",toUpdate[2])+"\"").then((result)=>({deletedRows:result.affectedRows, deletedName:bountyName}));;
-    };     
+        return connection.promise().query("DELETE FROM Projects WHERE name = \""+bountyName+"\" AND creatorID = \""+await Users.getUserInfoName("userID",creator)+"\"")
+        .then((result)=>{
+            if(result[0].affectedRows==0)
+                throw new Error("No project "+bountyName+" to delete")
+            return {deletedRows:result.affectedRows, deletedName:bountyName}
+        })
+        .catch(err=>{
+            console.log(err)
+            throw new Error("Error while deleting project "+bountyName+" : "+err.message)
+        });
+    };
 }
 
 module.exports = Project
