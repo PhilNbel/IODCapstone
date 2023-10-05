@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import Filter from '../components/Filter';
-import { useEffect, useState } from 'react';
-import readThat from "../hooks/useRead"
+import { useState } from 'react';
+import useRead from "../hooks/useRead"
 import { useMyThemeContext } from '../contexts/MyThemeContext';
 import { Button, CircularProgress, Stack, Typography } from '@mui/material';
 import FieldAdder from '../components/FieldAdder';
@@ -15,18 +15,14 @@ export default function UserProjectsPage(){
     let user=useUserContext();
 
     const navigate = useNavigate();
-    const fullList = readThat("projects")
-    const [projectList,setProjectList] = useState([]);
+    const fullList = useRead("projects") // runs side effect to load projects data into fullList
+
+    const newList = (fullList.data)?[...fullList.data]:[]; // based on fullList, which will be empty initially and then populated on re-render after running the effect
     const [filterList, setFilterList] = useState([]);
+    if (filterList.length == 0 && newList.length > 0) setFilterList(newList);
 
-    const newList = (fullList.data)?[...fullList.data].filter((project)=>project.members.indexOf(user.currentUser.nickName)):[];
+    console.log(newList)
 
-    //if(newList.length!=0)
-    useEffect(()=>{
-        if(projectList.length==0)
-            setProjectList(newList)
-        setFilterList(newList)
-    },[projectList])
     const theme = useMyThemeContext();
 
     function getProgress(project){
@@ -78,7 +74,7 @@ export default function UserProjectsPage(){
                     display: 'block'
                 }}
             >
-                <Filter list={projectList} handler={setFilterList}/>
+                <Filter list={newList} handler={setFilterList}/>
                 <Box sx={{display:"flex", flexWrap:'wrap',justifyContent:'center'}}>
                     {filterList.map((project, index)=>format(project, index))}
                 </Box>

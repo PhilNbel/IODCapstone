@@ -5,13 +5,17 @@ let path = "/api"
 export default function useRead(table, entity="", initialValue = []) {
   // state variable for holding fetched json data
   const [data, setData] = useState(initialValue);
+
+  console.log('fetching '+table)
   useEffect(() => {
+    console.log(`${path}/${encodeURI(table)}/${encodeURI(entity)}`)
+
     fetch(`${path}/${encodeURI(table)}/${encodeURI(entity)}`)
     .then((response) => response.json())
     .then((json) => {
       setData(json);
     })
-  }, []); // re-run effect if url changes
-  // return the data fetched from the given
+  }, []); 
+  // return the data fetched from the given path
   return data;
 }
