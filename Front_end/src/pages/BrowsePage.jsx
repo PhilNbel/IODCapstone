@@ -7,6 +7,7 @@ import { Button, CircularProgress, Typography } from '@mui/material';
 import FieldAdder from '../components/FieldAdder';
 import { useNavigate } from 'react-router-dom';
 import { shortProject } from '../MUIStyles';
+import UserAvatar from '../components/UserAvatar';
 
 
 export default function BrowsePage(){
@@ -42,11 +43,14 @@ export default function BrowsePage(){
                     <Typography sx={{marginBottom:"4rem"}}>
                         {project.name}
                     </Typography>
+                    <Box sx={{display:"flex", flexDirection:"row",justifyContent:"center"}}>
+                        {project.members.map((user)=><UserAvatar key={project.name+":"+user.nickName} user={user}/>)}
+                    </Box>
                     <Box sx={{marginY:"4rem"}}>
                         <FieldAdder canAdd={false} list={project.fields}/>
                     </Box>
                 </Box>
-                <CircularProgress variant="determinate" value={getProgress(project)} />
+                {/* <CircularProgress variant="determinate" color='success' value={getProgress(project)}/> */}
             </Button>
             //On hover, display dark transparent 
             

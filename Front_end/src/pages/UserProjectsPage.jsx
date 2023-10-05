@@ -8,6 +8,7 @@ import FieldAdder from '../components/FieldAdder';
 import { useNavigate } from 'react-router-dom';
 import { longProject } from '../MUIStyles';
 import { useUserContext } from '../contexts/UserContext';
+import UserAvatar from '../components/UserAvatar';
 
 
 export default function UserProjectsPage(){
@@ -42,21 +43,21 @@ export default function UserProjectsPage(){
 
 
     function format(project,index){
+        console.log(project)
         return (
             <Button key={index} onClick={()=>navigate('/'+project.creator+'/'+project.name)} sx={{...longProject, backgroundColor:theme.colors[3], color:theme.colors[4]}}>
                 <Box sx={{display:"flex", flexDirection:"column"}}>
                     <Typography sx={{marginBottom:"4rem"}}>
                         {project.name}
                     </Typography>
+                    <Box sx={{display:"flex", flexDirection:"row",justifyContent:"center"}}>
+                        {project.members.map((user)=><UserAvatar key={project.name+":"+user.nickName} user={user}/>)}
+                    </Box>
                     <Box sx={{marginY:"4rem"}}>
                         <FieldAdder canAdd={false} list={project.fields}/>
                     </Box>
                 </Box>
-                <Stack sx={{color:"white"}}>
-                    <CircularProgress variant="determinate" color='success' value={getProgress(project)}>
-                        <CircularProgress variant="determinate" color='inherit' value={100}/>
-                    </CircularProgress>
-                </Stack>
+                {/* <CircularProgress variant="determinate" color='success' value={getProgress(project)}/> */}
             </Button>
             //On hover, display dark transparent 
             

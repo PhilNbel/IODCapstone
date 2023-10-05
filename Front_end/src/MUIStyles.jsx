@@ -122,7 +122,7 @@ export const userButton={
 
 export const userField={
     borderRadius:"15px",
-    padding:"max(20px,5vw) max(10px,5vh)",
+    padding:"max(10px,3vh) max(20px,10vw)",
     alignItems:"center"
     //justifyContent:"center"
 }
@@ -133,13 +133,14 @@ export const projectTitle={
 }
 
 export const stepBox={
-    padding:"1.5 rem",
-    margin:"0.5 rem",
-    flexDirection:"column"
+    padding:"1rem 2rem 5rem 2rem",
+    margin:"1rem",
+    flexDirection:"column",
+    borderRadius:"8px"
 }
 export const taskBox={
     padding:"1rem",
-    minHeight:"3 rem",
-    height:"5 vh",
+    minHeight:"3rem",
+    height:"5vh",
     justifyContent:"space-between"
 }

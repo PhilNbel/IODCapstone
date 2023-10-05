@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useMyThemeContext } from '../contexts/MyThemeContext';
 import AddDialog from './AddDialog';
 
-export function AddFieldButton ({fromSkills, notIn, handler}){
+export function AddFieldButton ({fromSkills, notIn=[], handler}){
     const theme = useMyThemeContext();
     const [showFinder,setShowFinder] = useState(false)
     const fullList = readThat("fields")
@@ -26,7 +26,7 @@ export default function FieldAdder({canAdd = false,list=[],remHandler,addHandler
         { (!list)?
             "Loading"
             :
-            list.sort((field1,field2)=>field1.name>field2.name)
+            list.sort((field1,field2)=>(field1.name>field2.name)?1:-1)
             .map((field,index)=>
                     {return (canAdd)?
                         <Button key={index} onClick={()=>{remHandler(field)}}>

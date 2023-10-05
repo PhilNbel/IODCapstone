@@ -1,5 +1,6 @@
 let connection = require("../db_run");
 const { uploadFile } = require("../middleware/uploads");
+let Skills = require("./skill")
 
 class User {
 
@@ -72,6 +73,10 @@ class User {
     //Remote getters
 
     static async getUserInfoName(info,name){ //to get info with the name
+        if(info=="skills"){
+            let queryRes = await connection.promise().query(`SELECT Skills.name FROM Masters JOIN Users ON Masters.userID=Users.userID JOIN Skills ON Masters.skillID=Skills.skillID WHERE Users.nickName ="${name}"`)
+            return await Promise.all(queryRes[0].map(async(skill)=>{return await Skills.readOne(skill.name)}))
+        }
         let queryRes = await connection.promise().query(`SELECT ${info} FROM Users WHERE nickName = "${name}"`)
         if(queryRes[0].length!=0)
             return queryRes[0][0][info]
@@ -95,17 +100,19 @@ class User {
         if(req1[0].length==0)
             throw new Error("User "+toReadName+" does not exist")
         let req2 = await connection.promise().query(`SELECT Fields.name,Fields.description,Fields.color FROM Interests JOIN Users ON Interests.userID=Users.userID JOIN Fields ON Interests.fieldID=Fields.fieldID WHERE Users.nickName ="${toReadName}"`)
-        let req3 = await connection.promise().query(`SELECT Skills.name,Skills.description FROM Masters JOIN Users ON Masters.userID=Users.userID JOIN Skills ON Masters.skillID=Skills.skillID WHERE Users.nickName ="${toReadName}"`)
+        let req3 = await connection.promise().query(`SELECT Skills.name FROM Masters JOIN Users ON Masters.userID=Users.userID JOIN Skills ON Masters.skillID=Skills.skillID WHERE Users.nickName ="${toReadName}"`)
+        let part3 = await Promise.all(req3[0].map(async(skill)=>{return await Skills.readOne(skill.name)}))
         let req4 = await connection.promise().query(`SELECT Themes.primary_color,Themes.secondary_color,Themes.ternary_color,Themes.quaternary_color,Themes.quinary_color FROM Themes JOIN Users ON Users.themeID=Themes.themeID WHERE Users.nickName ="${toReadName}"`)
-        return {...req1[0][0],interests:req2[0],masters:req3[0],theme:User.getTheme(req4[0][0])}
+        return {...req1[0][0],interests:req2[0],masters:part3,theme:User.getTheme(req4[0][0])}
     };
     
     static async readOneAdmin(toReadName) {
         let req1 = await connection.promise().query(`SELECT firstName,lastName,nickName,color, image,email,password FROM Users WHERE nickName = "${toReadName}"`);
         let req2 = await connection.promise().query(`SELECT Fields.name,Fields.description,Fields.color FROM Interests JOIN Users ON Interests.userID=Users.userID JOIN Fields ON Interests.fieldID=Fields.fieldID WHERE Users.nickName ="${toReadName}"`)
-        let req3 = await connection.promise().query(`SELECT Skills.name,Skills.description FROM Masters JOIN Users ON Masters.userID=Users.userID JOIN Skills ON Masters.skillID=Skills.skillID WHERE Users.nickName ="${toReadName}"`)
+        let req3 = await connection.promise().query(`SELECT Skills.name FROM Masters JOIN Users ON Masters.userID=Users.userID JOIN Skills ON Masters.skillID=Skills.skillID WHERE Users.nickName ="${toReadName}"`)
+        let part3 = await Promise.all(req3[0].map(async(skill)=>{return await Skills.readOne(skill.name)}))
         let req4 = await connection.promise().query(`SELECT Themes.primary_color,Themes.secondary_color,Themes.ternary_color,Themes.quaternary_color,Themes.quinary_color FROM Themes JOIN Users ON Users.themeID=Themes.themeID WHERE Users.nickName ="${toReadName}"`)
-        return {...req1[0][0],interests:req2[0],masters:req3[0],theme:User.getTheme(req4[0][0])}
+        return {...req1[0][0],interests:req2[0],masters:part3,theme:User.getTheme(req4[0][0])}
     };
 
     static async readAll(constraint = null) {

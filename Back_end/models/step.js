@@ -57,10 +57,10 @@ class Step {
         if(queryRes[0].length==0)
             throw new Error("Project does not exist")
         let projectId = queryRes[0][0].projectID
-        let part1 = await connection.promise().query(`SELECT name,description FROM Steps WHERE name = "${toReadName}" AND projectID=${projectId}`);
+        let part1 = await connection.promise().query(`SELECT name,description,status FROM Steps WHERE name = "${toReadName}" AND projectID=${projectId}`);
         if(part1[0].length==0)
             throw new Error("No Such step")
-        let part2 = await connection.promise().query(`SELECT Tasks.name,Tasks.description FROM Tasks JOIN Steps ON Tasks.stepID=Steps.stepID WHERE Steps.name = "${toReadName}" AND Steps.projectID=${projectId}`)
+        let part2 = await connection.promise().query(`SELECT Tasks.name,Tasks.description,Tasks.status FROM Tasks JOIN Steps ON Tasks.stepID=Steps.stepID WHERE Steps.name = "${toReadName}" AND Steps.projectID=${projectId}`)
         return {...part1[0][0], tasks:part2[0]}
     };
 

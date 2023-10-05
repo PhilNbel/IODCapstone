@@ -43,7 +43,7 @@ class Task {
 
     static async read(stepName,projectName,creator) {
         let prep = await connection.promise().query(`SELECT Steps.stepID FROM Projects JOIN Steps ON Steps.projectID=Projects.projectID JOIN Users ON Projects.creator=Users.userID WHERE Users.nickName = "${creator}" AND Projects.name = "${projectName} AND Steps.name = "${stepName}"`)
-        let query = "SELECT Tasks.name, Tasks.description FROM Tasks JOIN Steps ON Tasks.stepID=Steps.stepID WHERE Steps.stepID = "+prep[0][0].stepID;
+        let query = "SELECT Tasks.name, Tasks.description, Tasks.status FROM Tasks JOIN Steps ON Tasks.stepID=Steps.stepID WHERE Steps.stepID = "+prep[0][0].stepID;
         return connection.promise().query(query)
     };     
 

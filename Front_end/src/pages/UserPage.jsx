@@ -1,4 +1,5 @@
 import FieldAdder from '../components/FieldAdder';
+import SkillAdder from '../components/SkillAdder';
 import { Avatar, Box, Container, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { userField } from '../MUIStyles';
@@ -26,12 +27,14 @@ function EditBox({user,handler}){
     const [newPassword,setNewPassword] = useState('')
     const [newMail,setNewMail] = useState('')
     const [newInterests,setNewInterests] = useState([])
+    const [newMasteries,setNewMasteries] = useState([])
     useEffect(()=>{
         setNewFirstName(newUser.firstName)
         setNewLastName(newUser.lastName)
         setNewNickName(newUser.nickName)
         setNewMail((newUser.email)?newUser.email:"")
         setNewInterests(newUser.interests)
+        setNewMasteries(newUser.masters)
     },[newUser])
     const [changeTheme,setChangeTheme] = useState(false)
     const [newTheme,setNewTheme] = useState(theme.colors)
@@ -61,12 +64,19 @@ function EditBox({user,handler}){
         handler(event.target.value)
     }
 
-    function removeFromList(field){
+    function removeFromFieldList(field){
         setNewInterests(newInterests.filter((currField)=>currField.name!=field.name))
     }
-    function addToList(field){
+    function addToFieldList(field){
         if(!newInterests.find(currField=>currField.name==field.name))
             setNewInterests([...newInterests,field])
+    }
+    function removeFromSkillList(skill){
+        setNewMasteries(newMasteries.filter((currSkill)=>currSkill.name!=skill.name))
+    }
+    function addToSkillList(skill){
+        if(!newMasteries.find(currSkill=>currSkill.name==skill.name))
+            setNewMasteries([...newMasteries,skill])
     }
 
     function changeColor(e,i){
@@ -75,10 +85,10 @@ function EditBox({user,handler}){
         setNewTheme(copy)
     }
 
-    return <Box component="form" onSubmit={(e)=>{e.preventDefault();updateUser(e);handler(false)}} sx={{display:"flex",flexDirection:"column", justifyContent:'center'}}>
+    return <Box component="form" onSubmit={(e)=>{e.preventDefault();updateUser(e);handler(false)}}>
         
         <Box sx={{color:theme.colors[1], flexDirection:"column"}}>
-            <Button style={{width:'16vw',backgroundColor:"transparent"}}>
+            <Button style={{width:'16vw',backgroundColor:"transparent", marginTop:"5rem"}}>
                 {(user.image)?<Avatar alt={user.nickName} src={user.image} sx={{
                     height:"auto",
                     width:'100%',
@@ -94,39 +104,48 @@ function EditBox({user,handler}){
             </Box>
         </Box>
         
-        <Box sx={{...userField,color:theme.colors[1]}}>
+        <Box sx={{...userField,display:"flex",flexDirection:"row", justifyContent:"flex-start",color:theme.colors[1]}}>
             <Typography>Username: </Typography>
-            <TextField name="nick" variant="standard" value={newNickName} onChange={(e)=>updateValue(setNewNickName,e)}></TextField>
+            <TextField name="nick" variant="standard" value={newNickName} onChange={(e)=>updateValue(setNewNickName,e)} sx={{color:theme.colors[4]}}></TextField>
         </Box>
 
-        <Box sx={{...userField,color:theme.colors[1]}}>
+        <Box sx={{...userField,display:"flex",flexDirection:"row", justifyContent:"flex-start",color:theme.colors[1]}}>
             <Typography>Password: </Typography>
-            <TextField name="password" variant="standard" type='password' value={newPassword} onChange={(e)=>updateValue(setNewPassword,e)}></TextField>
+            <TextField name="password" variant="standard" type='password' value={newPassword} onChange={(e)=>updateValue(setNewPassword,e)} sx={{color:theme.colors[4]}}></TextField>
         </Box>
         
-        <Box sx={{...userField,color:theme.colors[1]}}>
+        <Box sx={{...userField,display:"flex",flexDirection:"row", justifyContent:"flex-start",color:theme.colors[1]}}>
             <Typography>Email: </Typography>
-            <TextField name="mail" variant="standard" value={newMail} onChange={(e)=>updateValue(setNewMail,e)}></TextField>
+            <TextField name="mail" variant="standard" value={newMail} onChange={(e)=>updateValue(setNewMail,e)} sx={{color:theme.colors[4]}}></TextField>
         </Box>
 
         <Box sx={{...userField,flexDirection:"column",color:theme.colors[1]}}>
             <Typography width="100%" sx={{textAlign:"start "}}>Fields of interest: </Typography>
-            <FieldAdder canAdd={true} list={newInterests} remHandler={removeFromList} addHandler={addToList}/>
+            <FieldAdder canAdd={true} list={newInterests} remHandler={removeFromFieldList} addHandler={addToFieldList}/>
+        </Box>
+        <Box sx={{...userField,flexDirection:"column",color:theme.colors[1]}}>
+            <Typography width="100%" sx={{textAlign:"start "}}>Skills mastered: </Typography>
+            <SkillAdder canAdd={true} list={newMasteries} remHandler={removeFromSkillList} addHandler={addToSkillList}/>
         </Box>
 
-        <Box> <Button onClick={()=>{setChangeTheme(!changeTheme);theme.updateTheme(newUser.theme)}} style={{backgroundColor:theme.colors[3],color:theme.colors[4]}}> Edit theme </Button>
+        <Box sx={{...userField,display:"flex", flexDirection:"row"}}>
+             <Button onClick={()=>{setChangeTheme(!changeTheme);theme.updateTheme(newUser.theme)}} style={{backgroundColor:theme.colors[3],color:theme.colors[4]}}> Edit theme </Button>
             {
                 (changeTheme)?<Box>
-                    <input type="color" name="primary" value={newTheme[0]} onChange={(e)=>changeColor(e,0)}/>
-                    <input type="color" name="secondary" value={newTheme[1]} onChange={(e)=>changeColor(e,1)}/>
-                    <input type="color" name="ternary" value={newTheme[2]} onChange={(e)=>changeColor(e,2)}/>
-                    <input type="color" name="quaternary" value={newTheme[3]} onChange={(e)=>changeColor(e,3)}/>
-                    <input type="color" name="quinary" value={newTheme[4]} onChange={(e)=>changeColor(e,4)}/>
+                    <Box padding="0 2rem">
+                        <input type="color" name="primary" value={newTheme[0]} onChange={(e)=>changeColor(e,0)}/>
+                        <input type="color" name="secondary" value={newTheme[1]} onChange={(e)=>changeColor(e,1)}/>
+                        <input type="color" name="ternary" value={newTheme[2]} onChange={(e)=>changeColor(e,2)}/>
+                        <input type="color" name="quaternary" value={newTheme[3]} onChange={(e)=>changeColor(e,3)}/>
+                        <input type="color" name="quinary" value={newTheme[4]} onChange={(e)=>changeColor(e,4)}/>
+                    </Box>
                     <Button onClick={()=>theme.updateTheme(newTheme)} style={{backgroundColor:theme.colors[3],color:theme.colors[4]}}>Preview</Button>
                 </Box>:<></>
             }
         </Box>
-        <Button type='submit' style={{backgroundColor:theme.colors[3],color:theme.colors[4]}}> Edit </Button>
+        <Box sx={userField}>
+            <Button type='submit' style={{backgroundColor:theme.colors[3],color:theme.colors[4]}}> Edit </Button>
+        </Box>
     </Box>
 }
 
@@ -135,7 +154,7 @@ function DisplayBox({user,handler}){
     const userContext = useUserContext();
 
     return <Box sx={{display:"flex",flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
-        <Box sx={{width:'16vw', flexDirection:"column", margin:"2rem",color:theme.colors[1]}}>
+        <Box sx={{width:'16vw', flexDirection:"column", marginTop:"5rem",color:theme.colors[1]}}>
             {(user.image)?<Avatar alt={user.nickName} src={user.image} sx={{
                 height:"auto",
                 width:'100%',
@@ -154,6 +173,10 @@ function DisplayBox({user,handler}){
                 <Typography width="100%" sx={{textAlign:"start "}}>Fields of interest: </Typography>
                 <FieldAdder canAdd={false} list={user.interests}/>
             </Box>
+            <Box sx={{...userField,flexDirection:"column",color:theme.colors[1]}}>
+                <Typography width="100%" sx={{textAlign:"start "}}>Skills mastered: </Typography>
+                <SkillAdder canAdd={false} list={user.masters}/>
+            </Box>
         </Box>
         <Box>
             {(userContext.currentUser.nickName == user.nickName)?<Button onClick={()=>handler(true)} style={{backgroundColor:theme.colors[3],color:theme.colors[4]}}> Edit </Button>:<></>}
@@ -166,7 +189,9 @@ export default function UserPage({user}){
     const theme = useMyThemeContext();
     const [editMode,setEditMode] = useState(false)
 
-    return <Container sx={{ maxWidth:"90%", minHeight:'86vh', padding:'3rem', borderRadius:'35px', justifyContent:'center',display:"flex", backgroundColor:theme.colors[0]}}>
-        {(editMode)?<EditBox user={user} handler={setEditMode}/>:<DisplayBox user={user} handler={setEditMode}/>}
+    return <Container sx={{ maxWidth:"90%", minHeight:'86vh', padding:'1rem', borderRadius:'35px', justifyContent:'center',display:"flex", backgroundColor:theme.colors[2]}}>
+        <Box sx={{width:"96%",display:"flex",justifyContent:"center", borderRadius:'25px',backgroundColor:theme.colors[0]}}>
+            {(editMode)?<EditBox user={user} handler={setEditMode}/>:<DisplayBox user={user} handler={setEditMode}/>}
+        </Box>
     </Container>
 }

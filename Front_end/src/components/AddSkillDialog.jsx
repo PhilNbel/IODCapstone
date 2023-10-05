@@ -2,14 +2,15 @@ import { Box, Button, Dialog, DialogContent, FormControl, FormControlLabel, Inpu
 import { useState } from 'react';
 import { addButton, browse, browseBox } from '../MUIStyles';
 
-export default function AddDialog({displayHandler,addHandler,fromSkills, fieldList}){
+export default function AddSkillDialog({displayHandler,addHandler, skillList}){
 
-    const [currList,setCurrList] = useState(fieldList)
+    const [currList,setCurrList] = useState(skillList)
+    const [currField,setCurrField] = useState(<></>)
 
     function lighten(e){
         setCurrName(e.target.value)
         console.log(e.target.value)
-        setCurrList(fieldList.filter((field)=>field.name.toLowerCase().startsWith(e.target.value.toLowerCase())))
+        setCurrList(skillList.filter((skill)=>skill.name.toLowerCase().startsWith(e.target.value.toLowerCase())))
     }
 
     let displayList = [...currList]
@@ -22,16 +23,18 @@ export default function AddDialog({displayHandler,addHandler,fromSkills, fieldLi
             onClose={()=>displayHandler(false)} height="12vh">
                 <DialogContent
                     sx={{padding:0}}>
+                    <Box sx={{height:"1.5rem",borderBottom:"5px solid black"}}>
+                    </Box>
                     <Box height="20vh"
                         minWidth="20vw"
                         maxWidth="35vw"
                         sx={browseBox} >
                             <Box height="100%" width="75%" sx={{display:"flex",flexDirection:"column",padding:"5px"}}>
                                 <Box height="83%" sx={{flexDirection:"column", overflowY:"scroll"}}>
-                                    {displayList.sort((field1,field2)=>(field1.name>field2.name)?1:-1).map((field,index)=>(
-                                        <Tooltip title={field.description} key={"AFB"+index} >
-                                            <Button onClick={()=>setCurrName(field.name)} sx={{...browse, backgroundColor:field.color}}>
-                                                {field.name}
+                                    {displayList.sort((skill1,skill2)=>(skill1.name>skill2.name)?1:-1).map((skill,index)=>(
+                                        <Tooltip title={skill.description} key={"AFB"+index} >
+                                            <Button onClick={()=>setCurrName(skill.name)} sx={{...browse, backgroundColor:skill.color}}>
+                                                {skill.name}
                                             </Button>
                                         </Tooltip>)
                                     )}
@@ -39,12 +42,12 @@ export default function AddDialog({displayHandler,addHandler,fromSkills, fieldLi
                                 <TextField variant={"standard"} value={currName} onChange={lighten} sx={{maxHeight:"2vh"}}></TextField>
                             </Box>
                             <Button
-                                onClick={()=>{addHandler(displayList.find(field=>field.name==currName));displayHandler(false)}}
+                                onClick={()=>addHandler(displayList.find(skill=>skill.name==currName))}
                                 sx={{
                                     ...addButton,
                                     ...bg
                                 }}>
-                                    {(!fromSkills)?"Add":"Change"}
+                                    Add
                                 </Button>
                         </Box>
                     

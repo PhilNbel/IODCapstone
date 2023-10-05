@@ -72,18 +72,17 @@ class Project {
 
     static async readOne(toReadName, creatorName) {
         let creatorID  = await Users.getUserInfoName("userID",creatorName)
-        let req1 = await connection.promise().query(`SELECT type, name, description, isPrivate, budgetIsShared FROM Projects WHERE name = "${toReadName}" AND creatorID = ${creatorID}`);
+        let req1 = await connection.promise().query(`SELECT type, name, isPrivate, budgetIsShared FROM Projects WHERE name = "${toReadName}" AND creatorID = ${creatorID}`);
         let part1 = req1[0][0];
         if(!part1)
             throw new Error("Cannot find project "+toReadName+" created by "+creatorName)
-        let req2 = await connection.promise().query(`SELECT ${(part1.isPrivate)?"altDescription,":""}${(part1.budgetIsShared)?"budget,spending,":""}isOpen FROM Projects WHERE name = "${toReadName}" AND creatorID = ${creatorID}`);
+        let req2 = await connection.promise().query(`SELECT ${(part1.isPrivate)?"altDescription,":"description,"}${(part1.budgetIsShared)?"budget,spending,":""}isOpen FROM Projects WHERE name = "${toReadName}" AND creatorID = ${creatorID}`);
         let part2 = req2[0][0];
         
         let part3 = await Steps.readAll(toReadName, creatorName)
         
         let req4 = await connection.promise().query(`SELECT IsMember.role, Users.nickName, Users.image, Users.color FROM IsMember JOIN Users ON Users.userID=IsMember.userID JOIN Projects ON Projects.projectID=IsMember.projectID WHERE Projects.name = "${toReadName}" AND Projects.creatorID = ${creatorID}`);
-        let part4 = req4[0]
-
+        let part4 = await Promise.all(req4[0].map(async(member)=>({...member,masters:await Users.getUserInfoName("skills",member.nickName)})))
         let req5 = await connection.promise().query(`SELECT Fields.name, Fields.description, Fields.color FROM TouchesOn JOIN Fields ON Fields.fieldID=TouchesOn.fieldID JOIN Projects ON Projects.projectID=TouchesOn.projectID WHERE Projects.name = "${toReadName}" AND Projects.creatorID = ${creatorID}`);
         let part5 = req5[0]
         

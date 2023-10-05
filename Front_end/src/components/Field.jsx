@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { styled } from '@mui/material/styles';
 import Tooltip, { tooltipClasses } from '@mui/material/Tooltip';
 import { Box } from "@mui/material";
 import { useMyThemeContext } from '../contexts/MyThemeContext';
@@ -28,9 +27,9 @@ export default function Field({fieldInfo}){
     return (<Box>
             <Tooltip
                 title={
-                    <React.Fragment>
+                    <Box>
                         {fieldInfo.description}
-                    </React.Fragment>
+                    </Box>
                 }
             >
                 {fieldText}

@@ -7,9 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "set NODE_ENV=dev&& node server.js",
     "prod": "set NODE_ENV=prod&& node server.js",
-    "start-dev": "concurrently \"cd ../Front_End && npm run dev\" \"npm run dev\"",
-    "start-build": "concurrently \"cd ../Front_End && npm run build\" \"npm run dev\"",
-    "start": "concurrently \"cd ../Front_End && npm run prod\" \"npm run prod\"",
+    "start-dev": "concurrently \"cd ../Front_end && npm run dev\" \"npm run dev\"",
+    "start-build": "concurrently \"cd ../Front_end && npm run build\" \"npm run dev\"",
+    "start": "concurrently \"cd ../Front_end && npm run build\" \"npm run prod\"",
     "init-dev": "set NODE_ENV=dev&& node ./init.js",
     "init": "set NODE_ENV=prod&& node ./init.js"
   },

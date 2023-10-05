@@ -1,0 +1,6 @@
+Back_end/node_modules
+Front_end/node_modules
+Front_end/public
+Front_end/src
+*.local
+README.md
