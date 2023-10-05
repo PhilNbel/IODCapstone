@@ -1,4 +1,4 @@
-# IOD SE Capstone : Eovia
+# IOD Capstone : Eovia
 Complete code for a website named **Eovia**. It's purpose is improve one's life through an opportunity to connect with others who share similar passions to improve social life in an individualistic society, improve self-esteem through the realization of projects with proofs and records of those feats and improve one's career through the ability to learn from others and show one's skills.
 
 # DOCKER
