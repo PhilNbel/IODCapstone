@@ -63,7 +63,7 @@ function NavBar() {
         <Toolbar disableGutters>
 
           {/* desktop menu logo and icon */}
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 3 }} />
+          <img alt="E" src="/src/assets/Learn.png" />
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
                 size="large"
