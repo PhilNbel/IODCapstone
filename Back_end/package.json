@@ -8,7 +8,6 @@
     "dev": "set NODE_ENV=dev&& node server.js",
     "prod": "set NODE_ENV=prod&& node server.js",
     "dist": "set NODE_ENV=dist&& node server.js",
-    "dist2": "set NODE_ENV=dist2&& node server.js",
     "start-dev": "concurrently \"cd ../Front_end && npm run dev\" \"npm run dev\"",
     "start-dist": "concurrently \"cd ../Front_end && npm run dev\" \"npm run dist\"",
     "start-dist2": "concurrently \"cd ../Front_end && npm run dev\" \"npm run dist2\"",
