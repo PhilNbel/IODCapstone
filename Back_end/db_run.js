@@ -1,7 +1,7 @@
 const mysql = require("mysql2");
 require("dotenv").config();
 
-console.log(process.env.DB_HOST);
+process.env.DB_HOST=(process.env.DB_HOST!='localhost')?process.env.DB_HOST:"http://capstone-env.eba-25vfqzdt.ap-southeast-2.elasticbeanstalk.com";
 
 // Create a connection to the database
 const connection = mysql.createConnection({
