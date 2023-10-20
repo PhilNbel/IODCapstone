@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start-dev": "cd ./Back_end && npm run start-dev",
     "start-dist": "cd ./Back_end && npm run start-dist",
+    "start-dist2": "cd ./Back_end && npm run start-dist2",
     "start": "cd ./Back_end && npm start",
     "init": "cd ./Back_end && npm run init",
     "prod-init": "cd ./Back_end && npm run prod-init"
